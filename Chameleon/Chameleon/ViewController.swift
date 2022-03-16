@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         view.backgroundColor = .black // 배경색
         view.addSubview(test)
         
-        test.text = "hello" // test를 위해서 출력할 라벨
+        test.text = "test" // test를 위해서 출력할 라벨
         test.textColor = .white
         test.translatesAutoresizingMaskIntoConstraints = false
         test.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
