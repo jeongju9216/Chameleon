@@ -1,3 +1,3 @@
 # Chameleon Project
 
-test2
+GAN을 이용한 iOS 프로젝트
