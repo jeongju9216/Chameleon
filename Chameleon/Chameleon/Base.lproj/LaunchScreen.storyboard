@@ -3,7 +3,7 @@
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,7 +22,8 @@
                                 <rect key="frame" x="0.0" y="826" width="414" height="80"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <viewLayoutGuide key="safeArea" id="yF7-S4-XSh"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="kMk-Q7-Jjv" secondAttribute="trailing" id="15F-hB-KBO"/>
                             <constraint firstItem="kMk-Q7-Jjv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="CE5-YC-o6A"/>
@@ -41,8 +42,5 @@
     <resources>
         <image name="BottomView" width="360" height="80"/>
         <image name="Chameleon" width="640.33331298828125" height="360.33334350585938"/>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
     </resources>
 </document>
