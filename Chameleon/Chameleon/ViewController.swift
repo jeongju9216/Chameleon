@@ -18,11 +18,11 @@ class ViewController: UIViewController {
 
     func test() {
         let test = UILabel()
-        view.backgroundColor = .black // 배경색
+        view.backgroundColor = .white // 배경색
         view.addSubview(test)
         
         test.text = "text" // test를 위해서 출력할 라벨
-        test.textColor = .white
+        test.textColor = .blue
         test.translatesAutoresizingMaskIntoConstraints = false
         test.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         test.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -46,6 +46,8 @@ struct ViewControllerRepresentable: UIViewControllerRepresentable {
 @available(iOS 13.0.0, *)
 struct ViewPreview: PreviewProvider {
     static var previews: some View {
-        ViewControllerRepresentable()
+        Group {
+            ViewControllerRepresentable()
+        }
     }
 }

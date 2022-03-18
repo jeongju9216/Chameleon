@@ -20,6 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.rootViewController = mainViewController
         window?.makeKeyAndVisible()
+        
+        sleep(2)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
