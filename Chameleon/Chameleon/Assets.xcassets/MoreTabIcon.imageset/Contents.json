@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "settings_gray.png",
+      "filename" : "settings_gray-8.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,23 +12,24 @@
           "value" : "light"
         }
       ],
+      "filename" : "settings_gray-9.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "settings_gray-10.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
       "filename" : "settings_gray-5.png",
       "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "settings_gray-1.png",
-      "idiom" : "universal",
       "scale" : "2x"
     },
     {
@@ -38,7 +39,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "settings_gray-4.png",
+      "filename" : "settings_gray-6.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -49,6 +50,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "settings_gray-7.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -75,6 +77,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "settings_gray-4.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

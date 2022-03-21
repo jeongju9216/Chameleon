@@ -12,13 +12,17 @@ class CustomTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let mainVC = UINavigationController(rootViewController: MainController())
-        mainVC.tabBarItem.selectedImage = UIImage(systemName: "message")
+        let mainVC = UINavigationController(rootViewController: MainViewController())
+        mainVC.tabBarItem.image = UIImage(named: "HomeTabIcon")
+//        mainVC.tabBarItem.selectedImage = UIImage(named: "HomeTabSelectedIcon")
         mainVC.tabBarItem.title = "Home"
-        mainVC.tabBarItem.image = UIImage(systemName: "message.fill")
         
-        let moreVC = UINavigationController(rootViewController: UIViewController())
+        let moreVC = UINavigationController(rootViewController: MoreViewController())
+        moreVC.tabBarItem.image = UIImage(named: "MoreTabIcon")
+//        moreVC.tabBarItem.selectedImage = UIImage(named: "MoreTabSelectedIcon")
         moreVC.tabBarItem.title = "More"
+        
+        self.tabBar.tintColor = UIColor(named: "MainColor")
         
         self.viewControllers = [mainVC, moreVC]
     }
