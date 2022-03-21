@@ -21,8 +21,14 @@ class CustomTabBarController: UITabBarController {
         moreVC.tabBarItem.title = "More"
         
         self.tabBar.tintColor = UIColor(named: "MainColor")
+        self.tabBar.backgroundColor = UIColor(named:"TabBarColor")
         
-        self.tabBar.backgroundColor = UIColor(named:)
+        self.tabBar.layer.borderWidth = 3
+        self.tabBar.layer.borderColor = UIColor(named: "TabBarBorderColor")?.cgColor
+        
+        self.tabBar.clipsToBounds = true
+        self.tabBar.layer.cornerRadius = 20
+        self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         self.viewControllers = [mainVC, moreVC]
     }
