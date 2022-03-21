@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,13 +32,13 @@ class ViewController: UIViewController {
 
 import SwiftUI
 struct ViewControllerRepresentable: UIViewControllerRepresentable {
-    typealias UIViewControllerType = ViewController
+    typealias UIViewControllerType = MainController
     
-    func makeUIViewController(context: Context) -> ViewController {
-        return ViewController()
+    func makeUIViewController(context: Context) -> MainController {
+        return MainController()
     }
     
-    func updateUIViewController(_ uiViewController: ViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: MainController, context: Context) {
         
     }
 }
