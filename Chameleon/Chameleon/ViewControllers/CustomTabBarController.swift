@@ -10,6 +10,7 @@ import SnapKit
 
 class CustomTabBarController: UITabBarController {
     override func viewDidLoad() {
+        //commit test
         super.viewDidLoad()
         
         let mainVC = UINavigationController(rootViewController: MainController())
