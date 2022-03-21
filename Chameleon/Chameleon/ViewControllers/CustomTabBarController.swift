@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class CustomTabBarController: UITabBarController {
- 
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,5 +42,23 @@ class CustomTabBarController: UITabBarController {
         
         self.tabBar.layer.cornerRadius = 20
         self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        object_setClass(self.tabBar, CustomTabBar.self)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    class CustomTabBar: UITabBar {
+        override func sizeThatFits(_ size: CGSize) -> CGSize {
+            var sizeThatFits = super.sizeThatFits(size)
+            sizeThatFits.height = sizeThatFits.height + 10
+            return sizeThatFits
+        }
     }
 }
