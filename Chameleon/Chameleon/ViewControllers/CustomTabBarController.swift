@@ -20,7 +20,7 @@ class CustomTabBarController: UITabBarController {
     
     //MARK: - Methods
     private func initViewControllers() {
-        let mainVC = UINavigationController(rootViewController: MainViewController())
+        let mainVC = UINavigationController(rootViewController: HomeViewController())
         mainVC.tabBarItem.image = UIImage(named: "HomeTabIcon")
         mainVC.tabBarItem.title = "Home"
         
