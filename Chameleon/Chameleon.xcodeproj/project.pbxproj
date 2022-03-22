@@ -47,6 +47,8 @@
 			isa = PBXGroup;
 			children = (
 				9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */,
+				9B4B8FA727E0B2390066C7E3 /* MainViewController.swift */,
+				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -73,8 +75,6 @@
 				9B0D411B27E856B500E2FA10 /* ViewControllers */,
 				9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */,
 				9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */,
-				9B4B8FA727E0B2390066C7E3 /* MainViewController.swift */,
-				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 				9B4B8FAC27E0B2390066C7E3 /* Assets.xcassets */,
 				9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */,
 				9B4B8FB127E0B2390066C7E3 /* Info.plist */,
