@@ -12,12 +12,21 @@ class LoginViewController: UIViewController {
     
     //MARK: - Views
     let titleLabel: UILabel = UILabel()
+    let textFieldStack: UIStackView = UIStackView()
+    let idTextField: UITextField = UnderLineTextField()
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpLoginUI()
+        
+        idTextField.addTarget(self, action: #selector(clickIdTextField), for: .touchUpInside)
+    }
+    
+    //MARK: - Actions
+    @objc func clickIdTextField(sender: UITextField) {
+        print("\(#fileID) \(#line)-line, \(#function)")
     }
     
     //MARK: - Methods
@@ -25,7 +34,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setUpTitleLabel()
-        
+        setUpTextFields()
         
     }
     
@@ -41,4 +50,33 @@ class LoginViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
+    
+    private func setUpTextFields() {
+        setUpIdTextField()
+        
+        textFieldStack.translatesAutoresizingMaskIntoConstraints = false
+        textFieldStack.axis = .vertical
+        textFieldStack.distribution = .fillEqually
+        textFieldStack.spacing = 20
+        
+        
+        view.addSubview(textFieldStack)
+        textFieldStack.snp.makeConstraints { make in
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-200)
+            make.height.equalTo(100)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+        }
+    }
+    
+    private func setUpIdTextField() {
+        idTextField.placeholder = "email"
+        
+        textFieldStack.addSubview(idTextField)
+        idTextField.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+    }
+    
 }
