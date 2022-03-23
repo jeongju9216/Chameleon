@@ -21,12 +21,6 @@ class LoginViewController: UIViewController {
         
         setUpLoginUI()
         
-        idTextField.addTarget(self, action: #selector(clickIdTextField), for: .touchUpInside)
-    }
-    
-    //MARK: - Actions
-    @objc func clickIdTextField(sender: UITextField) {
-        print("\(#fileID) \(#line)-line, \(#function)")
     }
     
     //MARK: - Methods
