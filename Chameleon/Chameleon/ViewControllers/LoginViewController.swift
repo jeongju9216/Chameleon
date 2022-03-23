@@ -11,13 +11,11 @@ import SnapKit
 class LoginViewController: UIViewController {
     
     //MARK: - Views
-    let titleLabel: UILabel = UILabel()
     let titleImage: UIImageView = UIImageView()
     let textFieldStack: UIStackView = UIStackView()
     let idTextField: UITextField = UnderLineTextField()
     let pwTextField: UITextField = UnderLineTextField()
     let loginButton: UIButton = UIButton()
-    
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -45,7 +43,6 @@ class LoginViewController: UIViewController {
     private func setUpLoginUI() {
         view.backgroundColor = .systemBackground
         
-//        setUpTitleLabel()
         setUpTitleImage()
         setUpTextFields()
         setUpLoginButton()
@@ -61,19 +58,6 @@ class LoginViewController: UIViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
             make.width.equalTo(view.frame.width * 0.8)
             make.height.equalTo(view.frame.height * 0.1)
-            make.centerX.equalToSuperview()
-        }
-    }
-    
-    private func setUpTitleLabel() {
-        titleLabel.text = "Swap your face\nwith fake face"
-        titleLabel.numberOfLines = 0
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.systemFont(ofSize: 40)
-        
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(80)
             make.centerX.equalToSuperview()
         }
     }
@@ -99,6 +83,7 @@ class LoginViewController: UIViewController {
     private func setUpIdTextField() {
         idTextField.placeholder = "email"
         idTextField.clearButtonMode = .whileEditing
+        idTextField.keyboardType = .emailAddress
         
         textFieldStack.addArrangedSubview(idTextField)
         idTextField.snp.makeConstraints { make in
@@ -110,6 +95,7 @@ class LoginViewController: UIViewController {
     private func setUpPwTextField() {
         pwTextField.placeholder = "password"
         pwTextField.clearButtonMode = .whileEditing
+        pwTextField.isSecureTextEntry = true
         
         textFieldStack.addArrangedSubview(pwTextField)
         pwTextField.snp.makeConstraints { make in
@@ -130,6 +116,8 @@ class LoginViewController: UIViewController {
         loginButton.snp.makeConstraints { make in
             make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
             make.height.equalTo(40)
+            
+            
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             make.centerX.equalToSuperview()
         }
@@ -169,20 +157,12 @@ class LoginViewController: UIViewController {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
-            self.titleLabel.isHidden = true
-            UIView.animate(withDuration: 1) {
-//                self.textFieldStack.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - 180))
-                self.loginButton.transform = CGAffineTransform(translationX: 0.0, y: -keyboardHeight)
-            }
             
+            self.loginButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
         }
     }
     
     @objc private func keyboardWillHide(_ notification: Notification) {
-        self.titleLabel.isHidden = false
-        UIView.animate(withDuration: 1) {
-//            self.textFieldStack.transform = .identity
-            self.loginButton.transform = .identity
-        }
+        self.loginButton.transform = .identity
     }
 }
