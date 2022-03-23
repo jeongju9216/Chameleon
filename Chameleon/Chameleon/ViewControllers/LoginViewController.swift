@@ -12,16 +12,28 @@ class LoginViewController: UIViewController {
     
     //MARK: - Views
     let titleLabel: UILabel = UILabel()
+    let titleImage: UIImageView = UIImageView()
     let textFieldStack: UIStackView = UIStackView()
     let idTextField: UITextField = UnderLineTextField()
     let pwTextField: UITextField = UnderLineTextField()
-
+    let loginButton: UIButton = UIButton()
+    
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpLoginUI()
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addKeyboardNotification()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        removeKeyboardNotification()
     }
     
     //MARK: - Overrides
@@ -33,8 +45,24 @@ class LoginViewController: UIViewController {
     private func setUpLoginUI() {
         view.backgroundColor = .systemBackground
         
-        setUpTitleLabel()
+//        setUpTitleLabel()
+        setUpTitleImage()
         setUpTextFields()
+        setUpLoginButton()
+    }
+    
+    private func setUpTitleImage() {
+        titleImage.image = UIImage(named: "LogoImage")
+        titleImage.clipsToBounds = true
+        titleImage.contentMode = .scaleAspectFit
+        
+        view.addSubview(titleImage)
+        titleImage.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.width.equalTo(view.frame.width * 0.8)
+            make.height.equalTo(view.frame.height * 0.1)
+            make.centerX.equalToSuperview()
+        }
     }
     
     private func setUpTitleLabel() {
@@ -64,7 +92,7 @@ class LoginViewController: UIViewController {
             make.width.equalTo(view.safeAreaLayoutGuide).offset(-160)
             make.height.equalTo(100)
             make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(40)
+            make.top.equalTo(titleImage.snp.bottom).offset(40)
         }
     }
     
@@ -87,6 +115,74 @@ class LoginViewController: UIViewController {
         pwTextField.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
+        }
+    }
+    
+    private func setUpLoginButton() {
+        loginButton.clipsToBounds = true
+        
+        loginButton.setBackgroundColor(UIColor(named: "ButtonColor"), for: .normal)
+        loginButton.setBackgroundColor(UIColor(named: "ButtonClickColor"), for: .selected)
+        loginButton.layer.cornerRadius = 10
+        loginButton.setTitle("Login", for: .normal)
+        
+        view.addSubview(loginButton)
+        loginButton.snp.makeConstraints { make in
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
+            make.height.equalTo(40)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+            make.centerX.equalToSuperview()
+        }
+    }
+    
+    private func addKeyboardNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    private func removeKeyboardNotification() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            self.titleLabel.isHidden = true
+            UIView.animate(withDuration: 1) {
+//                self.textFieldStack.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - 180))
+                self.loginButton.transform = CGAffineTransform(translationX: 0.0, y: -keyboardHeight)
+            }
+            
+        }
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        self.titleLabel.isHidden = false
+        UIView.animate(withDuration: 1) {
+//            self.textFieldStack.transform = .identity
+            self.loginButton.transform = .identity
         }
     }
 }
