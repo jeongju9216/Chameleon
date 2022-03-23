@@ -10,6 +10,7 @@
 		9B04920B27E74CFB00D3B6FA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9B04920A27E74CFB00D3B6FA /* Alamofire */; };
 		9B0D411D27E856ED00E2FA10 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */; };
 		9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */; };
+		9B0D412827EAA5A800E2FA10 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */; };
 		9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */; };
 		9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */; };
 		9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
+		9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		9B4B8FA027E0B2390066C7E3 /* Chameleon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chameleon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,6 +52,7 @@
 				9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */,
 				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
 				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
+				9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B0D412827EAA5A800E2FA10 /* LoginViewController.swift in Sources */,
 				9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */,
 				9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */,
 				9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */,
