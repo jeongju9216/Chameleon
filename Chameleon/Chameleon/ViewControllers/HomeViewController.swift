@@ -11,49 +11,8 @@ import SnapKit
 class HomeViewController: UIViewController {
     
     //MARK: - Views
-    lazy var photoButton: UIView = {
-        let view = menuView()
-        
-        let innerView = buttonInnerStackView(imageName: "PhotoButton", title: "PHOTO")
-        view.addSubview(innerView)
-        innerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(8)
-        }
-        
-        let clickButton = UIButton()
-        clickButton.addTarget(self, action: #selector(touchDownPhotoButton(sender:)), for: .touchDown)
-        clickButton.addTarget(self, action: #selector(touchUpPhotoButton(sender:)), for: .touchUpInside)
-        
-        view.addSubview(clickButton)
-        clickButton.snp.makeConstraints { make in
-            make.width.height.equalToSuperview()
-        }
-        
-        return view
-    }()
-    
-    lazy var videoButton: UIView = {
-        let view = menuView()
-        
-        let innerView = buttonInnerStackView(imageName: "VideoButton", title: "VIDEO")
-        view.addSubview(innerView)
-        innerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(8)
-        }
-        
-        let clickButton = UIButton()
-        clickButton.addTarget(self, action: #selector(touchDownVideoButton(sender:)), for: .touchDown)
-        clickButton.addTarget(self, action: #selector(touchUpVideoButton(sender:)), for: .touchUpInside)
-        
-        view.addSubview(clickButton)
-        clickButton.snp.makeConstraints { make in
-            make.width.height.equalToSuperview()
-        }
-        
-        return view
-    }()
+    let photoButton: HomeMenuButton = HomeMenuButton(imageName: "PhotoButton", name: "PHOTO")
+    let videoButton: HomeMenuButton = HomeMenuButton(imageName: "VideoButton", name: "VIDEO")
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -66,44 +25,22 @@ class HomeViewController: UIViewController {
     
     //MARK: - Actions
     @objc func touchDownPhotoButton(sender: UIButton) {
-        photoButton.backgroundColor = UIColor(named: "MainColor")
-        changeSubviewsColor(view: photoButton, color: .white)
+        photoButton.touchDown()
     }
     
     @objc func touchUpPhotoButton(sender: UIButton) {
-        photoButton.backgroundColor = .white
-        changeSubviewsColor(view: photoButton, color: .black)
+        photoButton.touchUp()
     }
     
     @objc func touchDownVideoButton(sender: UIButton) {
-        videoButton.backgroundColor = UIColor(named: "MainColor")
-        changeSubviewsColor(view: videoButton, color: .white)
+        videoButton.touchDown()
     }
     
-    
     @objc func touchUpVideoButton(sender: UIButton) {
-        videoButton.backgroundColor = .white
-        changeSubviewsColor(view: videoButton, color: .black)
+        videoButton.touchUp()
     }
     
     //MARK: - Methods
-    private func changeSubviewsColor(view: UIView, color: UIColor) {
-        for v in view.subviews {
-            if v is UIStackView {
-                let currentStackView = v as! UIStackView
-                for sv in currentStackView.subviews {
-                    if sv is UILabel {
-                        let currnetLabel = sv as! UILabel
-                        currnetLabel.textColor = color
-                    } else if sv is UIImageView {
-                        let currnetImageView = sv as! UIImageView
-                        currnetImageView.tintColor = color
-                    }
-                }
-            }
-        }
-    }
-    
     private func setUpNavigationBar() {
         navigationItem.title = "Face Swap with Fake Face"
         
@@ -122,25 +59,31 @@ class HomeViewController: UIViewController {
     private func setUpHomeUI() {
         view.backgroundColor = .systemBackground
         
-        let buttonView = UIStackView(arrangedSubviews: [photoButton, videoButton])
-        buttonView.axis = .horizontal
-        buttonView.spacing = 20
-        buttonView.alignment = .center
-        buttonView.distribution = .fillEqually
+        setUpPhotoButton()
+        setUpVideoButton()
+        setUpButtonStack()
+    }
+    
+    private func setUpButtonStack() {
+        let buttonStack = UIStackView(arrangedSubviews: [photoButton, videoButton])
+        buttonStack.axis = .horizontal
+        buttonStack.spacing = 20
+        buttonStack.alignment = .center
+        buttonStack.distribution = .fillEqually
         
-        view.addSubview(buttonView)
-        
-        buttonView.snp.makeConstraints { make in
+        view.addSubview(buttonStack)
+        buttonStack.snp.makeConstraints { make in
             let width = view.frame.width * 0.8
             make.width.equalTo(width)
             make.height.equalTo(width * 0.35)
             make.centerX.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
         }
-        buttonView.addSubview(photoButton)
-        buttonView.addSubview(videoButton)
-
-        photoButton.snp.makeConstraints { (make) in
+        
+        buttonStack.addSubview(photoButton)
+        buttonStack.addSubview(videoButton)
+        
+        photoButton.snp.makeConstraints { make in
             make.height.equalToSuperview()
         }
         
@@ -149,52 +92,14 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func buttonInnerStackView(imageName: String, title: String) -> UIStackView {
-        //inner view
-        let imageView = UIImageView()
-        let textLabel = UILabel()
-        let innerStackView = UIStackView(arrangedSubviews: [imageView, textLabel])
-
-        innerStackView.translatesAutoresizingMaskIntoConstraints = false
-        innerStackView.axis = .vertical
-        innerStackView.spacing = 15
-        innerStackView.distribution = .fill
-        innerStackView.alignment = .center
-        
-        //image
-        if let buttonImage = UIImage(named: imageName) {
-            imageView.image = buttonImage.withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = .black
-        }
-        imageView.snp.makeConstraints { make in
-            make.width.height.equalTo(40)
-            make.centerX.equalToSuperview()
-        }
-        
-        //label
-        textLabel.text = title
-        textLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        textLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-        }
-        
-        return innerStackView
+    private func setUpPhotoButton() {
+        photoButton.addTarget(self, action: #selector(touchDownPhotoButton(sender:)), for: .touchDown)
+        photoButton.addTarget(self, action: #selector(touchUpPhotoButton(sender:)), for: .touchUpInside)
     }
     
-    private func menuView() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .white
-        
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor(named: "ButtonBorderColor")?.cgColor
-        view.layer.cornerRadius = 15
-        
-        view.layer.shadowColor = UIColor.lightGray.cgColor
-        view.layer.shadowOpacity = 0.3
-        view.layer.shadowOffset = CGSize(width: 0, height: 2)
-        view.layer.shadowRadius = 3
-        
-        return view
+    private func setUpVideoButton() {
+        videoButton.addTarget(self, action: #selector(touchDownVideoButton(sender:)), for: .touchDown)
+        videoButton.addTarget(self, action: #selector(touchUpVideoButton(sender:)), for: .touchUpInside)
     }
 }
 
