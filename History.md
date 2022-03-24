@@ -30,3 +30,7 @@
     - email, pw Textfield 작업
     - 로그인 버튼 작업
     - 키보드 올라올 때 로그인 버튼 위치 조정 작업
+
+### 2022-03-24 (목)
+- HomeViewController 리팩토링
+- UIColor 관련 Extension 작업

@@ -22,6 +22,8 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         setUpLoginUI()
+        
+        loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +39,16 @@ class LoginViewController: UIViewController {
     //MARK: - Overrides
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    //MARK: - Actions
+    @objc private func clickedLogin(sender: UIButton) {
+        self.dismiss(animated: true, completion: {
+            let homeVC = CustomTabBarController()
+            homeVC.modalPresentationStyle = .fullScreen
+            self.present(homeVC, animated: true, completion: nil)
+        })
+        
     }
     
     //MARK: - Methods

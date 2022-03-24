@@ -17,8 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window = UIWindow(windowScene: windowScene) //SceneDelegate의 프로퍼티에 설정
         
-//        window?.rootViewController = LoginViewController() //맨 처음 보여줄 VC
-        window?.rootViewController = CustomTabBarController() //맨 처음 보여줄 VC
+        window?.rootViewController = LoginViewController() //맨 처음 보여줄 VC
         window?.makeKeyAndVisible()
         
         sleep(2)
