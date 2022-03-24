@@ -38,7 +38,7 @@ class HomeMenuButton: UIButton {
         self.backgroundColor = .white
         
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor(named: "ButtonBorderColor")?.cgColor
+        self.layer.borderColor = UIColor().buttonBorderColor().cgColor
         
         self.layer.cornerRadius = 15
         
@@ -85,7 +85,7 @@ class HomeMenuButton: UIButton {
     }
     
     func touchDown() {
-        self.backgroundColor = UIColor(named: "MainColor")
+        self.backgroundColor = UIColor().mainColor()
         menuImage.tintColor = .white
         menuLabel.textColor = .white
     }

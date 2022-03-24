@@ -14,6 +14,7 @@
 		9B0D412B27EAAE6100E2FA10 /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */; };
 		9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412C27EACC5D00E2FA10 /* UIButton.swift */; };
 		9B0D412F27EB113E00E2FA10 /* HomeMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */; };
+		9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D413027EC0EBD00E2FA10 /* UIColor.swift */; };
 		9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */; };
 		9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */; };
 		9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */; };
@@ -29,6 +30,7 @@
 		9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		9B0D412C27EACC5D00E2FA10 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuButton.swift; sourceTree = "<group>"; };
+		9B0D413027EC0EBD00E2FA10 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		9B4B8FA027E0B2390066C7E3 /* Chameleon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chameleon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,6 +70,7 @@
 				9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */,
 				9B0D412C27EACC5D00E2FA10 /* UIButton.swift */,
 				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
+				9B0D413027EC0EBD00E2FA10 /* UIColor.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 				9B0D412B27EAAE6100E2FA10 /* UnderLineTextField.swift in Sources */,
 				9B0D411D27E856ED00E2FA10 /* CustomTabBarController.swift in Sources */,
 				9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */,
+				9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

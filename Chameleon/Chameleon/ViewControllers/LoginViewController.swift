@@ -107,8 +107,8 @@ class LoginViewController: UIViewController {
     private func setUpLoginButton() {
         loginButton.clipsToBounds = true
         
-        loginButton.setBackgroundColor(UIColor(named: "ButtonColor"), for: .normal)
-        loginButton.setBackgroundColor(UIColor(named: "ButtonClickColor"), for: .selected)
+        loginButton.setBackgroundColor(UIColor().buttonColor(), for: .normal)
+        loginButton.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
         loginButton.layer.cornerRadius = 10
         loginButton.setTitle("Login", for: .normal)
         
