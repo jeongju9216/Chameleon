@@ -34,3 +34,4 @@
 ### 2022-03-24 (목)
 - HomeViewController 리팩토링
 - UIColor 관련 Extension 작업
+- LoginVC -> HomeVC 이동 구현
