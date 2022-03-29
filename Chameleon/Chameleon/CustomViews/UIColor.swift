@@ -23,4 +23,12 @@ extension UIColor {
     func buttonBorderColor() -> UIColor {
         return UIColor(named: "ButtonBorderColor") ?? .black
     }
+    
+    func backgroundColor() -> UIColor {
+        return UIColor(named: "BackgroundColor") ?? .black
+    }
+    
+    func edgeColor() -> UIColor {
+        return UIColor(named: "EdgeColor") ?? .lightGray
+    }
 }

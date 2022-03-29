@@ -45,19 +45,19 @@ class HomeViewController: UIViewController {
         navigationItem.title = "Face Swap with Fake Face"
         
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = .systemBackground
+        appearance.backgroundColor = UIColor().backgroundColor()
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         
         navigationController?.navigationBar.layer.masksToBounds = false
-        navigationController?.navigationBar.layer.shadowColor = UIColor.lightGray.cgColor
+        navigationController?.navigationBar.layer.shadowColor = UIColor().edgeColor().cgColor
         navigationController?.navigationBar.layer.shadowOpacity = 0.6
         navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0, height: 2)
         navigationController?.navigationBar.layer.shadowRadius = 5
     }
     
     private func setUpHomeUI() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = UIColor().backgroundColor()
         
         setUpPhotoButton()
         setUpVideoButton()

@@ -35,14 +35,14 @@ class HomeMenuButton: UIButton {
     //MARK: - Methods
     private func setUpUI() {
         self.clipsToBounds = true
-        self.backgroundColor = .white
+        self.backgroundColor = UIColor().buttonColor()
         
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor().buttonBorderColor().cgColor
         
         self.layer.cornerRadius = 15
         
-        self.layer.shadowColor = UIColor.lightGray.cgColor
+        self.layer.shadowColor = UIColor().edgeColor().cgColor
         self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowRadius = 3
@@ -68,7 +68,7 @@ class HomeMenuButton: UIButton {
         
         //image
         menuImage.image = image?.withRenderingMode(.alwaysTemplate)
-        menuImage.tintColor = .black
+        menuImage.tintColor = .white
         menuImage.snp.makeConstraints { make in
             make.width.height.equalTo(40)
             make.centerX.equalToSuperview()
@@ -76,6 +76,7 @@ class HomeMenuButton: UIButton {
         
         //label
         menuLabel.text = self.name
+        menuLabel.textColor = .white
         menuLabel.font = UIFont.boldSystemFont(ofSize: 16)
         menuLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -85,14 +86,14 @@ class HomeMenuButton: UIButton {
     }
     
     func touchDown() {
-        self.backgroundColor = UIColor().mainColor()
-        menuImage.tintColor = .white
-        menuLabel.textColor = .white
+        self.backgroundColor = UIColor().buttonClickColor()
+        menuImage.tintColor = .lightGray
+        menuLabel.textColor = .lightGray
     }
     
     func touchUp() {
-        self.backgroundColor = .white
-        menuImage.tintColor = .black
-        menuLabel.textColor = .black
+        self.backgroundColor = UIColor().buttonColor()
+        menuImage.tintColor = .white
+        menuLabel.textColor = .white
     }
 }
