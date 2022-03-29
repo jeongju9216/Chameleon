@@ -12,6 +12,9 @@ class UploadViewController: BaseViewController {
 
     //MARK: - Views
     let uploadView: UIView = UIView()
+    let uploadImageView: UIImageView = UIImageView()
+    let uploadLabel: UILabel = UILabel()
+    
     let uploadButton: UIButton = UIButton()
 
     
@@ -24,6 +27,8 @@ class UploadViewController: BaseViewController {
         super.viewDidLoad()
     
         setUpUploadUI()
+        
+        uploadButton.isEnabled = false
     }
     
     
@@ -63,6 +68,36 @@ class UploadViewController: BaseViewController {
             make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
             make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
             make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
+        }
+        
+        setUpUploadImageInView()
+        setUpUploadLabelInView()
+    }
+    
+    private func setUpUploadImageInView() {
+        let uploadImageName: String = (uploadType == .Photo) ? "photo" : "video"
+        if let uploadImage = UIImage(systemName: uploadImageName) {
+            uploadImageView.image = uploadImage.withRenderingMode(.alwaysTemplate)
+            uploadImageView.tintColor = .lightGray
+            
+            uploadView.addSubview(uploadImageView)
+            uploadImageView.snp.makeConstraints { make in
+                make.width.equalTo(uploadImage.size.width * 2.0)
+                make.height.equalTo(uploadImage.size.height * 2.0)
+                make.centerX.equalToSuperview()
+                make.centerY.equalToSuperview().offset(-10)
+            }
+        }
+    }
+    
+    private func setUpUploadLabelInView() {
+        uploadLabel.text = "Choose \(uploadType)"
+        uploadLabel.textColor = .lightGray
+        
+        uploadView.addSubview(uploadLabel)
+        uploadLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(uploadImageView.snp.bottom).offset(10)
         }
     }
 }

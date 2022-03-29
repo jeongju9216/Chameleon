@@ -44,6 +44,12 @@ class HomeViewController: BaseViewController {
     
     @objc func touchUpVideoButton(sender: UIButton) {
         videoButton.touchUp()
+        
+        let uploadVC = UploadViewController()
+        uploadVC.uploadType = .Video
+        
+        uploadVC.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(uploadVC, animated: true)
     }
     
     //MARK: - Methods
