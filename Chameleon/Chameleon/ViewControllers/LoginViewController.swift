@@ -15,7 +15,15 @@ class LoginViewController: UIViewController {
     let textFieldStack: UIStackView = UIStackView()
     let idTextField: UITextField = UnderLineTextField()
     let pwTextField: UITextField = UnderLineTextField()
+    let pwCheckTextField: UITextField = UnderLineTextField()
+
+    let buttonStack: UIStackView = UIStackView()
     let loginButton: UIButton = UIButton()
+    let doneButton: UIButton = UIButton()
+    let cancelButton: UIButton = UIButton()
+    
+    let signUpButton: UIButton = UIButton(type: .system)
+    
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -24,6 +32,9 @@ class LoginViewController: UIViewController {
         setUpLoginUI()
         
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(clickedSignUp(sender:)), for: .touchUpInside)
+        doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +59,34 @@ class LoginViewController: UIViewController {
             homeVC.modalPresentationStyle = .fullScreen
             self.present(homeVC, animated: true, completion: nil)
         })
+    }
+    
+    @objc private func clickedSignUp(sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.pwCheckTextField.isHidden = false
+        })
         
+        signUpButton.isHidden = true
+        loginButton.isHidden = true
+        
+        doneButton.isHidden = false
+        cancelButton.isHidden = false
+    }
+    
+    @objc private func clickedDone(sender: UIButton) {
+        print("\(#fileID) \(#line)-line, \(#function)")
+    }
+    
+    @objc private func clickedCancel(sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.pwCheckTextField.isHidden = true
+        })
+        
+        signUpButton.isHidden = false
+        loginButton.isHidden = false
+        
+        doneButton.isHidden = true
+        cancelButton.isHidden = true
     }
     
     //MARK: - Methods
@@ -57,7 +95,19 @@ class LoginViewController: UIViewController {
         
         setUpTitleImage()
         setUpTextFields()
-        setUpLoginButton()
+        setUpButtons()
+        setUpSignUpButton()
+    }
+    
+    private func setUpSignUpButton() {
+        signUpButton.setTitle("아직 회원이 아니신가요?", for: .normal)
+        signUpButton.setTitleColor(.lightGray, for: .normal)
+
+        view.addSubview(signUpButton)
+        signUpButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(loginButton.snp.top).offset(-10)
+        }
     }
     
     private func setUpTitleImage() {
@@ -82,11 +132,11 @@ class LoginViewController: UIViewController {
         
         setUpIdTextField()
         setUpPwTextField()
+        setUpPwCheckTextField()
         
         view.addSubview(textFieldStack)
         textFieldStack.snp.makeConstraints { make in
             make.width.equalTo(view.safeAreaLayoutGuide).offset(-160)
-            make.height.equalTo(100)
             make.centerX.equalToSuperview()
             make.top.equalTo(titleImage.snp.bottom).offset(40)
         }
@@ -116,6 +166,71 @@ class LoginViewController: UIViewController {
         }
     }
     
+    private func setUpPwCheckTextField() {
+        pwCheckTextField.placeholder = "check password"
+        pwCheckTextField.clearButtonMode = .whileEditing
+        pwCheckTextField.isSecureTextEntry = true
+        pwCheckTextField.isHidden = true
+        
+        textFieldStack.addArrangedSubview(pwCheckTextField)
+        pwCheckTextField.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+    }
+    
+    private func setUpButtons() {
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        buttonStack.axis = .vertical
+        buttonStack.distribution = .fillEqually
+        buttonStack.spacing = 15
+        
+        setUpLoginButton()
+        setUpDoneButton()
+        setUpCancelButton()
+        
+        view.addSubview(buttonStack)
+        buttonStack.snp.makeConstraints { make in
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+        }
+    }
+    
+    private func setUpDoneButton() {
+        doneButton.clipsToBounds = true
+        
+        doneButton.setBackgroundColor(UIColor().buttonColor(), for: .normal)
+        doneButton.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
+        doneButton.layer.cornerRadius = 10
+        doneButton.setTitle("Sign Up", for: .normal)
+        
+        doneButton.isHidden = true
+        
+        buttonStack.addArrangedSubview(doneButton)
+        doneButton.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+    }
+    
+    private func setUpCancelButton() {
+        cancelButton.clipsToBounds = true
+        
+        cancelButton.setBackgroundColor(.lightGray, for: .normal)
+        cancelButton.setBackgroundColor(.darkGray, for: .selected)
+        cancelButton.layer.cornerRadius = 10
+        cancelButton.setTitle("Cancel", for: .normal)
+        
+        cancelButton.isHidden = true
+        
+        buttonStack.addArrangedSubview(cancelButton)
+        cancelButton.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(40)
+        }
+    }
+    
     private func setUpLoginButton() {
         loginButton.clipsToBounds = true
         
@@ -124,14 +239,10 @@ class LoginViewController: UIViewController {
         loginButton.layer.cornerRadius = 10
         loginButton.setTitle("Login", for: .normal)
         
-        view.addSubview(loginButton)
+        buttonStack.addArrangedSubview(loginButton)
         loginButton.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
+            make.width.equalToSuperview()
             make.height.equalTo(40)
-            
-            
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-            make.centerX.equalToSuperview()
         }
     }
     
@@ -170,11 +281,13 @@ class LoginViewController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
-            self.loginButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
+            self.buttonStack.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
+            self.signUpButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
         }
     }
     
     @objc private func keyboardWillHide(_ notification: Notification) {
-        self.loginButton.transform = .identity
+        self.buttonStack.transform = .identity
+        self.signUpButton.transform = .identity
     }
 }

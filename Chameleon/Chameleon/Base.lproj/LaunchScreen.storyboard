@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoImage" translatesAutoresizingMaskIntoConstraints="NO" id="4hP-M1-ZMt">
-                                <rect key="frame" x="40" y="391.66666666666669" width="334" height="112.66666666666669"/>
+                                <rect key="frame" x="40" y="371.66666666666669" width="334" height="112.66666666666669"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="BottomView" translatesAutoresizingMaskIntoConstraints="NO" id="kMk-Q7-Jjv">
                                 <rect key="frame" x="0.0" y="826" width="414" height="80"/>
@@ -29,7 +29,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="kMk-Q7-Jjv" secondAttribute="trailing" id="15F-hB-KBO"/>
                             <constraint firstItem="kMk-Q7-Jjv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="CE5-YC-o6A"/>
-                            <constraint firstItem="4hP-M1-ZMt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="c2G-IF-QMm"/>
+                            <constraint firstItem="4hP-M1-ZMt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-20" id="c2G-IF-QMm"/>
                             <constraint firstAttribute="bottom" secondItem="kMk-Q7-Jjv" secondAttribute="bottom" constant="-10" id="eGX-O4-ISc"/>
                             <constraint firstAttribute="trailing" secondItem="4hP-M1-ZMt" secondAttribute="trailing" constant="40" id="hJ5-vS-q2y"/>
                             <constraint firstItem="4hP-M1-ZMt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ulv-GG-QBo"/>
