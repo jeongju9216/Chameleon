@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setUpLoginUI()
         
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
