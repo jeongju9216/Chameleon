@@ -30,6 +30,12 @@ class HomeViewController: UIViewController {
     
     @objc func touchUpPhotoButton(sender: UIButton) {
         photoButton.touchUp()
+        
+        let uploadVC = UploadViewController()
+        uploadVC.uploadType = .Photo
+        
+        uploadVC.modalPresentationStyle = .fullScreen
+        navigationController?.pushViewController(uploadVC, animated: true)
     }
     
     @objc func touchDownVideoButton(sender: UIButton) {
@@ -42,7 +48,7 @@ class HomeViewController: UIViewController {
     
     //MARK: - Methods
     private func setUpNavigationBar() {
-        navigationItem.title = "Face Swap with Fake Face"
+        navigationItem.title = "Home"
         
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor().backgroundColor()
