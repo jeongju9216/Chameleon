@@ -16,10 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: windowScene) //SceneDelegate의 프로퍼티에 설정
-        let mainViewController = ViewController() //맨 처음 보여줄 VC
-        
-        window?.rootViewController = mainViewController
-        window?.makeKeyAndVisible()
+
+//        window?.rootViewController = LaunchViewController() //맨 처음 보여줄 VC
+        window?.rootViewController = CustomTabBarController() //맨 처음 보여줄 VC
+        window?.makeKeyAndVisible()        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
