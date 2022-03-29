@@ -20,19 +20,23 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoImage" translatesAutoresizingMaskIntoConstraints="NO" id="4hP-M1-ZMt">
                                 <rect key="frame" x="40" y="371.66666666666669" width="334" height="112.66666666666669"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="BottomView" translatesAutoresizingMaskIntoConstraints="NO" id="kMk-Q7-Jjv">
-                                <rect key="frame" x="0.0" y="826" width="414" height="80"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="BottomImage" translatesAutoresizingMaskIntoConstraints="NO" id="kMk-Q7-Jjv">
+                                <rect key="frame" x="0.0" y="726" width="414" height="180"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="CXn-X4-ofJ"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="yF7-S4-XSh"/>
                         <color key="backgroundColor" name="BackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="kMk-Q7-Jjv" secondAttribute="trailing" id="15F-hB-KBO"/>
-                            <constraint firstItem="kMk-Q7-Jjv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="CE5-YC-o6A"/>
+                            <constraint firstItem="kMk-Q7-Jjv" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="MGH-Mo-IMq"/>
+                            <constraint firstItem="kMk-Q7-Jjv" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Wbn-4x-pzW"/>
                             <constraint firstItem="4hP-M1-ZMt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-20" id="c2G-IF-QMm"/>
                             <constraint firstAttribute="bottom" secondItem="kMk-Q7-Jjv" secondAttribute="bottom" constant="-10" id="eGX-O4-ISc"/>
                             <constraint firstAttribute="trailing" secondItem="4hP-M1-ZMt" secondAttribute="trailing" constant="40" id="hJ5-vS-q2y"/>
                             <constraint firstItem="4hP-M1-ZMt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ulv-GG-QBo"/>
+                            <constraint firstAttribute="trailing" secondItem="kMk-Q7-Jjv" secondAttribute="trailing" id="xam-iN-ewX"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -42,7 +46,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BottomView" width="360" height="80"/>
+        <image name="BottomImage" width="752" height="139.33332824707031"/>
         <image name="LogoImage" width="597.66668701171875" height="112.66666412353516"/>
         <namedColor name="BackgroundColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

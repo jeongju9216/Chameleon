@@ -44,6 +44,8 @@ class LoginViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        
+        print("\(#fileID) \(#line)-line, \(#function)")
         removeKeyboardNotification()
     }
     
@@ -54,11 +56,10 @@ class LoginViewController: UIViewController {
     
     //MARK: - Actions
     @objc private func clickedLogin(sender: UIButton) {
-        self.dismiss(animated: true, completion: {
-            let homeVC = CustomTabBarController()
-            homeVC.modalPresentationStyle = .fullScreen
-            self.present(homeVC, animated: true, completion: nil)
-        })
+        let homeVC = CustomTabBarController()
+        homeVC.modalPresentationStyle = .fullScreen
+        homeVC.modalTransitionStyle = .crossDissolve
+        self.present(homeVC, animated: true, completion: nil)
     }
     
     @objc private func clickedSignUp(sender: UIButton) {
@@ -112,15 +113,14 @@ class LoginViewController: UIViewController {
     
     private func setUpTitleImage() {
         titleImage.image = UIImage(named: "LogoImage")
-        titleImage.clipsToBounds = true
         titleImage.contentMode = .scaleAspectFit
         
         view.addSubview(titleImage)
         titleImage.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-            make.width.equalTo(view.frame.width * 0.8)
             make.height.equalTo(view.frame.height * 0.1)
-            make.centerX.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.right.equalToSuperview().offset(-40)
+            make.left.equalToSuperview().offset(40)
         }
     }
     
