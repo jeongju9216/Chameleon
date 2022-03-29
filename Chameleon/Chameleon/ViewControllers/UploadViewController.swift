@@ -8,9 +8,13 @@
 import UIKit
 import SnapKit
 
-class UploadViewController: UIViewController {
+class UploadViewController: BaseViewController {
 
     //MARK: - Views
+    let uploadView: UIView = UIView()
+    
+    
+    //MARK: - Properties
     var uploadType: UploadType = .Video
     
     
@@ -26,13 +30,24 @@ class UploadViewController: UIViewController {
     private func setUpUploadUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpNavigationBar()
+        setUpNavigationBar(title: "Upload \(uploadType)")
+        setUpUploadView()
     }
     
-    private func setUpNavigationBar() {
-        self.navigationItem.title = "Upload \(uploadType)"
-        self.navigationController?.navigationBar.tintColor = .label
+    private func setUpUploadView() {
+        uploadView.backgroundColor = UIColor().backgroundColor()
         
+        uploadView.clipsToBounds = true
+        uploadView.layer.borderColor = UIColor().edgeColor().cgColor
+        uploadView.layer.borderWidth = 2
+        uploadView.layer.cornerRadius = 20
+        
+        view.addSubview(uploadView)
+        uploadView.snp.makeConstraints { make in
+            make.width.height.equalTo(view.frame.width * 0.6)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(-20)
+        }
     }
 }
 

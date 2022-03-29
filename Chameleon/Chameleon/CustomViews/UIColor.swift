@@ -31,4 +31,8 @@ extension UIColor {
     func edgeColor() -> UIColor {
         return UIColor(named: "EdgeColor") ?? .lightGray
     }
+    
+    func shadowColor() -> UIColor {
+        return UIColor(named: "ShadowColor") ?? .darkGray
+    }
 }

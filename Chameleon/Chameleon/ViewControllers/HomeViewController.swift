@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: BaseViewController {
     
     //MARK: - Views
     let photoButton: HomeMenuButton = HomeMenuButton(imageName: "PhotoButton", name: "PHOTO")
@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         print("\(#fileID) \(#line)-line, \(#function)")
-        setUpNavigationBar()
+        setUpNavigationBar(title: "Home")
         setUpHomeUI()
     }
     
@@ -47,21 +47,6 @@ class HomeViewController: UIViewController {
     }
     
     //MARK: - Methods
-    private func setUpNavigationBar() {
-        navigationItem.title = "Home"
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor().backgroundColor()
-        navigationItem.standardAppearance = appearance
-        navigationItem.scrollEdgeAppearance = appearance
-        
-        navigationController?.navigationBar.layer.masksToBounds = false
-        navigationController?.navigationBar.layer.shadowColor = UIColor().edgeColor().cgColor
-        navigationController?.navigationBar.layer.shadowOpacity = 0.6
-        navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0, height: 2)
-        navigationController?.navigationBar.layer.shadowRadius = 5
-    }
-    
     private func setUpHomeUI() {
         view.backgroundColor = UIColor().backgroundColor()
         

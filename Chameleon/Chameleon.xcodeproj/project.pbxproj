@@ -27,6 +27,7 @@
 		9BF442D727F2E5FE00537C60 /* bottomImage-Dark.json in Resources */ = {isa = PBXBuildFile; fileRef = 9BF442D527F2E5FE00537C60 /* bottomImage-Dark.json */; };
 		9BF442D827F2E5FE00537C60 /* bottomImage-Light.json in Resources */ = {isa = PBXBuildFile; fileRef = 9BF442D627F2E5FE00537C60 /* bottomImage-Light.json */; };
 		9BF442DC27F3473300537C60 /* UploadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF442DB27F3473300537C60 /* UploadViewController.swift */; };
+		9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BF442DD27F34DA500537C60 /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		9BF442D527F2E5FE00537C60 /* bottomImage-Dark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Dark.json"; sourceTree = "<group>"; };
 		9BF442D627F2E5FE00537C60 /* bottomImage-Light.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Light.json"; sourceTree = "<group>"; };
 		9BF442DB27F3473300537C60 /* UploadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadViewController.swift; sourceTree = "<group>"; };
+		9BF442DD27F34DA500537C60 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */,
 				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
 				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
+				9BF442DD27F34DA500537C60 /* BaseViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,
 				9B0D412F27EB113E00E2FA10 /* HomeMenuButton.swift in Sources */,
 				9BF442DC27F3473300537C60 /* UploadViewController.swift in Sources */,
 				9B0D412827EAA5A800E2FA10 /* LoginViewController.swift in Sources */,
