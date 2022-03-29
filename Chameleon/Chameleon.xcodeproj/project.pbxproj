@@ -22,6 +22,7 @@
 		9BD337AA27E74E5400E297FA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9BD337A927E74E5400E297FA /* SnapKit */; };
 		9BF442C427F2C31300537C60 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C327F2C31300537C60 /* FirebaseAuth */; };
 		9BF442C627F2C31300537C60 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C527F2C31300537C60 /* FirebaseDatabase */; };
+		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 				9BF442C627F2C31300537C60 /* FirebaseDatabase in Frameworks */,
 				9BD337AA27E74E5400E297FA /* SnapKit in Frameworks */,
 				9BF442C427F2C31300537C60 /* FirebaseAuth in Frameworks */,
+				9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +129,7 @@
 				9BD337A927E74E5400E297FA /* SnapKit */,
 				9BF442C327F2C31300537C60 /* FirebaseAuth */,
 				9BF442C527F2C31300537C60 /* FirebaseDatabase */,
+				9BF442CA27F2DEA000537C60 /* Lottie */,
 			);
 			productName = Chameleon;
 			productReference = 9B4B8FA027E0B2390066C7E3 /* Chameleon.app */;
@@ -159,6 +162,7 @@
 			packageReferences = (
 				9BD337A827E74E5400E297FA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				9BF442C227F2C31300537C60 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				9BF442C927F2DEA000537C60 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 9B4B8FA127E0B2390066C7E3 /* Products */;
 			projectDirPath = "";
@@ -423,6 +427,14 @@
 				kind = branch;
 			};
 		};
+		9BF442C927F2DEA000537C60 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -440,6 +452,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9BF442C227F2C31300537C60 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
+		};
+		9BF442CA27F2DEA000537C60 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9BF442C927F2DEA000537C60 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
