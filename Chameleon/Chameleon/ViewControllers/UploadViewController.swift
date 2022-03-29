@@ -12,7 +12,8 @@ class UploadViewController: BaseViewController {
 
     //MARK: - Views
     let uploadView: UIView = UIView()
-    
+    let uploadButton: UIButton = UIButton()
+
     
     //MARK: - Properties
     var uploadType: UploadType = .Video
@@ -32,6 +33,19 @@ class UploadViewController: BaseViewController {
         
         setUpNavigationBar(title: "Upload \(uploadType)")
         setUpUploadView()
+        setUpUploadButton()
+    }
+    
+    private func setUpUploadButton() {
+        uploadButton.applyMainButtonStyle(title: "업로드")
+        
+        view.addSubview(uploadButton)
+        uploadButton.snp.makeConstraints { make in
+            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
+            make.height.equalTo(40)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
+        }
     }
     
     private func setUpUploadView() {
@@ -44,9 +58,11 @@ class UploadViewController: BaseViewController {
         
         view.addSubview(uploadView)
         uploadView.snp.makeConstraints { make in
-            make.width.height.equalTo(view.frame.width * 0.6)
+            make.height.equalTo(uploadView.snp.width)
             make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(-20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
     }
 }

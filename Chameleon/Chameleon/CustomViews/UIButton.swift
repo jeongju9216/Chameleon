@@ -8,6 +8,17 @@
 import UIKit
 
 extension UIButton {
+    func applyMainButtonStyle(title: String) {
+        self.clipsToBounds = true
+        self.layer.masksToBounds = true
+        
+        self.setBackgroundColor(UIColor().buttonColor(), for: .normal)
+        self.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
+        self.layer.cornerRadius = 20 //heigth: 40 고정
+        
+        self.setTitle("업로드", for: .normal)
+    }
+    
     func setBackgroundColor(_ color: UIColor?, for state: UIControl.State) {
         if let color = color {
             UIGraphicsBeginImageContext(CGSize(width: 1.0, height: 1.0))

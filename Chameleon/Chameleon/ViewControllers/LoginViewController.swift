@@ -198,12 +198,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpDoneButton() {
-        doneButton.clipsToBounds = true
-        
-        doneButton.setBackgroundColor(UIColor().buttonColor(), for: .normal)
-        doneButton.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
-        doneButton.layer.cornerRadius = 10
-        doneButton.setTitle("Sign Up", for: .normal)
+        doneButton.applyMainButtonStyle(title: "Done")
         
         doneButton.isHidden = true
         
@@ -215,12 +210,9 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpCancelButton() {
-        cancelButton.clipsToBounds = true
-        
+        cancelButton.applyMainButtonStyle(title: "Cancel")
         cancelButton.setBackgroundColor(.lightGray, for: .normal)
         cancelButton.setBackgroundColor(.darkGray, for: .selected)
-        cancelButton.layer.cornerRadius = 10
-        cancelButton.setTitle("Cancel", for: .normal)
         
         cancelButton.isHidden = true
         
@@ -232,12 +224,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpLoginButton() {
-        loginButton.clipsToBounds = true
-        
-        loginButton.setBackgroundColor(UIColor().buttonColor(), for: .normal)
-        loginButton.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
-        loginButton.layer.cornerRadius = 10
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.applyMainButtonStyle(title: "Login")
         
         buttonStack.addArrangedSubview(loginButton)
         loginButton.snp.makeConstraints { make in
