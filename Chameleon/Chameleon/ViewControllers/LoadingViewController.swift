@@ -25,13 +25,17 @@ class LoadingViewController: BaseViewController {
     }()
     
     //MARK: - Properties
-    let guideString: String = "Loading"
+    var guideString: String = ""
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setUpLoadingUI()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     //MARK: - Methods
@@ -51,7 +55,7 @@ class LoadingViewController: BaseViewController {
         
         var count = 0
         let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            self.guideLabel.text = "Loading" + String(repeating: ".", count: count % 3)
+            self.guideLabel.text = self.guideString + String(repeating: ".", count: count % 3)
             count += 1
         }
         timer.fire()

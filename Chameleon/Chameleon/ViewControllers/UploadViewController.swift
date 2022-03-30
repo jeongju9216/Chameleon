@@ -37,7 +37,9 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Actions
     @objc private func clickedUpload(sender: UIButton) {
-        
+        let loadingVC = LoadingViewController()
+        loadingVC.guideString = "Loading"
+        self.present(loadingVC, animated: true)
     }
     
     //MARK: - Methods
