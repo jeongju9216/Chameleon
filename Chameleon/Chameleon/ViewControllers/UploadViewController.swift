@@ -22,6 +22,9 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Properties
     var uploadType: UploadType = .Video
+    lazy var uploadTypeString: String = {
+        return (uploadType == .Photo) ? "사진" : "영상"
+    }()
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -41,14 +44,14 @@ class UploadViewController: BaseViewController {
     private func setUpUploadUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpNavigationBar(title: "Upload \(uploadType)")
+        setUpNavigationBar(title: "\(uploadTypeString) 업로드")
         setUpGuideLabel()
         setUpUploadView()
         setUpUploadButton()
     }
     
     private func setUpGuideLabel() {
-        guideLabel.text = "변환할 \(uploadType == .Photo ? "사진" : "영상")을 선택해 주세요."
+        guideLabel.text = "변환할 \(uploadTypeString)을 선택해 주세요."
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)

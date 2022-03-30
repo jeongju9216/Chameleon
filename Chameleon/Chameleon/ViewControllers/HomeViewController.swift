@@ -19,7 +19,7 @@ class HomeViewController: BaseViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         print("\(#fileID) \(#line)-line, \(#function)")
-        setUpNavigationBar(title: "Home")
+        setUpNavigationBar(title: "")
         setUpHomeUI()
     }
     
