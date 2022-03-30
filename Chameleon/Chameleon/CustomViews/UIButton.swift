@@ -17,7 +17,12 @@ extension UIButton {
         self.layer.cornerRadius = 20 //heigth: 40 고정
         
         self.setTitle("업로드", for: .normal)
-        self.setTitleColor(.lightGray, for: .disabled)
+        
+        if UITraitCollection.current.userInterfaceStyle == .light {
+            self.setTitleColor(.white, for: .disabled)
+        } else {
+            self.setTitleColor(.lightGray, for: .disabled)
+        }
     }
     
     func setBackgroundColor(_ color: UIColor?, for state: UIControl.State) {

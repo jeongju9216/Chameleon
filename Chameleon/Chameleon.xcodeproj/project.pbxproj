@@ -70,12 +70,12 @@
 		9B0D411B27E856B500E2FA10 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
-				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
-				9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */,
-				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
-				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
 				9BF442DD27F34DA500537C60 /* BaseViewController.swift */,
+				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
+				9B0D412727EAA5A800E2FA10 /* LoginViewController.swift */,
+				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
+				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
+				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

@@ -11,6 +11,7 @@ class BaseViewController: UIViewController {
 
     func setUpNavigationBar(title: String) {
         navigationItem.title = title
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = UIColor().backgroundColor()

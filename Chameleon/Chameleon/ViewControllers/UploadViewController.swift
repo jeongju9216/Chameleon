@@ -11,6 +11,8 @@ import SnapKit
 class UploadViewController: BaseViewController {
 
     //MARK: - Views
+    let guideLabel: UILabel = UILabel()
+    
     let uploadView: UIView = UIView()
     let uploadImageView: UIImageView = UIImageView()
     let uploadLabel: UILabel = UILabel()
@@ -37,8 +39,20 @@ class UploadViewController: BaseViewController {
         view.backgroundColor = UIColor().backgroundColor()
         
         setUpNavigationBar(title: "Upload \(uploadType)")
+        setUpGuideLabel()
         setUpUploadView()
         setUpUploadButton()
+    }
+    
+    private func setUpGuideLabel() {
+        guideLabel.text = "변환할 \(uploadType == .Photo ? "사진" : "영상")을 선택해 주세요."
+        guideLabel.numberOfLines = 0
+        
+        view.addSubview(guideLabel)
+        guideLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+        }
     }
     
     private func setUpUploadButton() {
@@ -65,7 +79,7 @@ class UploadViewController: BaseViewController {
         uploadView.snp.makeConstraints { make in
             make.height.equalTo(uploadView.snp.width)
             make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.top.equalTo(guideLabel).offset(40)
             make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
             make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
