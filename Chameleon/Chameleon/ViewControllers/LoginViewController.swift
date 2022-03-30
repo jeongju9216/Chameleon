@@ -63,6 +63,8 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func clickedSignUp(sender: UIButton) {
+        clearTextFields()
+        
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.pwCheckTextField.isHidden = false
         })
@@ -75,10 +77,22 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func clickedDone(sender: UIButton) {
-        print("\(#fileID) \(#line)-line, \(#function)")
+        clearTextFields()
+        
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.pwCheckTextField.isHidden = true
+        })
+        
+        signUpButton.isHidden = false
+        loginButton.isHidden = false
+        
+        doneButton.isHidden = true
+        cancelButton.isHidden = true
     }
     
     @objc private func clickedCancel(sender: UIButton) {
+        clearTextFields()
+        
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.pwCheckTextField.isHidden = true
         })
@@ -91,6 +105,12 @@ class LoginViewController: UIViewController {
     }
     
     //MARK: - Methods
+    private func clearTextFields() {
+        idTextField.text = ""
+        pwTextField.text = ""
+        pwCheckTextField.text = ""
+    }
+    
     private func setUpLoginUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
@@ -198,7 +218,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpDoneButton() {
-        doneButton.applyMainButtonStyle(title: "Done")
+        doneButton.applyMainButtonStyle(title: "회원가입")
         
         doneButton.isHidden = true
         
@@ -210,7 +230,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpCancelButton() {
-        cancelButton.applyMainButtonStyle(title: "Cancel")
+        cancelButton.applyMainButtonStyle(title: "취소")
         cancelButton.setBackgroundColor(.lightGray, for: .normal)
         cancelButton.setBackgroundColor(.darkGray, for: .selected)
         
@@ -224,7 +244,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setUpLoginButton() {
-        loginButton.applyMainButtonStyle(title: "Login")
+        loginButton.applyMainButtonStyle(title: "로그인")
         
         buttonStack.addArrangedSubview(loginButton)
         loginButton.snp.makeConstraints { make in
@@ -234,47 +254,34 @@ class LoginViewController: UIViewController {
     }
     
     private func addKeyboardNotification() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: UIResponder.keyboardWillShowNotification, object: nil)
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func removeKeyboardNotification() {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil
-        )
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+    @objc private func keyboardWillChange(_ notification: Notification) {
+        guard let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        if notification.name == UIResponder.keyboardWillChangeFrameNotification || notification.name == UIResponder.keyboardWillShowNotification {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
+            print("keyboardHeight: \(keyboardHeight)")
             self.buttonStack.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
             self.signUpButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
+        } else {
+            self.buttonStack.transform = .identity
+            self.signUpButton.transform = .identity
         }
-    }
-    
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        self.buttonStack.transform = .identity
-        self.signUpButton.transform = .identity
     }
 }

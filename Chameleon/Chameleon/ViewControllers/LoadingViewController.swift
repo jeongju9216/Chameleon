@@ -33,7 +33,8 @@ class LoadingViewController: BaseViewController {
         
         setUpLoadingUI()
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+        //test code
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10) {
             self.dismiss(animated: true, completion: nil)
         }
     }

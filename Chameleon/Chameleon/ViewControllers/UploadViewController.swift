@@ -23,7 +23,7 @@ class UploadViewController: BaseViewController {
     //MARK: - Properties
     var uploadType: UploadType = .Video
     lazy var uploadTypeString: String = {
-        return (uploadType == .Photo) ? "사진" : "영상"
+        return (uploadType == .Photo) ? "사진" : "비디오"
     }()
     
     //MARK: - Life Cycles
@@ -38,6 +38,9 @@ class UploadViewController: BaseViewController {
     //MARK: - Actions
     @objc private func clickedUpload(sender: UIButton) {
         let loadingVC = LoadingViewController()
+        loadingVC.modalPresentationStyle = .fullScreen
+        loadingVC.modalTransitionStyle = .crossDissolve
+        
         loadingVC.guideString = "Loading"
         self.present(loadingVC, animated: true)
     }
@@ -46,7 +49,7 @@ class UploadViewController: BaseViewController {
     private func setUpUploadUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpNavigationBar(title: "\(uploadTypeString) 업로드")
+        setUpNavigationBar(title: "\(uploadType)")
         setUpGuideLabel()
         setUpUploadView()
         setUpUploadButton()
