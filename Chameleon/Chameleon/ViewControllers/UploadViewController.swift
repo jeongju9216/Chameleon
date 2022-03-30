@@ -23,16 +23,19 @@ class UploadViewController: BaseViewController {
     //MARK: - Properties
     var uploadType: UploadType = .Video
     
-    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
     
         setUpUploadUI()
         
-        uploadButton.isEnabled = false
+        uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
     }
     
+    //MARK: - Actions
+    @objc private func clickedUpload(sender: UIButton) {
+        
+    }
     
     //MARK: - Methods
     private func setUpUploadUI() {
