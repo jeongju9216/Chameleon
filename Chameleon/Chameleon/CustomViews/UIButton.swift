@@ -16,6 +16,7 @@ extension UIButton {
         self.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
         self.layer.cornerRadius = 20 //heigth: 40 고정
         
+        //todo: 업로드 -> title로 변경
         self.setTitle("업로드", for: .normal)
         
         if UITraitCollection.current.userInterfaceStyle == .light {

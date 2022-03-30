@@ -13,7 +13,10 @@ class LaunchViewController: UIViewController {
     
     //MARK: - Views
     let logoImage: UIImageView = UIImageView()
-    var animationView: AnimationView = .init(name: "bottomImage-Light")
+    lazy var animationView: AnimationView = {
+        UITraitCollection.current.userInterfaceStyle == .light ? .init(name: "bottomImage-Light")
+                                                               : .init(name: "bottomImage-Dark")
+    }()
 
     
     //MARK: - Life Cycles
@@ -68,10 +71,6 @@ class LaunchViewController: UIViewController {
     }
     
     private func setUpBottomView() {
-        if UITraitCollection.current.userInterfaceStyle == .dark {
-            animationView = .init(name: "bottomImage-Dark")
-        }
-        
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .loop
         animationView.animationSpeed = 1.2
