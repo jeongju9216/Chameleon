@@ -10,6 +10,7 @@ import SnapKit
 
 class ChooseFaceCell: UICollectionViewCell {
     let imageView: UIImageView = UIImageView()
+    var image: UIImage?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -28,15 +29,19 @@ class ChooseFaceCell: UICollectionViewCell {
     }
     
     private func setupImageView() {
-        imageView.image = UIImage(named: "SampleFaceImage")
-        imageView.clipsToBounds = true
+        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 10
         
         contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.width.height.equalToSuperview()
         }
+    }
+    
+    func setupImage() {
+        imageView.image = image
     }
     
 }

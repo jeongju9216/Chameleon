@@ -36,14 +36,13 @@ class ChooseFaceViewController: BaseViewController {
     
     private func setupFaceCollectionView() {
         faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-        faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 80, right: 0)
+        faceCollectionView.backgroundColor = .backgroundColor
+        faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 80, right: 10)
+        faceCollectionView.showsVerticalScrollIndicator = false
         
         view.addSubview(faceCollectionView)
         faceCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(view).offset(10)
-            make.bottom.equalTo(view).offset(-10)
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(10)
-            make.right.equalTo(view.safeAreaLayoutGuide).offset(-10)
+            make.width.height.equalToSuperview()
         }
     }
     
@@ -72,8 +71,17 @@ class ChooseFaceViewController: BaseViewController {
 extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size = (faceCollectionView.frame.size.width / 3.05).rounded(.down) - 5
+        let interval: CGFloat = 10
+        let size = (UIScreen.main.bounds.width - interval * 4) / 3
         return CGSize(width: size, height: size)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 10
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -82,7 +90,13 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
-        //todo: input cell data
+    
+        if indexPath.row % 2 == 0 {
+            cell.image = UIImage(named: "SampleFaceImage")
+        } else {
+            cell.image = UIImage(named: "ChameleonImage")
+        }
+        cell.setupImage()
         
         return cell
     }
