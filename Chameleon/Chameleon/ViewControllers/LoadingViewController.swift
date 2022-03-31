@@ -31,7 +31,7 @@ class LoadingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpLoadingUI()
+        setupLoadingUI()
         
         //test code
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 10) {
@@ -40,16 +40,16 @@ class LoadingViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setUpLoadingUI() {
+    private func setupLoadingUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpTopAnimationView()
-        setUpBottomAnimationView()
-        setUpChameleonImage()
-        setUpGuideLabel()
+        setupTopAnimationView()
+        setupBottomAnimationView()
+        setupChameleonImage()
+        setupGuideLabel()
     }
     
-    private func setUpGuideLabel() {
+    private func setupGuideLabel() {
         guideLabel.text = guideString
         guideLabel.font = UIFont.boldSystemFont(ofSize: 32)
         guideLabel.numberOfLines = 0
@@ -68,7 +68,7 @@ class LoadingViewController: BaseViewController {
         }
     }
     
-    private func setUpChameleonImage() {
+    private func setupChameleonImage() {
         if let chameleonImage = UIImage(named: "ChameleonImage") {
             chameleonImageView.image = chameleonImage
             chameleonImageView.contentMode = .scaleAspectFill
@@ -84,7 +84,7 @@ class LoadingViewController: BaseViewController {
         
     }
     
-    private func setUpTopAnimationView() {
+    private func setupTopAnimationView() {
         topAnimationView.transform = .init(rotationAngle: .pi)
         
         topAnimationView.contentMode = .scaleAspectFill
@@ -102,7 +102,7 @@ class LoadingViewController: BaseViewController {
         }
     }
     
-    private func setUpBottomAnimationView() {
+    private func setupBottomAnimationView() {
         bottomAnimationView.contentMode = .scaleAspectFill
         bottomAnimationView.loopMode = .loop
         bottomAnimationView.animationSpeed = 1.2

@@ -25,8 +25,8 @@ class LaunchViewController: UIViewController {
         
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpLogoImage()
-        setUpBottomView()
+        setupLogoImage()
+        setupBottomView()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             self.logoImage.snp.remakeConstraints { make in
@@ -57,7 +57,7 @@ class LaunchViewController: UIViewController {
     }
     
     //MARK: - Methods
-    private func setUpLogoImage() {
+    private func setupLogoImage() {
         logoImage.image = UIImage(named: "LogoImage")
         logoImage.contentMode = .scaleAspectFit
         
@@ -70,7 +70,7 @@ class LaunchViewController: UIViewController {
         }
     }
     
-    private func setUpBottomView() {
+    private func setupBottomView() {
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .loop
         animationView.animationSpeed = 1.2

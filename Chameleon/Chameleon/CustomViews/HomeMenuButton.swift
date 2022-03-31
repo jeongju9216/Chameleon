@@ -21,7 +21,7 @@ class HomeMenuButton: UIButton {
         self.image = UIImage(named: imageName)
         self.name = name
         
-        setUpUI()
+        setupUI()
     }
     
     init() {
@@ -33,7 +33,7 @@ class HomeMenuButton: UIButton {
     }
     
     //MARK: - Methods
-    private func setUpUI() {
+    private func setupUI() {
         self.clipsToBounds = true
         self.backgroundColor = UIColor().buttonColor()
         

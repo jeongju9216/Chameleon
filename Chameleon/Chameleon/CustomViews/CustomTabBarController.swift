@@ -15,7 +15,7 @@ class CustomTabBarController: UITabBarController {
         super.viewDidLoad()
         
         initViewControllers()
-        setUpTabBar()
+        setupTabBar()
     }
     
     //MARK: - Methods
@@ -31,7 +31,7 @@ class CustomTabBarController: UITabBarController {
         self.viewControllers = [mainVC, moreVC]
     }
     
-    private func setUpTabBar() {
+    private func setupTabBar() {
         self.tabBar.clipsToBounds = true
         
         self.tabBar.tintColor = UIColor().mainColor()

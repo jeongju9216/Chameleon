@@ -20,6 +20,7 @@
 		9B4B8FAD27E0B2390066C7E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B8FAC27E0B2390066C7E3 /* Assets.xcassets */; };
 		9B4B8FB027E0B2390066C7E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */; };
 		9BD337AA27E74E5400E297FA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9BD337A927E74E5400E297FA /* SnapKit */; };
+		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
 		9BF442C427F2C31300537C60 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C327F2C31300537C60 /* FirebaseAuth */; };
 		9BF442C627F2C31300537C60 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C527F2C31300537C60 /* FirebaseDatabase */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -46,6 +47,7 @@
 		9B4B8FAC27E0B2390066C7E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B4B8FAF27E0B2390066C7E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B4B8FB127E0B2390066C7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		9BF442D527F2E5FE00537C60 /* bottomImage-Dark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Dark.json"; sourceTree = "<group>"; };
 		9BF442D627F2E5FE00537C60 /* bottomImage-Light.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Light.json"; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
 				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 				9BF442DF27F3DF9400537C60 /* LoadingViewController.swift */,
+				9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 				9B0D412827EAA5A800E2FA10 /* LoginViewController.swift in Sources */,
 				9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */,
 				9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */,
+				9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */,
 				9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */,
 				9BF442E027F3DF9400537C60 /* LoadingViewController.swift in Sources */,
 				9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */,

@@ -9,7 +9,7 @@ import UIKit
 
 class BaseViewController: UIViewController {
 
-    func setUpNavigationBar(title: String) {
+    func setupNavigationBar(title: String) {
         navigationItem.title = title
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
         

@@ -19,8 +19,8 @@ class HomeViewController: BaseViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         print("\(#fileID) \(#line)-line, \(#function)")
-        setUpNavigationBar(title: "")
-        setUpHomeUI()
+        setupNavigationBar(title: "")
+        setupHomeUI()
     }
     
     //MARK: - Actions
@@ -53,15 +53,15 @@ class HomeViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setUpHomeUI() {
+    private func setupHomeUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpPhotoButton()
-        setUpVideoButton()
-        setUpButtonStack()
+        setupPhotoButton()
+        setupVideoButton()
+        setupButtonStack()
     }
     
-    private func setUpButtonStack() {
+    private func setupButtonStack() {
         let buttonStack = UIStackView(arrangedSubviews: [photoButton, videoButton])
         buttonStack.axis = .horizontal
         buttonStack.spacing = 20
@@ -89,12 +89,12 @@ class HomeViewController: BaseViewController {
         }
     }
     
-    private func setUpPhotoButton() {
+    private func setupPhotoButton() {
         photoButton.addTarget(self, action: #selector(touchDownPhotoButton(sender:)), for: .touchDown)
         photoButton.addTarget(self, action: #selector(touchUpPhotoButton(sender:)), for: .touchUpInside)
     }
     
-    private func setUpVideoButton() {
+    private func setupVideoButton() {
         videoButton.addTarget(self, action: #selector(touchDownVideoButton(sender:)), for: .touchDown)
         videoButton.addTarget(self, action: #selector(touchUpVideoButton(sender:)), for: .touchUpInside)
     }

@@ -30,7 +30,7 @@ class UploadViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        setUpUploadUI()
+        setupUploadUI()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
     }
@@ -46,16 +46,16 @@ class UploadViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setUpUploadUI() {
+    private func setupUploadUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpNavigationBar(title: "\(uploadType)")
-        setUpGuideLabel()
-        setUpUploadView()
-        setUpUploadButton()
+        setupNavigationBar(title: "\(uploadType)")
+        setupGuideLabel()
+        setupUploadView()
+        setupUploadButton()
     }
     
-    private func setUpGuideLabel() {
+    private func setupGuideLabel() {
         guideLabel.text = "변환할 \(uploadTypeString)을 선택해 주세요."
         guideLabel.numberOfLines = 0
         
@@ -66,7 +66,7 @@ class UploadViewController: BaseViewController {
         }
     }
     
-    private func setUpUploadButton() {
+    private func setupUploadButton() {
         uploadButton.applyMainButtonStyle(title: "업로드")
         
         view.addSubview(uploadButton)
@@ -78,7 +78,7 @@ class UploadViewController: BaseViewController {
         }
     }
     
-    private func setUpUploadView() {
+    private func setupUploadView() {
         uploadView.backgroundColor = UIColor().backgroundColor()
         
         uploadView.clipsToBounds = true
@@ -95,11 +95,11 @@ class UploadViewController: BaseViewController {
             make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
         
-        setUpUploadImageInView()
-        setUpUploadLabelInView()
+        setupUploadImageInView()
+        setupUploadLabelInView()
     }
     
-    private func setUpUploadImageInView() {
+    private func setupUploadImageInView() {
         let uploadImageName: String = (uploadType == .Photo) ? "photo" : "video"
         if let uploadImage = UIImage(systemName: uploadImageName) {
             uploadImageView.image = uploadImage.withRenderingMode(.alwaysTemplate)
@@ -115,7 +115,7 @@ class UploadViewController: BaseViewController {
         }
     }
     
-    private func setUpUploadLabelInView() {
+    private func setupUploadLabelInView() {
         uploadLabel.text = "Choose \(uploadType)"
         uploadLabel.textColor = .lightGray
         

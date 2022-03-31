@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setUpLoginUI()
+        setupLoginUI()
         
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(clickedSignUp(sender:)), for: .touchUpInside)
@@ -111,16 +111,16 @@ class LoginViewController: UIViewController {
         pwCheckTextField.text = ""
     }
     
-    private func setUpLoginUI() {
+    private func setupLoginUI() {
         view.backgroundColor = UIColor().backgroundColor()
         
-        setUpTitleImage()
-        setUpTextFields()
-        setUpButtons()
-        setUpSignUpButton()
+        setupTitleImage()
+        setupTextFields()
+        setupButtons()
+        setupSignUpButton()
     }
     
-    private func setUpSignUpButton() {
+    private func setupSignUpButton() {
         signUpButton.setTitle("아직 회원이 아니신가요?", for: .normal)
         signUpButton.setTitleColor(.lightGray, for: .normal)
 
@@ -131,7 +131,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpTitleImage() {
+    private func setupTitleImage() {
         titleImage.image = UIImage(named: "LogoImage")
         titleImage.contentMode = .scaleAspectFit
         
@@ -144,15 +144,15 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpTextFields() {
+    private func setupTextFields() {
         textFieldStack.translatesAutoresizingMaskIntoConstraints = false
         textFieldStack.axis = .vertical
         textFieldStack.distribution = .fillEqually
         textFieldStack.spacing = 30
         
-        setUpIdTextField()
-        setUpPwTextField()
-        setUpPwCheckTextField()
+        setupIdTextField()
+        setupPwTextField()
+        setupPwCheckTextField()
         
         view.addSubview(textFieldStack)
         textFieldStack.snp.makeConstraints { make in
@@ -162,7 +162,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpIdTextField() {
+    private func setupIdTextField() {
         idTextField.placeholder = "email"
         idTextField.clearButtonMode = .whileEditing
         idTextField.keyboardType = .emailAddress
@@ -174,7 +174,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpPwTextField() {
+    private func setupPwTextField() {
         pwTextField.placeholder = "password"
         pwTextField.clearButtonMode = .whileEditing
         pwTextField.isSecureTextEntry = true
@@ -186,7 +186,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpPwCheckTextField() {
+    private func setupPwCheckTextField() {
         pwCheckTextField.placeholder = "check password"
         pwCheckTextField.clearButtonMode = .whileEditing
         pwCheckTextField.isSecureTextEntry = true
@@ -199,15 +199,15 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpButtons() {
+    private func setupButtons() {
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 15
         
-        setUpLoginButton()
-        setUpDoneButton()
-        setUpCancelButton()
+        setupLoginButton()
+        setupDoneButton()
+        setupCancelButton()
         
         view.addSubview(buttonStack)
         buttonStack.snp.makeConstraints { make in
@@ -217,7 +217,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpDoneButton() {
+    private func setupDoneButton() {
         doneButton.applyMainButtonStyle(title: "회원가입")
         
         doneButton.isHidden = true
@@ -229,7 +229,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpCancelButton() {
+    private func setupCancelButton() {
         cancelButton.applyMainButtonStyle(title: "취소")
         cancelButton.setBackgroundColor(.lightGray, for: .normal)
         cancelButton.setBackgroundColor(.darkGray, for: .selected)
@@ -243,7 +243,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    private func setUpLoginButton() {
+    private func setupLoginButton() {
         loginButton.applyMainButtonStyle(title: "로그인")
         
         buttonStack.addArrangedSubview(loginButton)
