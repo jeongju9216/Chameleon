@@ -8,31 +8,32 @@
 import UIKit
 
 extension UIColor {
-    func mainColor() -> UIColor {
+    
+    class var mainColor: UIColor {
         return UIColor(named: "MainColor") ?? .black
     }
     
-    func buttonColor() -> UIColor {
+    class var buttonColor: UIColor {
         return UIColor(named: "ButtonColor") ?? .black
     }
     
-    func buttonClickColor() -> UIColor {
+    class var buttonClickColor: UIColor {
         return UIColor(named: "ButtonClickColor") ?? .black
     }
 
-    func buttonBorderColor() -> UIColor {
+    class var buttonBorderColor: UIColor {
         return UIColor(named: "ButtonBorderColor") ?? .black
     }
     
-    func backgroundColor() -> UIColor {
+    class var backgroundColor: UIColor {
         return UIColor(named: "BackgroundColor") ?? .black
     }
     
-    func edgeColor() -> UIColor {
+    class var edgeColor: UIColor {
         return UIColor(named: "EdgeColor") ?? .lightGray
     }
     
-    func shadowColor() -> UIColor {
+    class var shadowColor: UIColor {
         return UIColor(named: "ShadowColor") ?? .darkGray
     }
 }

@@ -34,7 +34,7 @@ class CustomTabBarController: UITabBarController {
     private func setupTabBar() {
         self.tabBar.clipsToBounds = true
         
-        self.tabBar.tintColor = UIColor().mainColor()
+        self.tabBar.tintColor = UIColor.mainColor
         self.tabBar.backgroundColor = UIColor(named:"TabBarColor")
         
         self.tabBar.layer.borderWidth = 3

@@ -12,8 +12,8 @@ extension UIButton {
         self.clipsToBounds = true
         self.layer.masksToBounds = true
         
-        self.setBackgroundColor(UIColor().buttonColor(), for: .normal)
-        self.setBackgroundColor(UIColor().buttonClickColor(), for: .selected)
+        self.setBackgroundColor(UIColor.buttonColor, for: .normal)
+        self.setBackgroundColor(UIColor.buttonClickColor, for: .selected)
         self.layer.cornerRadius = 20 //heigth: 40 고정
         
         self.setTitle(title, for: .normal)

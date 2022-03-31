@@ -35,14 +35,14 @@ class HomeMenuButton: UIButton {
     //MARK: - Methods
     private func setupUI() {
         self.clipsToBounds = true
-        self.backgroundColor = UIColor().buttonColor()
+        self.backgroundColor = UIColor.buttonColor
         
         self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor().buttonBorderColor().cgColor
+        self.layer.borderColor = UIColor.buttonBorderColor.cgColor
         
         self.layer.cornerRadius = 15
         
-        self.layer.shadowColor = UIColor().edgeColor().cgColor
+        self.layer.shadowColor = UIColor.edgeColor.cgColor
         self.layer.shadowOpacity = 0.3
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowRadius = 3
@@ -86,13 +86,13 @@ class HomeMenuButton: UIButton {
     }
     
     func touchDown() {
-        self.backgroundColor = UIColor().buttonClickColor()
+        self.backgroundColor = UIColor.buttonClickColor
         menuImage.tintColor = .lightGray
         menuLabel.textColor = .lightGray
     }
     
     func touchUp() {
-        self.backgroundColor = UIColor().buttonColor()
+        self.backgroundColor = UIColor.buttonColor
         menuImage.tintColor = .white
         menuLabel.textColor = .white
     }

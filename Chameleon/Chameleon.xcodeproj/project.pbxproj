@@ -21,6 +21,7 @@
 		9B4B8FB027E0B2390066C7E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */; };
 		9BD337AA27E74E5400E297FA /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 9BD337A927E74E5400E297FA /* SnapKit */; };
 		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
+		9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */; };
 		9BF442C427F2C31300537C60 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C327F2C31300537C60 /* FirebaseAuth */; };
 		9BF442C627F2C31300537C60 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442C527F2C31300537C60 /* FirebaseDatabase */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -48,6 +49,7 @@
 		9B4B8FAF27E0B2390066C7E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B4B8FB127E0B2390066C7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
+		9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceCell.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		9BF442D527F2E5FE00537C60 /* bottomImage-Dark.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Dark.json"; sourceTree = "<group>"; };
 		9BF442D627F2E5FE00537C60 /* bottomImage-Light.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "bottomImage-Light.json"; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
 				9B0D412C27EACC5D00E2FA10 /* UIButton.swift */,
 				9B0D413027EC0EBD00E2FA10 /* UIColor.swift */,
+				9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				9BF442D027F2E04700537C60 /* LaunchViewController.swift in Sources */,
 				9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */,
 				9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */,
+				9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

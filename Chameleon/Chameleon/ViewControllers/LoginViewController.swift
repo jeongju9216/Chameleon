@@ -112,7 +112,7 @@ class LoginViewController: UIViewController {
     }
     
     private func setupLoginUI() {
-        view.backgroundColor = UIColor().backgroundColor()
+        view.backgroundColor = UIColor.backgroundColor
         
         setupTitleImage()
         setupTextFields()

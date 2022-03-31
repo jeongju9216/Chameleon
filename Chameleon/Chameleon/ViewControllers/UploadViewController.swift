@@ -65,7 +65,7 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Methods
     private func setupUploadUI() {
-        view.backgroundColor = UIColor().backgroundColor()
+        view.backgroundColor = UIColor.backgroundColor
         
         setupNavigationBar(title: "\(uploadType)")
         setupGuideLabel()
@@ -97,10 +97,10 @@ class UploadViewController: BaseViewController {
     }
     
     private func setupUploadView() {
-        uploadView.backgroundColor = UIColor().backgroundColor()
+        uploadView.backgroundColor = UIColor.backgroundColor
         
         uploadView.clipsToBounds = true
-        uploadView.layer.borderColor = UIColor().edgeColor().cgColor
+        uploadView.layer.borderColor = UIColor.edgeColor.cgColor
         uploadView.layer.borderWidth = 2
         uploadView.layer.cornerRadius = 20
         

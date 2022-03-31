@@ -18,7 +18,7 @@ class MoreViewController: UIViewController {
 
     func test() {
         let test = UILabel()
-        view.backgroundColor = UIColor().backgroundColor() // 배경색
+        view.backgroundColor = UIColor.backgroundColor // 배경색
         view.addSubview(test)
     }
 }

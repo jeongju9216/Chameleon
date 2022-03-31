@@ -34,14 +34,14 @@ class LoadingViewController: BaseViewController {
         setupLoadingUI()
         
         //test code
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             self.dismiss(animated: true)
         }
     }
     
     //MARK: - Methods
     private func setupLoadingUI() {
-        view.backgroundColor = UIColor().backgroundColor()
+        view.backgroundColor = UIColor.backgroundColor
         
         setupTopAnimationView()
         setupBottomAnimationView()

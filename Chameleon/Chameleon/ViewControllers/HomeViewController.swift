@@ -57,7 +57,7 @@ class HomeViewController: BaseViewController {
     
     //MARK: - Methods
     private func setupHomeUI() {
-        view.backgroundColor = UIColor().backgroundColor()
+        view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "")
 
         setupPhotoButton()
