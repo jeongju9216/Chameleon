@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -32,9 +33,13 @@ class LoginViewController: UIViewController {
         setupLoginUI()
         
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
-        signUpButton.addTarget(self, action: #selector(clickedSignUp(sender:)), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
+        
+        idTextField.text = "test@test.com"
+        pwTextField.text = "test111"
+        pwCheckTextField.text = "test111"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,7 +50,6 @@ class LoginViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        print("\(#fileID) \(#line)-line, \(#function)")
         removeKeyboardNotification()
     }
     
@@ -62,18 +66,18 @@ class LoginViewController: UIViewController {
         self.present(homeVC, animated: true, completion: nil)
     }
     
-    @objc private func clickedSignUp(sender: UIButton) {
-        clearTextFields()
+    @objc private func clickedStartSignUpButton(sender: UIButton) {
+        self.clearTextFields()
         
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.pwCheckTextField.isHidden = false
         })
         
-        signUpButton.isHidden = true
-        loginButton.isHidden = true
+        self.signUpButton.isHidden = true
+        self.loginButton.isHidden = true
         
-        doneButton.isHidden = false
-        cancelButton.isHidden = false
+        self.doneButton.isHidden = false
+        self.cancelButton.isHidden = false
     }
     
     @objc private func clickedDone(sender: UIButton) {
@@ -218,6 +222,8 @@ class LoginViewController: UIViewController {
     }
     
     private func setupDoneButton() {
+//        doneButton.isEnabled = false
+        
         doneButton.applyMainButtonStyle(title: "회원가입")
         
         doneButton.isHidden = true
@@ -244,6 +250,8 @@ class LoginViewController: UIViewController {
     }
     
     private func setupLoginButton() {
+//        loginButton.isEnabled = false
+        
         loginButton.applyMainButtonStyle(title: "로그인")
         
         buttonStack.addArrangedSubview(loginButton)
