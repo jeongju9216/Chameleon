@@ -36,10 +36,6 @@ class LoginViewController: UIViewController {
         signUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
-        
-        idTextField.text = "test@test.com"
-        pwTextField.text = "test111"
-        pwCheckTextField.text = "test111"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,14 +56,27 @@ class LoginViewController: UIViewController {
     
     //MARK: - Actions
     @objc private func clickedLogin(sender: UIButton) {
-        let homeVC = CustomTabBarController()
-        homeVC.modalPresentationStyle = .fullScreen
-        homeVC.modalTransitionStyle = .crossDissolve
-        self.present(homeVC, animated: true, completion: nil)
+        guard let email = idTextField.text,
+              let password = pwTextField.text else {
+            return
+        }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
+            guard let strongSelf = self else { return }
+            
+            if error == nil {
+                let homeVC = CustomTabBarController()
+                homeVC.modalPresentationStyle = .fullScreen
+                homeVC.modalTransitionStyle = .crossDissolve
+                strongSelf.present(homeVC, animated: true, completion: nil)
+            } else {
+                print("Login Error: \(error)")
+            }
+        }
     }
     
     @objc private func clickedStartSignUpButton(sender: UIButton) {
-        self.clearTextFields()
+//        self.clearTextFields()
         
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.pwCheckTextField.isHidden = false
@@ -81,17 +90,32 @@ class LoginViewController: UIViewController {
     }
     
     @objc private func clickedDone(sender: UIButton) {
-        clearTextFields()
+        guard let email = idTextField.text,
+              let password = pwTextField.text else {
+            return
+        }
         
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            self?.pwCheckTextField.isHidden = true
-        })
-        
-        signUpButton.isHidden = false
-        loginButton.isHidden = false
-        
-        doneButton.isHidden = true
-        cancelButton.isHidden = true
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            guard let user = authResult?.user else { return }
+            
+            if error == nil { //정상 완료
+                print("user: \(user)")
+                self.clearTextFields()
+                
+                UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                    self?.pwCheckTextField.isHidden = true
+                })
+                
+                self.signUpButton.isHidden = false
+                self.loginButton.isHidden = false
+                
+                self.doneButton.isHidden = true
+                self.cancelButton.isHidden = true
+            } else {
+                //에러
+                print("Auth Error: \(error)")
+            }
+        }
     }
     
     @objc private func clickedCancel(sender: UIButton) {
