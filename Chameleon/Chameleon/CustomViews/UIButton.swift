@@ -17,6 +17,7 @@ extension UIButton {
         self.layer.cornerRadius = 20 //heigth: 40 고정
         
         self.setTitle(title, for: .normal)
+        self.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         
         if UITraitCollection.current.userInterfaceStyle == .light {
             self.setTitleColor(.white, for: .disabled)

@@ -28,7 +28,7 @@ class LaunchViewController: UIViewController {
         
         view.backgroundColor = UIColor.backgroundColor
         
-        checkAutoLogin()
+//        checkAutoLogin()
         
         setupLogoImage()
         setupBottomView()

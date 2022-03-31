@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
     let pwCheckTextField: UITextField = UnderLineTextField()
 
     var autoLoginButton: UIButton!
+    var guideLabel: UILabel!
     
     let buttonStack: UIStackView = UIStackView()
     let loginButton: UIButton = UIButton()
@@ -26,7 +27,6 @@ class LoginViewController: UIViewController {
     let cancelButton: UIButton = UIButton()
     
     let signUpButton: UIButton = UIButton(type: .system)
-    
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -69,7 +69,7 @@ class LoginViewController: UIViewController {
             
             if error == nil {
                 if let _ = self?.autoLoginButton.isSelected {
-                    self?.saveAuth(email: email, password: password)
+                    strongSelf.saveAuth(email: email, password: password)
                 }
                 
                 let homeVC = CustomTabBarController()
@@ -78,6 +78,7 @@ class LoginViewController: UIViewController {
                 strongSelf.present(homeVC, animated: true, completion: nil)
             } else {
                 print("Login Error: \(String(describing: error))")
+                strongSelf.showWrongLoginGuide()
             }
         }
     }
@@ -93,14 +94,20 @@ class LoginViewController: UIViewController {
         }
         
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            guard let user = authResult?.user else { return }
+            guard let user = authResult?.user else {
+                self.showWrongSignUpGuide()
+                return
+                
+            }
             
             if error == nil { //정상 완료
                 print("user: \(user)")
                 self.showLoginUI()
+                self.showLoginGuide()
             } else {
                 //에러
                 print("Auth Error: \(String(describing: error))")
+                self.showWrongSignUpGuide()
             }
         }
     }
@@ -111,9 +118,33 @@ class LoginViewController: UIViewController {
     
     @objc private func clickedAutoLogin(sender: UIButton) {
         autoLoginButton.isSelected = !autoLoginButton.isSelected
+        UserDefaults.standard.set(autoLoginButton.isSelected, forKey: "isSaveAuth")
+        UserDefaults.standard.synchronize()
     }
     
     //MARK: - Methods
+    private func showWrongLoginGuide() {
+        guideLabel.text = "이메일이나 비밀번호가 틀렸습니다."
+        guideLabel.textColor = .red
+        guideLabel.isHidden = false
+    }
+    
+    private func showWrongSignUpGuide() {
+        guideLabel.text = "이미 존재하는 이메일입니다."
+        guideLabel.textColor = .red
+        guideLabel.isHidden = false
+    }
+    
+    private func showLoginGuide() {
+        guideLabel.text = "가입한 계정으로 로그인을 해주세요."
+        guideLabel.textColor = .label
+        guideLabel.isHidden = false
+    }
+    
+    private func hideGuideLabel() {
+        guideLabel.isHidden = true
+    }
+    
     private func saveAuth(email: String, password: String) {
         print("Save Auth!!!")
         UserDefaults.standard.set(email, forKey: "email")
@@ -135,6 +166,8 @@ class LoginViewController: UIViewController {
         
         self.doneButton.isHidden = true
         self.cancelButton.isHidden = true
+        
+        self.idTextField.becomeFirstResponder()
     }
     
     private func showSignUpUI() {
@@ -151,12 +184,16 @@ class LoginViewController: UIViewController {
         
         self.doneButton.isHidden = false
         self.cancelButton.isHidden = false
+        
+        self.idTextField.becomeFirstResponder()
     }
     
     private func clearTextFields() {
         idTextField.text = ""
         pwTextField.text = ""
         pwCheckTextField.text = ""
+        
+        guideLabel.isHidden = true
     }
     
     private func setupLoginUI() {
@@ -165,8 +202,22 @@ class LoginViewController: UIViewController {
         setupTitleImage()
         setupTextFields()
         setupAutoLoginButton()
+        setupGuideLabel()
+        
         setupButtons()
         setupSignUpButton()
+    }
+    
+    private func setupGuideLabel() {
+        guideLabel = UILabel()
+        guideLabel.font = .systemFont(ofSize: 16)
+        guideLabel.isHidden = true
+        
+        view.addSubview(guideLabel)
+        guideLabel.snp.makeConstraints { make in
+            make.left.equalTo(textFieldStack.snp.left)
+            make.top.equalTo(autoLoginButton.snp.bottom).offset(20)
+        }
     }
     
     private func setupAutoLoginButton() {
@@ -177,7 +228,8 @@ class LoginViewController: UIViewController {
         autoLoginButton.setImage(UIImage(systemName: "checkmark.square.fill")?.withRenderingMode(.alwaysTemplate), for: .selected)
         autoLoginButton.tintColor = .mainColor
         
-        autoLoginButton.isSelected = true
+        let isSaveAuth = UserDefaults.standard.bool(forKey: "isSaveAuth")
+        autoLoginButton.isSelected = isSaveAuth
         
         view.addSubview(autoLoginButton)
         autoLoginButton.snp.makeConstraints { make in
