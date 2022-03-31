@@ -19,7 +19,6 @@ class HomeViewController: BaseViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         print("\(#fileID) \(#line)-line, \(#function)")
-        setupNavigationBar(title: "")
         setupHomeUI()
     }
     
@@ -33,9 +32,13 @@ class HomeViewController: BaseViewController {
         
         let uploadVC = UploadViewController()
         uploadVC.uploadType = .Photo
-        
+
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)
+
+//        let chooseFaceVC = ChooseFaceViewController()
+//        chooseFaceVC.modalPresentationStyle = .fullScreen
+//        navigationController?.pushViewController(chooseFaceVC, animated: true)
     }
     
     @objc func touchDownVideoButton(sender: UIButton) {
@@ -55,7 +58,8 @@ class HomeViewController: BaseViewController {
     //MARK: - Methods
     private func setupHomeUI() {
         view.backgroundColor = UIColor().backgroundColor()
-        
+        setupNavigationBar(title: "")
+
         setupPhotoButton()
         setupVideoButton()
         setupButtonStack()

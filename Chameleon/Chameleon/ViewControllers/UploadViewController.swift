@@ -26,6 +26,8 @@ class UploadViewController: BaseViewController {
         return (uploadType == .Photo) ? "사진" : "비디오"
     }()
     
+    var isAfterLoading: Bool = false
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,19 @@ class UploadViewController: BaseViewController {
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("isAfterLoading: \(isAfterLoading)")
+        if isAfterLoading {
+            isAfterLoading = false
+            let chooseFaceVC = ChooseFaceViewController()
+            chooseFaceVC.modalPresentationStyle = .fullScreen
+            chooseFaceVC.modalTransitionStyle = .crossDissolve
+            navigationController?.pushViewController(chooseFaceVC, animated: true)
+        }
+    }
+    
     //MARK: - Actions
     @objc private func clickedUpload(sender: UIButton) {
         let loadingVC = LoadingViewController()
@@ -42,7 +57,10 @@ class UploadViewController: BaseViewController {
         loadingVC.modalTransitionStyle = .crossDissolve
         
         loadingVC.guideString = "Loading"
-        self.present(loadingVC, animated: true)
+        
+        self.present(loadingVC, animated: true) {
+            self.isAfterLoading = true
+        }
     }
     
     //MARK: - Methods
