@@ -18,6 +18,8 @@ class LoginViewController: UIViewController {
     let pwTextField: UITextField = UnderLineTextField()
     let pwCheckTextField: UITextField = UnderLineTextField()
 
+    var autoLoginButton: UIButton!
+    
     let buttonStack: UIStackView = UIStackView()
     let loginButton: UIButton = UIButton()
     let doneButton: UIButton = UIButton()
@@ -36,6 +38,7 @@ class LoginViewController: UIViewController {
         signUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
+        autoLoginButton.addTarget(self, action: #selector(clickedAutoLogin(sender:)), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,28 +68,22 @@ class LoginViewController: UIViewController {
             guard let strongSelf = self else { return }
             
             if error == nil {
+                if let _ = self?.autoLoginButton.isSelected {
+                    self?.saveAuth(email: email, password: password)
+                }
+                
                 let homeVC = CustomTabBarController()
                 homeVC.modalPresentationStyle = .fullScreen
                 homeVC.modalTransitionStyle = .crossDissolve
                 strongSelf.present(homeVC, animated: true, completion: nil)
             } else {
-                print("Login Error: \(error)")
+                print("Login Error: \(String(describing: error))")
             }
         }
     }
     
     @objc private func clickedStartSignUpButton(sender: UIButton) {
-//        self.clearTextFields()
-        
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            self?.pwCheckTextField.isHidden = false
-        })
-        
-        self.signUpButton.isHidden = true
-        self.loginButton.isHidden = true
-        
-        self.doneButton.isHidden = false
-        self.cancelButton.isHidden = false
+        showSignUpUI()
     }
     
     @objc private func clickedDone(sender: UIButton) {
@@ -100,39 +97,62 @@ class LoginViewController: UIViewController {
             
             if error == nil { //정상 완료
                 print("user: \(user)")
-                self.clearTextFields()
-                
-                UIView.animate(withDuration: 0.3, animations: { [weak self] in
-                    self?.pwCheckTextField.isHidden = true
-                })
-                
-                self.signUpButton.isHidden = false
-                self.loginButton.isHidden = false
-                
-                self.doneButton.isHidden = true
-                self.cancelButton.isHidden = true
+                self.showLoginUI()
             } else {
                 //에러
-                print("Auth Error: \(error)")
+                print("Auth Error: \(String(describing: error))")
             }
         }
     }
     
     @objc private func clickedCancel(sender: UIButton) {
-        clearTextFields()
+        showLoginUI()
+    }
+    
+    @objc private func clickedAutoLogin(sender: UIButton) {
+        autoLoginButton.isSelected = !autoLoginButton.isSelected
+    }
+    
+    //MARK: - Methods
+    private func saveAuth(email: String, password: String) {
+        print("Save Auth!!!")
+        UserDefaults.standard.set(email, forKey: "email")
+        UserDefaults.standard.set(password, forKey: "password")
+        UserDefaults.standard.synchronize()
+    }
+    
+    private func showLoginUI() {
+        self.clearTextFields()
         
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.pwCheckTextField.isHidden = true
         })
         
-        signUpButton.isHidden = false
-        loginButton.isHidden = false
+        self.autoLoginButton.isHidden = false
         
-        doneButton.isHidden = true
-        cancelButton.isHidden = true
+        self.signUpButton.isHidden = false
+        self.loginButton.isHidden = false
+        
+        self.doneButton.isHidden = true
+        self.cancelButton.isHidden = true
     }
     
-    //MARK: - Methods
+    private func showSignUpUI() {
+        self.clearTextFields()
+        
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.pwCheckTextField.isHidden = false
+        })
+        
+        self.autoLoginButton.isHidden = true
+        
+        self.signUpButton.isHidden = true
+        self.loginButton.isHidden = true
+        
+        self.doneButton.isHidden = false
+        self.cancelButton.isHidden = false
+    }
+    
     private func clearTextFields() {
         idTextField.text = ""
         pwTextField.text = ""
@@ -144,8 +164,26 @@ class LoginViewController: UIViewController {
         
         setupTitleImage()
         setupTextFields()
+        setupAutoLoginButton()
         setupButtons()
         setupSignUpButton()
+    }
+    
+    private func setupAutoLoginButton() {
+        autoLoginButton = UIButton(type: .custom)
+        autoLoginButton.setTitle("  자동로그인", for: .normal)
+        autoLoginButton.setTitleColor(.lightGray, for: .normal)
+        autoLoginButton.setImage(UIImage(systemName: "squareshape")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        autoLoginButton.setImage(UIImage(systemName: "checkmark.square.fill")?.withRenderingMode(.alwaysTemplate), for: .selected)
+        autoLoginButton.tintColor = .mainColor
+        
+        autoLoginButton.isSelected = true
+        
+        view.addSubview(autoLoginButton)
+        autoLoginButton.snp.makeConstraints { make in
+            make.top.equalTo(textFieldStack.snp.bottom).offset(20)
+            make.left.equalTo(textFieldStack.snp.left)
+        }
     }
     
     private func setupSignUpButton() {
@@ -194,6 +232,8 @@ class LoginViewController: UIViewController {
         idTextField.placeholder = "email"
         idTextField.clearButtonMode = .whileEditing
         idTextField.keyboardType = .emailAddress
+        idTextField.autocorrectionType = .no
+        idTextField.autocapitalizationType = .none
         
         textFieldStack.addArrangedSubview(idTextField)
         idTextField.snp.makeConstraints { make in

@@ -8,6 +8,7 @@
 import UIKit
 import Lottie
 import SnapKit
+import FirebaseAuth
 
 class LaunchViewController: UIViewController {
     
@@ -18,6 +19,8 @@ class LaunchViewController: UIViewController {
                                                                : .init(name: "bottomImage-Dark")
     }()
 
+    //MARK: - Properties
+    private var isAutoLogin: Bool = false
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -25,38 +28,59 @@ class LaunchViewController: UIViewController {
         
         view.backgroundColor = UIColor.backgroundColor
         
+        checkAutoLogin()
+        
         setupLogoImage()
         setupBottomView()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.logoImage.snp.remakeConstraints { make in
-                make.height.equalTo(self.view.frame.height * 0.1)
-                make.top.equalTo(self.view.safeAreaLayoutGuide).offset(40)
-                make.right.equalToSuperview().offset(-40)
-                make.left.equalToSuperview().offset(40)
+            if !self.isAutoLogin {
+                self.logoImage.snp.remakeConstraints { make in
+                    make.height.equalTo(self.view.frame.height * 0.1)
+                    make.top.equalTo(self.view.safeAreaLayoutGuide).offset(40)
+                    make.right.equalToSuperview().offset(-40)
+                    make.left.equalToSuperview().offset(40)
+                }
+                
+                UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                    self?.animationView.isHidden = true
+                    self?.view.layoutIfNeeded()
+                })
             }
-            
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in
-                self?.animationView.isHidden = true
-                self?.view.layoutIfNeeded()
-            })
         }
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.3) {
             self.dismiss(animated: false, completion: {
-                let loginVC = LoginViewController()
-                loginVC.modalPresentationStyle = .fullScreen
-                self.present(loginVC, animated: false, completion: nil)
+                if self.isAutoLogin {
+                    let homeVC = CustomTabBarController()
+                    homeVC.modalPresentationStyle = .fullScreen
+                    homeVC.modalTransitionStyle = .crossDissolve
+                    self.present(homeVC, animated: true, completion: nil)
+                } else {
+                    let loginVC = LoginViewController()
+                    loginVC.modalPresentationStyle = .fullScreen
+                    self.present(loginVC, animated: false, completion: nil)
+                }
+                
             })
         }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("\(#fileID) \(#line)-line, \(#function)")
+    //MARK: - Methods
+    private func checkAutoLogin() {
+        if let email = UserDefaults.standard.string(forKey: "email"),
+           let password = UserDefaults.standard.string(forKey: "password") {
+            Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
+                if error == nil {
+                    self?.isAutoLogin = true
+                    User.shared.email = email
+                } else {
+                    print("Login Error: \(String(describing: error))")
+                }
+            }
+        }
     }
     
-    //MARK: - Methods
     private func setupLogoImage() {
         logoImage.image = UIImage(named: "LogoImage")
         logoImage.contentMode = .scaleAspectFit
