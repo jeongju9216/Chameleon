@@ -19,7 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 //        window?.rootViewController = LaunchViewController() //맨 처음 보여줄 VC
         window?.rootViewController = CustomTabBarController() //맨 처음 보여줄 V
-//        window?.rootViewController = ChooseFaceViewController() //맨 처음 보여줄 VCC
         
         window?.makeKeyAndVisible()        
     }

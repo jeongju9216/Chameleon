@@ -25,9 +25,7 @@ class UploadViewController: BaseViewController {
     lazy var uploadTypeString: String = {
         return (uploadType == .Photo) ? "사진" : "비디오"
     }()
-    
-    var isAfterLoading: Bool = false
-    
+        
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,19 +33,6 @@ class UploadViewController: BaseViewController {
         setupUploadUI()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        print("isAfterLoading: \(isAfterLoading)")
-        if isAfterLoading {
-            isAfterLoading = false
-            let chooseFaceVC = ChooseFaceViewController()
-            chooseFaceVC.modalPresentationStyle = .fullScreen
-            chooseFaceVC.modalTransitionStyle = .crossDissolve
-            navigationController?.pushViewController(chooseFaceVC, animated: true)
-        }
     }
     
     //MARK: - Actions
@@ -58,9 +43,7 @@ class UploadViewController: BaseViewController {
         
         loadingVC.guideString = "Loading"
         
-        self.present(loadingVC, animated: true) {
-            self.isAfterLoading = true
-        }
+        self.present(loadingVC, animated: true)
     }
     
     //MARK: - Methods

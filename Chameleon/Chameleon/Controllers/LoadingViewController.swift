@@ -10,18 +10,18 @@ import SnapKit
 import Lottie
 
 class LoadingViewController: BaseViewController {
-
+    
     //MARK: - Views
     let guideLabel: UILabel = UILabel()
     
     let chameleonImageView: UIImageView = UIImageView()
     lazy var topAnimationView: AnimationView = {
         UITraitCollection.current.userInterfaceStyle == .light ? .init(name: "bottomImage-Light")
-                                                               : .init(name: "bottomImage-Dark")
+        : .init(name: "bottomImage-Dark")
     }()
     lazy var bottomAnimationView: AnimationView = {
         UITraitCollection.current.userInterfaceStyle == .light ? .init(name: "bottomImage-Light")
-                                                               : .init(name: "bottomImage-Dark")
+        : .init(name: "bottomImage-Dark")
     }()
     
     //MARK: - Properties
@@ -35,11 +35,25 @@ class LoadingViewController: BaseViewController {
         
         //test code
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-            self.dismiss(animated: true)
+            self.dismissLoading()
         }
     }
     
     //MARK: - Methods
+    private func dismissLoading() {
+        if let tvc = self.presentingViewController as? UITabBarController,
+           let nvc = tvc.selectedViewController as? UINavigationController,
+           let pvc = nvc.topViewController as? UploadViewController {
+            self.dismiss(animated: true) {
+                let chooseFaceVC = ChooseFaceViewController()
+                chooseFaceVC.modalPresentationStyle = .fullScreen
+                chooseFaceVC.modalTransitionStyle = .crossDissolve
+
+                pvc.navigationController?.pushViewController(chooseFaceVC, animated: true)
+            }
+        }
+    }
+    
     private func setupLoadingUI() {
         view.backgroundColor = UIColor.backgroundColor
         
