@@ -24,15 +24,31 @@ class MoreViewController: UIViewController {
     
     //MARK: - Actions
     @objc private func clickedLogoutButton(sender: UIButton) {
-        print("Remove Auth!!")
-        UserDefaults.standard.removeObject(forKey: "email")
-        UserDefaults.standard.removeObject(forKey: "password")
-        UserDefaults.standard.synchronize()
+        showLogoutActionSheet()
+    }
+    
+    //MARK: - Methods
+    private func showLogoutActionSheet() {
+        let alert = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .actionSheet)
+        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+            print("Remove Auth!!")
+
+            UserDefaults.standard.removeObject(forKey: "email")
+            UserDefaults.standard.removeObject(forKey: "password")
+            UserDefaults.standard.synchronize()
+            
+            self.dismiss(animated: true, completion: nil)
+        }
         
-        self.dismiss(animated: true, completion: nil)
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
     }
 
-    //MARK: - Methods
+    //MARK: - Setup
     private func setupMoreUI() {
         view.backgroundColor = .backgroundColor
         
