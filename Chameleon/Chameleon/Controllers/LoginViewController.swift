@@ -39,6 +39,9 @@ class LoginViewController: UIViewController {
         doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
         autoLoginButton.addTarget(self, action: #selector(clickedAutoLogin(sender:)), for: .touchUpInside)
+        
+        idTextField.text = "test@test.com"
+        pwTextField.text = "test111"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +74,8 @@ class LoginViewController: UIViewController {
                 if let _ = self?.autoLoginButton.isSelected {
                     strongSelf.saveAuth(email: email, password: password)
                 }
+                
+                self?.clearTextFields()
                 
                 let homeVC = CustomTabBarController()
                 homeVC.modalPresentationStyle = .fullScreen
