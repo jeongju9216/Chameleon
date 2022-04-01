@@ -67,20 +67,6 @@ class MoreViewController: BaseViewController {
         setupTableView()
     }
     
-    private func setupWithdrawalButton() {
-        withdrawalButton = UIButton(type: .system)
-        withdrawalButton.setTitle("회원 탈퇴", for: .normal)
-        withdrawalButton.setTitleColor(.label, for: .normal)
-        withdrawalButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        
-        view.addSubview(withdrawalButton)
-        withdrawalButton.snp.makeConstraints { make in
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
-        
-    }
-    
     private func setupTitleLabel() {
         titleLabel = UILabel()
         titleLabel.text = "설정"
@@ -93,14 +79,29 @@ class MoreViewController: BaseViewController {
         }
     }
     
+    private func setupWithdrawalButton() {
+        withdrawalButton = UIButton(type: .system)
+        withdrawalButton.setTitle("회원 탈퇴", for: .normal)
+        withdrawalButton.setTitleColor(.lightGray, for: .normal)
+        withdrawalButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        
+        view.addSubview(withdrawalButton)
+        withdrawalButton.snp.makeConstraints { make in
+            make.left.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
+        }
+    }
+    
     private func setupTableView() {
         tableView = UITableView()
         tableView.backgroundColor = .backgroundColor
+        tableView.alwaysBounceVertical = false
+        tableView.separatorInset.left = 20
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.width.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.bottom.equalTo(withdrawalButton.snp.top).offset(-10)
         }
     }
@@ -169,6 +170,7 @@ extension MoreViewController: UITableViewDataSource {
         default : break
         }
         cell.textLabel?.text = title
+        
         cell.imageView?.image = UIImage(systemName: iconName)?.withRenderingMode(.alwaysTemplate)
         cell.imageView?.tintColor = .label
         
