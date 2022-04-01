@@ -21,8 +21,9 @@ class ChooseFaceViewController: BaseViewController {
         
         setupChooseFaceUI()
         
-        registerCollectionView()
-        collectionViewDelegate()
+        faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
+        faceCollectionView.delegate = self
+        faceCollectionView.dataSource = self
     }
         
     //MARK: - Methods
@@ -46,15 +47,6 @@ class ChooseFaceViewController: BaseViewController {
         faceCollectionView.snp.makeConstraints { make in
             make.width.height.equalToSuperview()
         }
-    }
-    
-    private func registerCollectionView() {
-        faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
-    }
-    
-    private func collectionViewDelegate() {
-        faceCollectionView.delegate = self
-        faceCollectionView.dataSource = self
     }
     
     private func setupUploadButton() {
