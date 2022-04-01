@@ -48,6 +48,9 @@ class MoreViewController: BaseViewController {
     private func showLogoutActionSheet() {
         let alert = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .actionSheet)
         let ok = UIAlertAction(title: "로그아웃", style: .default) { (action) in
+            
+            try? Auth.auth().signOut()
+            
             print("Remove Auth!!")
 
             UserDefaults.standard.removeObject(forKey: "email")

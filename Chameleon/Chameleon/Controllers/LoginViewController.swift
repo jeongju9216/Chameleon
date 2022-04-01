@@ -19,13 +19,14 @@ class LoginViewController: BaseViewController {
     let pwCheckTextField: UITextField = UnderLineTextField()
 
     var autoLoginButton: UIButton!
+    var signUpGuideLabel: UILabel!
     
     let buttonStack: UIStackView = UIStackView()
     let loginButton: UIButton = UIButton()
-    let doneButton: UIButton = UIButton()
+    let signUpButton: UIButton = UIButton()
     let cancelButton: UIButton = UIButton()
     
-    let signUpButton: UIButton = UIButton(type: .system)
+    let startSignUpButton: UIButton = UIButton(type: .system)
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -34,10 +35,19 @@ class LoginViewController: BaseViewController {
         setupLoginUI()
         
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
-        signUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
-        doneButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
+        startSignUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
         autoLoginButton.addTarget(self, action: #selector(clickedAutoLogin(sender:)), for: .touchUpInside)
+        
+        idTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
+        pwTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
+        pwCheckTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
+
+        loginButton.isEnabled = false
+        signUpButton.isEnabled = false
+        
+        changeLayout(isLogin: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +67,16 @@ class LoginViewController: BaseViewController {
     }
     
     //MARK: - Actions
+    @objc private func changedTextField(sender: UITextField) {
+        if isValidEmail() && isValidPassword() && isValidPasswordCheck() {
+            loginButton.isEnabled = true
+            signUpButton.isEnabled = true
+        } else {
+            loginButton.isEnabled = false
+            signUpButton.isEnabled = false
+        }
+    }
+    
     @objc private func clickedLogin(sender: UIButton) {
         guard let email = idTextField.text,
               let password = pwTextField.text else {
@@ -88,7 +108,7 @@ class LoginViewController: BaseViewController {
     }
     
     @objc private func clickedStartSignUpButton(sender: UIButton) {
-        showSignUpUI()
+        changeLayout(isLogin: false)
     }
     
     @objc private func clickedDone(sender: UIButton) {
@@ -97,27 +117,35 @@ class LoginViewController: BaseViewController {
             return
         }
         
-        doneButton.isEnabled = false
+        guard let password2 = pwCheckTextField.text, password == password2 else {
+            showOneButtonAlert(title: "회원가입 실패", message: "비밀번호가 일치하지 않습니다.\n다시 확인해 주세요.")
+            return
+        }
+        
+        signUpButton.isEnabled = false
         
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            self.doneButton.isEnabled = true
+            self.signUpButton.isEnabled = true
             guard let user = authResult?.user else {
+                self.showOneButtonAlert(title: "회원가입 실패", message: "이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해 주세요.")
                 return
             }
         
             if error == nil { //정상 완료
                 print("user: \(user)")
-                self.showLoginUI()
+                self.changeLayout(isLogin: true)
+
                 self.showSuccessSignUpAlert()
             } else {
                 //에러
                 print("Auth Error: \(String(describing: error))")
+                self.showOneButtonAlert(title: "회원가입 실패", message: "Error(\(error?.localizedDescription))가 발생했습니다.\n다시 시도해 주세요.")
             }
         }
     }
     
     @objc private func clickedCancel(sender: UIButton) {
-        showLoginUI()
+        changeLayout(isLogin: true)
     }
     
     @objc private func clickedAutoLogin(sender: UIButton) {
@@ -127,6 +155,28 @@ class LoginViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    private func isValidEmail() -> Bool {
+        let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let preicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        return preicate.evaluate(with: idTextField.text ?? "")
+    }
+    
+    private func isValidPassword() -> Bool {
+        let regex = "^(?=.*[A-Za-z])(?=.*[0-9]).{8,50}" // 8자리 ~ 50자리 영어+숫자
+//        let regex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,50}" // 8자리 ~ 50자리 영어+숫자+특수문자
+        let preicate = NSPredicate(format: "SELF MATCHES %@", regex)
+        return preicate.evaluate(with: pwTextField.text ?? "")
+    }
+    
+    private func isValidPasswordCheck() -> Bool {
+        guard let pw = pwTextField.text,
+              let pwCheck = pwCheckTextField.text else {
+            return false
+        }
+        
+        return pw == pwCheck
+    }
+    
     private func showFailedLoginAlert() {
         showOneButtonAlert(title: "로그인 실패", message: "이메일이나 비밀번호가 틀립니다.")
     }
@@ -142,38 +192,25 @@ class LoginViewController: BaseViewController {
         UserDefaults.standard.synchronize()
     }
     
-    private func showLoginUI() {
+    private func changeLayout(isLogin: Bool) {
+        loginButton.isEnabled = false
+        signUpButton.isEnabled = false
         self.clearTextFields()
         
+        //sign up UI
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            self?.pwCheckTextField.isHidden = true
+            self?.pwCheckTextField.isHidden = isLogin
         })
+        self.signUpGuideLabel.isHidden = isLogin
+        self.signUpButton.isHidden = isLogin
+        self.cancelButton.isHidden = isLogin
         
-        self.autoLoginButton.isHidden = false
+        //login UI
+        self.autoLoginButton.isHidden = !isLogin
+        self.startSignUpButton.isHidden = !isLogin
+        self.loginButton.isHidden = !isLogin
         
-        self.signUpButton.isHidden = false
-        self.loginButton.isHidden = false
         
-        self.doneButton.isHidden = true
-        self.cancelButton.isHidden = true
-        
-        self.idTextField.becomeFirstResponder()
-    }
-    
-    private func showSignUpUI() {
-        self.clearTextFields()
-        
-        UIView.animate(withDuration: 0.3, animations: { [weak self] in
-            self?.pwCheckTextField.isHidden = false
-        })
-        
-        self.autoLoginButton.isHidden = true
-        
-        self.signUpButton.isHidden = true
-        self.loginButton.isHidden = true
-        
-        self.doneButton.isHidden = false
-        self.cancelButton.isHidden = false
         
         self.idTextField.becomeFirstResponder()
     }
@@ -194,6 +231,23 @@ class LoginViewController: BaseViewController {
         
         setupButtons()
         setupSignUpButton()
+        
+        setupSignUpGuideLabel()
+    }
+    
+    private func setupSignUpGuideLabel() {
+        signUpGuideLabel = UILabel()
+        signUpGuideLabel.text = "* 비밀번호는 8~50자의 알파벳, 숫자의 조합입니다."
+        signUpGuideLabel.font = .systemFont(ofSize: 14)
+        signUpGuideLabel.textColor = .lightGray
+        signUpGuideLabel.numberOfLines = 0
+        
+        view.addSubview(signUpGuideLabel)
+        signUpGuideLabel.snp.makeConstraints { make in
+            make.width.equalTo(textFieldStack.snp.width)
+            make.left.equalTo(textFieldStack.snp.left)
+            make.top.equalTo(textFieldStack.snp.bottom).offset(20)
+        }
     }
     
     private func setupAutoLoginButton() {
@@ -207,19 +261,15 @@ class LoginViewController: BaseViewController {
         let isSaveAuth = UserDefaults.standard.bool(forKey: "isSaveAuth")
         autoLoginButton.isSelected = isSaveAuth
         
-        view.addSubview(autoLoginButton)
-        autoLoginButton.snp.makeConstraints { make in
-            make.top.equalTo(textFieldStack.snp.bottom).offset(20)
-            make.left.equalTo(textFieldStack.snp.left)
-        }
+        textFieldStack.addArrangedSubview(autoLoginButton)
     }
     
     private func setupSignUpButton() {
-        signUpButton.setTitle("아직 회원이 아니신가요?", for: .normal)
-        signUpButton.setTitleColor(.lightGray, for: .normal)
+        startSignUpButton.setTitle("아직 회원이 아니신가요?", for: .normal)
+        startSignUpButton.setTitleColor(.lightGray, for: .normal)
 
-        view.addSubview(signUpButton)
-        signUpButton.snp.makeConstraints { make in
+        view.addSubview(startSignUpButton)
+        startSignUpButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.bottom.equalTo(loginButton.snp.top).offset(-10)
         }
@@ -243,6 +293,7 @@ class LoginViewController: BaseViewController {
         textFieldStack.axis = .vertical
         textFieldStack.distribution = .fillEqually
         textFieldStack.spacing = 30
+        textFieldStack.alignment = .leading
         
         setupIdTextField()
         setupPwTextField()
@@ -314,14 +365,12 @@ class LoginViewController: BaseViewController {
     }
     
     private func setupDoneButton() {
-//        doneButton.isEnabled = false
+        signUpButton.applyMainButtonStyle(title: "회원가입")
         
-        doneButton.applyMainButtonStyle(title: "회원가입")
+        signUpButton.isHidden = true
         
-        doneButton.isHidden = true
-        
-        buttonStack.addArrangedSubview(doneButton)
-        doneButton.snp.makeConstraints { make in
+        buttonStack.addArrangedSubview(signUpButton)
+        signUpButton.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalTo(40)
         }
@@ -342,8 +391,6 @@ class LoginViewController: BaseViewController {
     }
     
     private func setupLoginButton() {
-//        loginButton.isEnabled = false
-        
         loginButton.applyMainButtonStyle(title: "로그인")
         
         buttonStack.addArrangedSubview(loginButton)
@@ -379,10 +426,10 @@ extension LoginViewController {
             let keyboardHeight = keyboardRectangle.height
             
             self.buttonStack.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
-            self.signUpButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
+            self.startSignUpButton.transform = CGAffineTransform(translationX: 0.0, y: -(keyboardHeight - view.safeAreaInsets.bottom))
         } else {
             self.buttonStack.transform = .identity
-            self.signUpButton.transform = .identity
+            self.startSignUpButton.transform = .identity
         }
     }
 }
