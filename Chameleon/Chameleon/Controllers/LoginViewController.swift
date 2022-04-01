@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import FirebaseAuth
 
-class LoginViewController: UIViewController {
+class LoginViewController: BaseViewController {
     
     //MARK: - Views
     let titleImage: UIImageView = UIImageView()
@@ -19,7 +19,6 @@ class LoginViewController: UIViewController {
     let pwCheckTextField: UITextField = UnderLineTextField()
 
     var autoLoginButton: UIButton!
-    var guideLabel: UILabel!
     
     let buttonStack: UIStackView = UIStackView()
     let loginButton: UIButton = UIButton()
@@ -64,8 +63,11 @@ class LoginViewController: UIViewController {
             return
         }
         
+        loginButton.isEnabled = false
+        
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
             guard let strongSelf = self else { return }
+            strongSelf.loginButton.isEnabled = true
             
             if error == nil {
                 if let _ = self?.autoLoginButton.isSelected {
@@ -80,7 +82,7 @@ class LoginViewController: UIViewController {
                 strongSelf.present(homeVC, animated: true, completion: nil)
             } else {
                 print("Login Error: \(String(describing: error))")
-                strongSelf.showWrongLoginGuide()
+                self?.showFailedLoginAlert()
             }
         }
     }
@@ -95,21 +97,21 @@ class LoginViewController: UIViewController {
             return
         }
         
+        doneButton.isEnabled = false
+        
         Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            self.doneButton.isEnabled = true
             guard let user = authResult?.user else {
-                self.showWrongSignUpGuide()
                 return
-                
             }
-            
+        
             if error == nil { //정상 완료
                 print("user: \(user)")
                 self.showLoginUI()
-                self.showLoginGuide()
+                self.showSuccessSignUpAlert()
             } else {
                 //에러
                 print("Auth Error: \(String(describing: error))")
-                self.showWrongSignUpGuide()
             }
         }
     }
@@ -125,26 +127,12 @@ class LoginViewController: UIViewController {
     }
     
     //MARK: - Methods
-    private func showWrongLoginGuide() {
-        guideLabel.text = "이메일이나 비밀번호가 틀렸습니다."
-        guideLabel.textColor = .red
-        guideLabel.isHidden = false
+    private func showFailedLoginAlert() {
+        showOneButtonAlert(title: "로그인 실패", message: "이메일이나 비밀번호가 틀립니다.")
     }
     
-    private func showWrongSignUpGuide() {
-        guideLabel.text = "이미 존재하는 이메일입니다."
-        guideLabel.textColor = .red
-        guideLabel.isHidden = false
-    }
-    
-    private func showLoginGuide() {
-        guideLabel.text = "가입한 계정으로 로그인을 해주세요."
-        guideLabel.textColor = .label
-        guideLabel.isHidden = false
-    }
-    
-    private func hideGuideLabel() {
-        guideLabel.isHidden = true
+    private func showSuccessSignUpAlert() {
+        showOneButtonAlert(title: "회원가입 성공", message: "가입한 정보로 로그인을 해주세요.")
     }
     
     private func saveAuth(email: String, password: String) {
@@ -194,8 +182,6 @@ class LoginViewController: UIViewController {
         idTextField.text = ""
         pwTextField.text = ""
         pwCheckTextField.text = ""
-        
-        guideLabel.isHidden = true
     }
     
     //MARK: - Setup
@@ -205,22 +191,9 @@ class LoginViewController: UIViewController {
         setupTitleImage()
         setupTextFields()
         setupAutoLoginButton()
-        setupGuideLabel()
         
         setupButtons()
         setupSignUpButton()
-    }
-    
-    private func setupGuideLabel() {
-        guideLabel = UILabel()
-        guideLabel.font = .systemFont(ofSize: 16)
-        guideLabel.isHidden = true
-        
-        view.addSubview(guideLabel)
-        guideLabel.snp.makeConstraints { make in
-            make.left.equalTo(textFieldStack.snp.left)
-            make.top.equalTo(autoLoginButton.snp.bottom).offset(20)
-        }
     }
     
     private func setupAutoLoginButton() {

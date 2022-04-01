@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MoreViewController: BaseViewController {
 
     //MARK: - Views
     private var tableView: UITableView!
     private var titleLabel: UILabel!
-    private var withdrawalButton: UIButton!
+    private var deleteAccountButton: UIButton!
     
     //MARK: - Properties
     private var menus1: [String] = ["앱 정보", "도움말"]
@@ -34,12 +35,19 @@ class MoreViewController: BaseViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         tableView.delegate = self
         tableView.dataSource = self
+        
+        deleteAccountButton.addTarget(self, action: #selector(clickedDeleteAccount(sender:)), for: .touchUpInside)
+    }
+    
+    //MARK: - Actions
+    @objc private func clickedDeleteAccount(sender: UIButton) {
+        deleteAccount()
     }
     
     //MARK: - Methods
     private func showLogoutActionSheet() {
         let alert = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .actionSheet)
-        let ok = UIAlertAction(title: "확인", style: .default) { (action) in
+        let ok = UIAlertAction(title: "로그아웃", style: .default) { (action) in
             print("Remove Auth!!")
 
             UserDefaults.standard.removeObject(forKey: "email")
@@ -56,6 +64,31 @@ class MoreViewController: BaseViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    private func deleteAccount() {
+        let alert = UIAlertController(title: "회원 탈퇴", message: "정말 회원 탈퇴를 하시겠습니까?", preferredStyle: .actionSheet)
+        let ok = UIAlertAction(title: "회원 탈퇴", style: .destructive) { (action) in
+            
+            let user = Auth.auth().currentUser
+            user?.delete { [weak self] error in
+                if error == nil {
+                    self?.showOneButtonAlert(message: "회원 탈퇴가 성공적으로 되었습니다.", action: { [weak self] _ in
+                        self?.dismiss(animated: true, completion: nil)
+                    })
+                } else {
+                    print("Delete Error: \(error ?? nil)")
+                    self?.showOneButtonAlert(message: "에러가 발생했습니다. 다시 진행해 주세요.")
+                }
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "취소", style: .cancel)
+        
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
 
     //MARK: - Setup
     private func setupMoreUI() {
@@ -63,7 +96,7 @@ class MoreViewController: BaseViewController {
         setupNavigationBar(title: "")
         
         setupTitleLabel()
-        setupWithdrawalButton()
+        setupDeleteAccountButton()
         setupTableView()
     }
     
@@ -79,14 +112,14 @@ class MoreViewController: BaseViewController {
         }
     }
     
-    private func setupWithdrawalButton() {
-        withdrawalButton = UIButton(type: .system)
-        withdrawalButton.setTitle("회원 탈퇴", for: .normal)
-        withdrawalButton.setTitleColor(.lightGray, for: .normal)
-        withdrawalButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+    private func setupDeleteAccountButton() {
+        deleteAccountButton = UIButton(type: .system)
+        deleteAccountButton.setTitle("회원 탈퇴", for: .normal)
+        deleteAccountButton.setTitleColor(.lightGray, for: .normal)
+        deleteAccountButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         
-        view.addSubview(withdrawalButton)
-        withdrawalButton.snp.makeConstraints { make in
+        view.addSubview(deleteAccountButton)
+        deleteAccountButton.snp.makeConstraints { make in
             make.left.equalTo(view.safeAreaLayoutGuide).offset(20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
         }
@@ -102,7 +135,7 @@ class MoreViewController: BaseViewController {
         tableView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.bottom.equalTo(withdrawalButton.snp.top).offset(-10)
+            make.bottom.equalTo(deleteAccountButton.snp.top).offset(-10)
         }
     }
 }

@@ -25,4 +25,13 @@ class BaseViewController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .label
     }
+    
+    func showOneButtonAlert(title: String = "알림", message: String, buttonTitle: String = "확인", action: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let doneAction = UIAlertAction(title: buttonTitle, style: .default, handler: action)
+        alert.addAction(doneAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
 }
