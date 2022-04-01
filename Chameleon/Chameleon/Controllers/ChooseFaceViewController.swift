@@ -26,6 +26,8 @@ class ChooseFaceViewController: BaseViewController {
     }
         
     //MARK: - Methods
+    
+    //MARK: - Setup
     private func setupChooseFaceUI() {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "바꾸지 않을 얼굴 선택")

@@ -47,6 +47,8 @@ class UploadViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    
+    //MARK: - Setup
     private func setupUploadUI() {
         view.backgroundColor = UIColor.backgroundColor
         

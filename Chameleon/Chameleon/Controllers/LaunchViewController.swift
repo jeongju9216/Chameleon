@@ -81,6 +81,7 @@ class LaunchViewController: UIViewController {
         }
     }
     
+    //MARK: - Setup
     private func setupLogoImage() {
         logoImage.image = UIImage(named: "LogoImage")
         logoImage.contentMode = .scaleAspectFit

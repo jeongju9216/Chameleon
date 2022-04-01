@@ -201,6 +201,7 @@ class LoginViewController: UIViewController {
         guideLabel.isHidden = true
     }
     
+    //MARK: - Setup
     private func setupLoginUI() {
         view.backgroundColor = UIColor.backgroundColor
         
@@ -381,7 +382,9 @@ class LoginViewController: UIViewController {
             make.height.equalTo(40)
         }
     }
-    
+}
+
+extension LoginViewController {
     private func addKeyboardNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: UIResponder.keyboardWillShowNotification, object: nil)
         

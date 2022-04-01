@@ -54,6 +54,7 @@ class LoadingViewController: BaseViewController {
         }
     }
     
+    //MARK: - Setup
     private func setupLoadingUI() {
         view.backgroundColor = UIColor.backgroundColor
         

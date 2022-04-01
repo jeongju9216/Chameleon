@@ -35,10 +35,6 @@ class HomeViewController: BaseViewController {
 
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)
-
-//        let chooseFaceVC = ChooseFaceViewController()
-//        chooseFaceVC.modalPresentationStyle = .fullScreen
-//        navigationController?.pushViewController(chooseFaceVC, animated: true)
     }
     
     @objc func touchDownVideoButton(sender: UIButton) {
@@ -56,6 +52,8 @@ class HomeViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    
+    //MARK: - Setup
     private func setupHomeUI() {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "")
