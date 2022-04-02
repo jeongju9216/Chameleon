@@ -34,4 +34,30 @@ class BaseViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func showTwoButtonAlert(title: String = "알림", message: String, defaultButtonTitle: String = "확인", cancelButtonTitle: String = "취소", defaultAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let doneAction = UIAlertAction(title: defaultButtonTitle, style: .default, handler: defaultAction)
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel, handler: cancelAction)
+        
+        alert.addAction(doneAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showThreeButtonAlert(title: String = "알림", message: String, defaultButtonTitle: String = "확인", cancelButtonTitle: String = "취소", destructiveButtonTitle: String, defaultAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil, destructiveAction: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let doneAction = UIAlertAction(title: defaultButtonTitle, style: .default, handler: defaultAction)
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel, handler: cancelAction)
+        let destructiveAction = UIAlertAction(title: destructiveButtonTitle, style: .destructive, handler: destructiveAction)
+        
+        alert.addAction(doneAction)
+        alert.addAction(cancelAction)
+        alert.addAction(destructiveAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
 }

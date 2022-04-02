@@ -12,7 +12,6 @@ class ConvertViewController: BaseViewController {
     //MARK: - Views
     var guideLabel: UILabel!
     
-    var uploadView: UIView!
     var uploadImageView: UIImageView!
     
     var progressStack: UIStackView!
@@ -32,14 +31,22 @@ class ConvertViewController: BaseViewController {
         setupCovertUI()
         
         doneButton.isHidden = true
+        doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
     
+    //MARK: - Actions
+    @objc private func clickedDoneButton(sender: UIButton) {
+        let conversionResultVC = ConversionResultViewController()
+        conversionResultVC.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(conversionResultVC, animated: true)
+    }
+    
     //MARK: - Methods
     @objc private func progressConvert(sender: UIProgressView) {
-        time += 0.01
+        time += 0.05
 
         progressView.setProgress(time, animated: true)
         progressLabel.text = "\(Int(time * 100))%"
@@ -86,18 +93,18 @@ class ConvertViewController: BaseViewController {
     }
     
     private func setupUploadView() {
-        uploadView = UIImageView()
+        uploadImageView = UIImageView()
         
-        uploadView.backgroundColor = UIColor.backgroundColor
+        uploadImageView.backgroundColor = UIColor.backgroundColor
         
-        uploadView.clipsToBounds = true
-        uploadView.layer.borderColor = UIColor.edgeColor.cgColor
-        uploadView.layer.borderWidth = 2
-        uploadView.layer.cornerRadius = 20
+        uploadImageView.clipsToBounds = true
+        uploadImageView.layer.borderColor = UIColor.edgeColor.cgColor
+        uploadImageView.layer.borderWidth = 2
+        uploadImageView.layer.cornerRadius = 20
         
-        view.addSubview(uploadView)
-        uploadView.snp.makeConstraints { make in
-            make.height.equalTo(uploadView.snp.width)
+        view.addSubview(uploadImageView)
+        uploadImageView.snp.makeConstraints { make in
+            make.height.equalTo(uploadImageView.snp.width)
             make.centerX.equalToSuperview()
             make.top.equalTo(guideLabel.snp.bottom).offset(20)
             make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
@@ -118,7 +125,7 @@ class ConvertViewController: BaseViewController {
         progressStack.snp.makeConstraints({ make in
             make.width.equalTo(view.frame.width * 0.8)
             make.centerX.equalToSuperview()
-            make.top.equalTo(uploadView.snp.bottom).offset(30)
+            make.top.equalTo(uploadImageView.snp.bottom).offset(30)
         })
         
     }

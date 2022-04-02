@@ -13,6 +13,11 @@ final class UploadInfo {
     var uploadType: UploadType = .Video
     
     var uploadTypeString: String {
-        return (uploadType == .Photo) ? "사진" : "비디오"
+        return (uploadType == .Photo) ? "사진" : "영상"
     }
+}
+
+enum UploadType: String {
+    case Photo
+    case Video
 }

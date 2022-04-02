@@ -123,8 +123,3 @@ class UploadViewController: BaseViewController {
         }
     }
 }
-
-enum UploadType: String {
-    case Photo
-    case Video
-}
