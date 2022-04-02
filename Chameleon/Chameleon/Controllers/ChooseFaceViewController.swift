@@ -42,6 +42,7 @@ class ChooseFaceViewController: BaseViewController {
         faceCollectionView.backgroundColor = .backgroundColor
         faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 80, right: 10)
         faceCollectionView.showsVerticalScrollIndicator = false
+        faceCollectionView.allowsMultipleSelection = true
         
         view.addSubview(faceCollectionView)
         faceCollectionView.snp.makeConstraints { make in
@@ -62,8 +63,7 @@ class ChooseFaceViewController: BaseViewController {
     }
 }
 
-extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
+extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let interval: CGFloat = 10
         let size = (UIScreen.main.bounds.width - interval * 4) / 3
@@ -77,6 +77,9 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
+}
+
+extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 30
