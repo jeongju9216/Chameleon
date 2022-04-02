@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import FirebaseAuth
 
 class LoginViewController: BaseViewController {
     
@@ -85,13 +84,12 @@ class LoginViewController: BaseViewController {
         
         loginButton.isEnabled = false
         
-        Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
-            guard let strongSelf = self else { return }
-            strongSelf.loginButton.isEnabled = true
+        FirebaseService.shared.login(withEmail: email, password: password, completion: { [weak self] (authResult, error) in
+            self?.loginButton.isEnabled = true
             
             if error == nil {
                 if let _ = self?.autoLoginButton.isSelected {
-                    strongSelf.saveAuth(email: email, password: password)
+                    self?.saveAuth(email: email, password: password)
                 }
                 
                 self?.clearTextFields()
@@ -99,12 +97,12 @@ class LoginViewController: BaseViewController {
                 let homeVC = CustomTabBarController()
                 homeVC.modalPresentationStyle = .fullScreen
                 homeVC.modalTransitionStyle = .crossDissolve
-                strongSelf.present(homeVC, animated: true, completion: nil)
+                self?.present(homeVC, animated: true, completion: nil)
             } else {
                 print("Login Error: \(String(describing: error))")
                 self?.showFailedLoginAlert()
             }
-        }
+        })
     }
     
     @objc private func clickedStartSignUpButton(sender: UIButton) {
@@ -124,24 +122,20 @@ class LoginViewController: BaseViewController {
         
         signUpButton.isEnabled = false
         
-        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
-            self.signUpButton.isEnabled = true
+        FirebaseService.shared.signUp(withEmail: email, password: password, completion: { [weak self] (authResult, error) in
+            self?.signUpButton.isEnabled = true
             guard let user = authResult?.user else {
-                self.showOneButtonAlert(title: "회원가입 실패", message: "이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해 주세요.")
+                self?.showOneButtonAlert(title: "회원가입 실패", message: "이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해 주세요.")
                 return
             }
         
-            if error == nil { //정상 완료
-                print("user: \(user)")
-                self.changeLayout(isLogin: true)
-
-                self.showSuccessSignUpAlert()
+            if let error = error { //에러
+                self?.showOneButtonAlert(title: "회원가입 실패", message: "Error(\(error.localizedDescription))가 발생했습니다.\n다시 시도해 주세요.")
             } else {
-                //에러
-                print("Auth Error: \(String(describing: error))")
-                self.showOneButtonAlert(title: "회원가입 실패", message: "Error(\(error?.localizedDescription))가 발생했습니다.\n다시 시도해 주세요.")
+                self?.changeLayout(isLogin: true)
+                self?.showSuccessSignUpAlert()
             }
-        }
+        })
     }
     
     @objc private func clickedCancel(sender: UIButton) {
@@ -169,6 +163,10 @@ class LoginViewController: BaseViewController {
     }
     
     private func isValidPasswordCheck() -> Bool {
+        if pwCheckTextField.isHidden {
+            return true
+        }
+        
         guard let pw = pwTextField.text,
               let pwCheck = pwCheckTextField.text else {
             return false

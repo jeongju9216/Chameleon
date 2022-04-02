@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import FirebaseAuth
 
 class MoreViewController: BaseViewController {
 
@@ -49,7 +48,7 @@ class MoreViewController: BaseViewController {
         let alert = UIAlertController(title: "로그아웃", message: "로그아웃 하시겠습니까?", preferredStyle: .actionSheet)
         let ok = UIAlertAction(title: "로그아웃", style: .default) { (action) in
             
-            try? Auth.auth().signOut()
+            FirebaseService.shared.logout()
             
             print("Remove Auth!!")
 
@@ -71,18 +70,16 @@ class MoreViewController: BaseViewController {
     private func deleteAccount() {
         let alert = UIAlertController(title: "회원 탈퇴", message: "정말 회원 탈퇴를 하시겠습니까?", preferredStyle: .actionSheet)
         let ok = UIAlertAction(title: "회원 탈퇴", style: .destructive) { (action) in
-            
-            let user = Auth.auth().currentUser
-            user?.delete { [weak self] error in
-                if error == nil {
+            FirebaseService.shared.deleteAccount(completion: { [weak self] error in
+                if let error = error {
+                    print("Delete Error: \(error)")
+                    self?.showOneButtonAlert(message: "에러가 발생했습니다. 다시 진행해 주세요.")
+                } else {
                     self?.showOneButtonAlert(message: "회원 탈퇴가 성공적으로 되었습니다.", action: { [weak self] _ in
                         self?.dismiss(animated: true, completion: nil)
                     })
-                } else {
-                    print("Delete Error: \(error ?? nil)")
-                    self?.showOneButtonAlert(message: "에러가 발생했습니다. 다시 진행해 주세요.")
                 }
-            }
+            })
         }
         
         let cancel = UIAlertAction(title: "취소", style: .cancel)

@@ -8,7 +8,6 @@
 import UIKit
 import Lottie
 import SnapKit
-import FirebaseAuth
 
 class LaunchViewController: UIViewController {
     
@@ -70,14 +69,14 @@ class LaunchViewController: UIViewController {
     private func checkAutoLogin() {
         if let email = UserDefaults.standard.string(forKey: "email"),
            let password = UserDefaults.standard.string(forKey: "password") {
-            Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
-                if error == nil {
+            FirebaseService.shared.login(withEmail: email, password: password, completion: { [weak self] (authResult, error) in
+                if let error = error {
+                    print("Login Error: \(error)")
+                } else {
                     self?.isAutoLogin = true
                     User.shared.email = email
-                } else {
-                    print("Login Error: \(String(describing: error))")
                 }
-            }
+            })
         }
     }
     
