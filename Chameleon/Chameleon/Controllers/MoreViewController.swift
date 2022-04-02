@@ -56,7 +56,11 @@ class MoreViewController: BaseViewController {
             UserDefaults.standard.removeObject(forKey: "password")
             UserDefaults.standard.synchronize()
             
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.popToRootViewController(animated: true)
+            
+            let loginVC = LoginViewController()
+            loginVC.modalPresentationStyle = .fullScreen
+            self.present(loginVC, animated: false, completion: nil)
         }
         
         let cancel = UIAlertAction(title: "취소", style: .cancel)
