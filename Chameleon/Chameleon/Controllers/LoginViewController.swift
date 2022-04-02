@@ -13,7 +13,7 @@ class LoginViewController: BaseViewController {
     //MARK: - Views
     let titleImage: UIImageView = UIImageView()
     let textFieldStack: UIStackView = UIStackView()
-    let idTextField: UITextField = UnderLineTextField()
+    let emailTextField: UITextField = UnderLineTextField()
     let pwTextField: UITextField = UnderLineTextField()
     let pwCheckTextField: UITextField = UnderLineTextField()
 
@@ -33,13 +33,17 @@ class LoginViewController: BaseViewController {
         
         setupLoginUI()
         
+        self.emailTextField.delegate = self
+        self.pwTextField.delegate = self
+        self.pwCheckTextField.delegate = self
+        
         loginButton.addTarget(self, action: #selector(clickedLogin(sender:)), for: .touchUpInside)
         startSignUpButton.addTarget(self, action: #selector(clickedStartSignUpButton(sender:)), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(clickedDone(sender:)), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(clickedCancel(sender:)), for: .touchUpInside)
         autoLoginButton.addTarget(self, action: #selector(clickedAutoLogin(sender:)), for: .touchUpInside)
         
-        idTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
         pwTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
         pwCheckTextField.addTarget(self, action: #selector(changedTextField(sender:)), for: .editingChanged)
 
@@ -77,7 +81,7 @@ class LoginViewController: BaseViewController {
     }
     
     @objc private func clickedLogin(sender: UIButton) {
-        guard let email = idTextField.text,
+        guard let email = emailTextField.text,
               let password = pwTextField.text else {
             return
         }
@@ -110,7 +114,7 @@ class LoginViewController: BaseViewController {
     }
     
     @objc private func clickedDone(sender: UIButton) {
-        guard let email = idTextField.text,
+        guard let email = emailTextField.text,
               let password = pwTextField.text else {
             return
         }
@@ -152,7 +156,7 @@ class LoginViewController: BaseViewController {
     private func isValidEmail() -> Bool {
         let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let preicate = NSPredicate(format: "SELF MATCHES %@", regex)
-        return preicate.evaluate(with: idTextField.text ?? "")
+        return preicate.evaluate(with: emailTextField.text ?? "")
     }
     
     private func isValidPassword() -> Bool {
@@ -208,13 +212,17 @@ class LoginViewController: BaseViewController {
         self.startSignUpButton.isHidden = !isLogin
         self.loginButton.isHidden = !isLogin
         
+        if isLogin {
+            pwTextField.returnKeyType = .done
+        } else {
+            pwTextField.returnKeyType = .next
+        }
         
-        
-        self.idTextField.becomeFirstResponder()
+        self.emailTextField.becomeFirstResponder()
     }
     
     private func clearTextFields() {
-        idTextField.text = ""
+        emailTextField.text = ""
         pwTextField.text = ""
         pwCheckTextField.text = ""
     }
@@ -306,14 +314,15 @@ class LoginViewController: BaseViewController {
     }
     
     private func setupIdTextField() {
-        idTextField.placeholder = "email"
-        idTextField.clearButtonMode = .whileEditing
-        idTextField.keyboardType = .emailAddress
-        idTextField.autocorrectionType = .no
-        idTextField.autocapitalizationType = .none
+        emailTextField.placeholder = "email"
+        emailTextField.clearButtonMode = .whileEditing
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.returnKeyType = .next
+        emailTextField.autocorrectionType = .no
+        emailTextField.autocapitalizationType = .none
         
-        textFieldStack.addArrangedSubview(idTextField)
-        idTextField.snp.makeConstraints { make in
+        textFieldStack.addArrangedSubview(emailTextField)
+        emailTextField.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -323,6 +332,7 @@ class LoginViewController: BaseViewController {
         pwTextField.placeholder = "password"
         pwTextField.clearButtonMode = .whileEditing
         pwTextField.isSecureTextEntry = true
+        pwTextField.returnKeyType = .done
         
         textFieldStack.addArrangedSubview(pwTextField)
         pwTextField.snp.makeConstraints { make in
@@ -336,6 +346,7 @@ class LoginViewController: BaseViewController {
         pwCheckTextField.clearButtonMode = .whileEditing
         pwCheckTextField.isSecureTextEntry = true
         pwCheckTextField.isHidden = true
+        pwCheckTextField.returnKeyType = .done
         
         textFieldStack.addArrangedSubview(pwCheckTextField)
         pwCheckTextField.snp.makeConstraints { make in
@@ -396,6 +407,24 @@ class LoginViewController: BaseViewController {
             make.width.equalToSuperview()
             make.height.equalTo(40)
         }
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case self.emailTextField:
+            pwTextField.becomeFirstResponder()
+        case self.pwTextField:
+            if textField.returnKeyType == .done {
+                self.view.endEditing(true)
+            } else {
+                pwCheckTextField.becomeFirstResponder()
+            }
+        default: self.view.endEditing(true)
+        }
+        
+        return false
     }
 }
 
