@@ -60,7 +60,7 @@ class MoreViewController: BaseViewController {
             
             let loginVC = LoginViewController()
             loginVC.modalPresentationStyle = .fullScreen
-            self.present(loginVC, animated: false, completion: nil)
+            self.present(loginVC, animated: true, completion: nil)
         }
         
         let cancel = UIAlertAction(title: "취소", style: .cancel)
@@ -80,7 +80,11 @@ class MoreViewController: BaseViewController {
                     self?.showOneButtonAlert(message: "에러가 발생했습니다. 다시 진행해 주세요.")
                 } else {
                     self?.showOneButtonAlert(message: "회원 탈퇴가 성공적으로 되었습니다.", action: { [weak self] _ in
-                        self?.dismiss(animated: true, completion: nil)
+                        self?.navigationController?.popToRootViewController(animated: true)
+                        
+                        let loginVC = LoginViewController()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        self?.present(loginVC, animated: true, completion: nil)
                     })
                 }
             })
