@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class UploadViewController: BaseViewController {
 
@@ -17,15 +16,8 @@ class UploadViewController: BaseViewController {
     let uploadImageView: UIImageView = UIImageView()
     let uploadLabel: UILabel = UILabel()
     
-    let uploadButton: UIButton = UIButton()
+    var uploadButton: UIButton!
 
-    
-    //MARK: - Properties
-    var uploadType: UploadType = .Video
-    lazy var uploadTypeString: String = {
-        return (uploadType == .Photo) ? "사진" : "비디오"
-    }()
-        
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,24 +44,26 @@ class UploadViewController: BaseViewController {
     private func setupUploadUI() {
         view.backgroundColor = UIColor.backgroundColor
         
-        setupNavigationBar(title: "\(uploadType)")
+        setupNavigationBar(title: "\(UploadInfo.shared.uploadType)")
         setupGuideLabel()
         setupUploadView()
         setupUploadButton()
     }
     
     private func setupGuideLabel() {
-        guideLabel.text = "변환할 \(uploadTypeString)을 선택해 주세요."
+        guideLabel.text = "변환할 \(UploadInfo.shared.uploadTypeString)을 선택해 주세요."
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)
         guideLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
         }
     }
     
     private func setupUploadButton() {
+        uploadButton = UIButton(type: .custom)
+        
         uploadButton.applyMainButtonStyle(title: "업로드")
         
         view.addSubview(uploadButton)
@@ -103,7 +97,7 @@ class UploadViewController: BaseViewController {
     }
     
     private func setupUploadImageInView() {
-        let uploadImageName: String = (uploadType == .Photo) ? "photo" : "video"
+        let uploadImageName: String = (UploadInfo.shared.uploadType == .Photo) ? "photo" : "video"
         if let uploadImage = UIImage(systemName: uploadImageName) {
             uploadImageView.image = uploadImage.withRenderingMode(.alwaysTemplate)
             uploadImageView.tintColor = .lightGray
@@ -119,7 +113,7 @@ class UploadViewController: BaseViewController {
     }
     
     private func setupUploadLabelInView() {
-        uploadLabel.text = "Choose \(uploadType)"
+        uploadLabel.text = "Choose \(UploadInfo.shared.uploadType)"
         uploadLabel.textColor = .lightGray
         
         uploadView.addSubview(uploadLabel)

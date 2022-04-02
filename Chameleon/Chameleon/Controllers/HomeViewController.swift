@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class HomeViewController: BaseViewController {
     
@@ -31,7 +30,7 @@ class HomeViewController: BaseViewController {
         photoButton.touchUp()
         
         let uploadVC = UploadViewController()
-        uploadVC.uploadType = .Photo
+        UploadInfo.shared.uploadType = .Photo
 
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)
@@ -45,7 +44,7 @@ class HomeViewController: BaseViewController {
         videoButton.touchUp()
         
         let uploadVC = UploadViewController()
-        uploadVC.uploadType = .Video
+        UploadInfo.shared.uploadType = .Video
         
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)

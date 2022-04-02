@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 import Lottie
 
 class LoadingViewController: BaseViewController {

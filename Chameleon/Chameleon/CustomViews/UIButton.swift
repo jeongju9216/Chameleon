@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIButton {
-    func applyMainButtonStyle(title: String) {
+    func applyMainButtonStyle(title: String) {        
         self.clipsToBounds = true
         self.layer.masksToBounds = true
         
@@ -18,6 +18,9 @@ extension UIButton {
         
         self.setTitle(title, for: .normal)
         self.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        
+        self.setTitleColor(.white, for: .normal)
+        self.setTitleColor(.lightGray, for: .highlighted)
         
         if UITraitCollection.current.userInterfaceStyle == .light {
             self.setTitleColor(.white, for: .disabled)

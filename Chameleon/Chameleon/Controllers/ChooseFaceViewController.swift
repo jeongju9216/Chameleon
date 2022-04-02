@@ -6,14 +6,13 @@
 //
 
 import UIKit
-import SnapKit
 
 class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Views
     var faceCollectionView: UICollectionView!
     
-    let convertButton: UIButton = UIButton()
+    var convertButton: UIButton!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -24,9 +23,17 @@ class ChooseFaceViewController: BaseViewController {
         faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
         faceCollectionView.delegate = self
         faceCollectionView.dataSource = self
+        
+        convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
     }
         
-    //MARK: - Methods
+    //MARK: - Actions
+    @objc private func clickedCovertButton(sender: UIButton) {
+        let convertVC = ConvertViewController()
+        convertVC.modalPresentationStyle = .fullScreen
+        
+        self.navigationController?.pushViewController(convertVC, animated: true)
+    }
     
     //MARK: - Setup
     private func setupChooseFaceUI() {
@@ -34,7 +41,7 @@ class ChooseFaceViewController: BaseViewController {
         setupNavigationBar(title: "바꾸지 않을 얼굴 선택")
         
         setupFaceCollectionView()
-        setupUploadButton()
+        setupConvertButton()
     }
     
     private func setupFaceCollectionView() {
@@ -50,7 +57,8 @@ class ChooseFaceViewController: BaseViewController {
         }
     }
     
-    private func setupUploadButton() {
+    private func setupConvertButton() {
+        convertButton = UIButton()
         convertButton.applyMainButtonStyle(title: "변환하기")
         
         view.addSubview(convertButton)
