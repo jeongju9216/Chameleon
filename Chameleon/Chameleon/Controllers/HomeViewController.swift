@@ -10,94 +10,90 @@ import UIKit
 class HomeViewController: BaseViewController {
     
     //MARK: - Views
-    let photoButton: HomeMenuButton = HomeMenuButton(imageName: "PhotoButton", name: "PHOTO")
-    let videoButton: HomeMenuButton = HomeMenuButton(imageName: "VideoButton", name: "VIDEO")
+    var buttonStack: UIStackView!
+    var photoButton: HomeMenuButton!
+    var videoButton: HomeMenuButton!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        print("\(#fileID) \(#line)-line, \(#function)")
         setupHomeUI()
+        
+        photoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
+        photoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
+        photoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
+        videoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
+        videoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
+        videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
     }
     
     //MARK: - Actions
-    @objc func touchDownPhotoButton(sender: UIButton) {
-        photoButton.touchDown()
+    @objc func touchDownButton(sender: HomeMenuButton) {
+        sender.touchDown()
     }
     
-    @objc func touchUpPhotoButton(sender: UIButton) {
-        photoButton.touchUp()
+    @objc func touchUpInsideButton(sender: HomeMenuButton) {
+        sender.touchUp()
         
         let uploadVC = UploadViewController()
-        UploadInfo.shared.uploadType = .Photo
-
-        uploadVC.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(uploadVC, animated: true)
-    }
-    
-    @objc func touchDownVideoButton(sender: UIButton) {
-        videoButton.touchDown()
-    }
-    
-    @objc func touchUpVideoButton(sender: UIButton) {
-        videoButton.touchUp()
         
-        let uploadVC = UploadViewController()
-        UploadInfo.shared.uploadType = .Video
+        if sender == photoButton {
+            UploadInfo.shared.uploadType = .Photo
+        } else {
+            UploadInfo.shared.uploadType = .Video
+        }
         
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     
-    //MARK: - Methods
+    @objc func touchUpOutsideButton(sender: HomeMenuButton) {
+        sender.touchUp()
+    }
     
     //MARK: - Setup
     private func setupHomeUI() {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "")
 
-        setupPhotoButton()
-        setupVideoButton()
         setupButtonStack()
     }
     
     private func setupButtonStack() {
-        let buttonStack = UIStackView(arrangedSubviews: [photoButton, videoButton])
+        buttonStack = UIStackView()
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        
         buttonStack.axis = .horizontal
         buttonStack.spacing = 20
         buttonStack.alignment = .center
         buttonStack.distribution = .fillEqually
         
+        setupPhotoButton()
+        setupVideoButton()
+        
         view.addSubview(buttonStack)
-        buttonStack.snp.makeConstraints { make in
-            let width = view.frame.width * 0.8
-            make.width.equalTo(width)
-            make.height.equalTo(width * 0.35)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-        }
-        
-        buttonStack.addSubview(photoButton)
-        buttonStack.addSubview(videoButton)
-        
-        photoButton.snp.makeConstraints { make in
-            make.height.equalToSuperview()
-        }
-        
-        videoButton.snp.makeConstraints { make in
-            make.height.equalToSuperview()
-        }
+        let width = view.frame.width * 0.8
+        buttonStack.widthAnchor.constraint(equalToConstant: width).isActive = true
+        buttonStack.heightAnchor.constraint(equalToConstant: width * 0.35).isActive = true
+        buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        buttonStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
     }
     
     private func setupPhotoButton() {
-        photoButton.addTarget(self, action: #selector(touchDownPhotoButton(sender:)), for: .touchDown)
-        photoButton.addTarget(self, action: #selector(touchUpPhotoButton(sender:)), for: .touchUpInside)
+        photoButton = HomeMenuButton(imageName: "PhotoButton", name: "PHOTO")
+        photoButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        buttonStack.addArrangedSubview(photoButton)
+        photoButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor).isActive = true
     }
     
     private func setupVideoButton() {
-        videoButton.addTarget(self, action: #selector(touchDownVideoButton(sender:)), for: .touchDown)
-        videoButton.addTarget(self, action: #selector(touchUpVideoButton(sender:)), for: .touchUpInside)
+        videoButton = HomeMenuButton(imageName: "VideoButton", name: "VIDEO")
+        videoButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        buttonStack.addArrangedSubview(videoButton)
+        videoButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor).isActive = true
     }
 }
 

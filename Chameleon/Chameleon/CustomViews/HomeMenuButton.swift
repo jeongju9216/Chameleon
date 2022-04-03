@@ -59,8 +59,8 @@ class HomeMenuButton: UIButton {
     
     private func innerStackView() -> UIStackView {
         let innerStackView = UIStackView(arrangedSubviews: [menuImage, menuLabel])
-
         innerStackView.translatesAutoresizingMaskIntoConstraints = false
+        
         innerStackView.axis = .vertical
         innerStackView.spacing = 15
         innerStackView.distribution = .fill
@@ -68,6 +68,7 @@ class HomeMenuButton: UIButton {
         
         //image
         menuImage.image = image?.withRenderingMode(.alwaysTemplate)
+        
         menuImage.tintColor = .white
         menuImage.snp.makeConstraints { make in
             make.width.height.equalTo(40)
