@@ -9,11 +9,14 @@ import UIKit
 
 class HomeMenuButton: UIButton {
     
+    //MARK: - Views
+    var menuStackView: UIStackView!
+    var menuImage: UIImageView!
+    var menuLabel: UILabel!
+    
+    //MARK: - Properties
     var image: UIImage?
     var name: String = ""
-    
-    let menuImage = UIImageView()
-    let menuLabel = UILabel()
     
     convenience init(imageName: String, name: String) {
         self.init()
@@ -47,43 +50,49 @@ class HomeMenuButton: UIButton {
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowRadius = 3
         
-        let innerView = innerStackView()
-        self.addSubview(innerView)
-        innerView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview().offset(8)
-        }
-        
-        innerView.isUserInteractionEnabled = false
+        setupStackView()
+        setupMenuImageView()
+        setupMenuLabel()
     }
     
-    private func innerStackView() -> UIStackView {
-        let innerStackView = UIStackView(arrangedSubviews: [menuImage, menuLabel])
-        innerStackView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupStackView() {
+        menuStackView = UIStackView()
+        menuStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        innerStackView.axis = .vertical
-        innerStackView.spacing = 15
-        innerStackView.distribution = .fill
-        innerStackView.alignment = .center
+        menuStackView.isUserInteractionEnabled = false
         
-        //image
-        menuImage.image = image?.withRenderingMode(.alwaysTemplate)
+        menuStackView.axis = .vertical
+        menuStackView.spacing = 15
+        menuStackView.distribution = .fill
+        menuStackView.alignment = .center
+        
+        self.addSubview(menuStackView)
+        menuStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        menuStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 8).isActive = true
+    }
+    
+    private func setupMenuImageView() {
+        menuImage = UIImageView(image: image?.withRenderingMode(.alwaysTemplate))
+        menuImage.translatesAutoresizingMaskIntoConstraints = false
         
         menuImage.tintColor = .white
-        menuImage.snp.makeConstraints { make in
-            make.width.height.equalTo(40)
-            make.centerX.equalToSuperview()
-        }
         
-        //label
+        menuStackView.addArrangedSubview(menuImage)
+        menuImage.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        menuImage.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        menuImage.centerXAnchor.constraint(equalTo: menuStackView.centerXAnchor).isActive = true
+    }
+    
+    private func setupMenuLabel() {
+        menuLabel = UILabel()
+        menuLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         menuLabel.text = self.name
         menuLabel.textColor = .white
         menuLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        menuLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-        }
         
-        return innerStackView
+        menuStackView.addArrangedSubview(menuLabel)
+        menuLabel.centerXAnchor.constraint(equalTo: menuStackView.centerXAnchor).isActive = true
     }
     
     func touchDown() {

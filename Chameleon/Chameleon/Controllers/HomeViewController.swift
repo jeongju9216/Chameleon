@@ -58,6 +58,8 @@ class HomeViewController: BaseViewController {
         setupNavigationBar(title: "")
 
         setupButtonStack()
+        setupPhotoButton()
+        setupVideoButton()
     }
     
     private func setupButtonStack() {
@@ -68,9 +70,6 @@ class HomeViewController: BaseViewController {
         buttonStack.spacing = 20
         buttonStack.alignment = .center
         buttonStack.distribution = .fillEqually
-        
-        setupPhotoButton()
-        setupVideoButton()
         
         view.addSubview(buttonStack)
         let width = view.frame.width * 0.8

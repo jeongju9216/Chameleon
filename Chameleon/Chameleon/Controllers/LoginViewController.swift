@@ -231,13 +231,22 @@ class LoginViewController: BaseViewController {
         view.backgroundColor = UIColor.backgroundColor
         
         setupTitleImage()
+        
         setupTextFieldStack()
+        setupEmailTextField()
+        setupPwTextField()
+        setupPwCheckTextField()
+        
         setupAutoLoginButton()
         
-        setupButtonStack()
-        setupStartSignUpButton()
-        
         setupSignUpGuideLabel()
+        
+        setupButtonStack()
+        setupLoginButton()
+        setupDoneButton()
+        setupCancelButton()
+        
+        setupStartSignUpButton()
     }
     
     private func setupSignUpGuideLabel() {
@@ -263,10 +272,6 @@ class LoginViewController: BaseViewController {
         textFieldStack.distribution = .fillEqually
         textFieldStack.spacing = 30
         textFieldStack.alignment = .leading
-        
-        setupEmailTextField()
-        setupPwTextField()
-        setupPwCheckTextField()
         
         view.addSubview(textFieldStack)
         textFieldStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -160).isActive = true
@@ -363,10 +368,6 @@ class LoginViewController: BaseViewController {
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 15
-        
-        setupLoginButton()
-        setupDoneButton()
-        setupCancelButton()
         
         view.addSubview(buttonStack)
         buttonStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
