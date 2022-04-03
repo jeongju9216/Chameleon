@@ -7,19 +7,18 @@
 
 import UIKit
 import Lottie
-import SnapKit
 
-class LaunchViewController: UIViewController {
+class LaunchViewController: BaseViewController {
     
     //MARK: - Views
-    let logoImage: UIImageView = UIImageView()
-    lazy var animationView: AnimationView = {
-        UITraitCollection.current.userInterfaceStyle == .light ? .init(name: "bottomImage-Light")
-                                                               : .init(name: "bottomImage-Dark")
-    }()
+    var logoImage: UIImageView!
+    var animationView: AnimationView!
 
     //MARK: - Properties
     private var isAutoLogin: Bool = false
+    
+    var imageTopConstraint: NSLayoutConstraint?
+    var imageCenterYConstraint: NSLayoutConstraint?
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -33,39 +32,42 @@ class LaunchViewController: UIViewController {
         setupBottomView()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            if !self.isAutoLogin {
-                self.logoImage.snp.remakeConstraints { make in
-                    make.height.equalTo(self.view.frame.height * 0.1)
-                    make.top.equalTo(self.view.safeAreaLayoutGuide).offset(40)
-                    make.right.equalToSuperview().offset(-40)
-                    make.left.equalToSuperview().offset(40)
-                }
-                
-                UIView.animate(withDuration: 0.3, animations: { [weak self] in
-                    self?.animationView.isHidden = true
-                    self?.view.layoutIfNeeded()
-                })
-            }
+            self.logoAnimation()
         }
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.3) {
-            self.dismiss(animated: false, completion: {
-                if self.isAutoLogin {
-                    let homeVC = CustomTabBarController()
-                    homeVC.modalPresentationStyle = .fullScreen
-                    homeVC.modalTransitionStyle = .crossDissolve
-                    self.present(homeVC, animated: true, completion: nil)
-                } else {
-                    let loginVC = LoginViewController()
-                    loginVC.modalPresentationStyle = .fullScreen
-                    self.present(loginVC, animated: false, completion: nil)
-                }
-                
-            })
+            self.presentNextViewController()
         }
     }
     
     //MARK: - Methods
+    private func logoAnimation() {
+        if !isAutoLogin {
+            imageCenterYConstraint?.isActive = false
+            logoImage.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+            
+            UIView.animate(withDuration: 0.3, animations: { [weak self] in
+                self?.animationView.isHidden = true
+                self?.view.layoutIfNeeded()
+            })
+        }
+    }
+    
+    private func presentNextViewController() {
+        self.dismiss(animated: false, completion: {
+            if self.isAutoLogin {
+                let homeVC = CustomTabBarController()
+                homeVC.modalPresentationStyle = .fullScreen
+                homeVC.modalTransitionStyle = .crossDissolve
+                self.present(homeVC, animated: true, completion: nil)
+            } else {
+                let loginVC = LoginViewController()
+                loginVC.modalPresentationStyle = .fullScreen
+                self.present(loginVC, animated: false, completion: nil)
+            }
+        })
+    }
+    
     private func checkAutoLogin() {
         if let email = UserDefaults.standard.string(forKey: "email"),
            let password = UserDefaults.standard.string(forKey: "password") {
@@ -82,30 +84,34 @@ class LaunchViewController: UIViewController {
     
     //MARK: - Setup
     private func setupLogoImage() {
-        logoImage.image = UIImage(named: "LogoImage")
+        logoImage = UIImageView(image: UIImage(named: "LogoImage"))
+        logoImage.translatesAutoresizingMaskIntoConstraints = false
+        
         logoImage.contentMode = .scaleAspectFit
         
         view.addSubview(logoImage)
-        logoImage.snp.makeConstraints { make in
-            make.height.equalTo(view.frame.height * 0.1)
-            make.centerY.equalToSuperview().offset(-20)
-            make.right.equalToSuperview().offset(-40)
-            make.left.equalToSuperview().offset(40)
-        }
+        logoImage.heightAnchor.constraint(equalToConstant: view.frame.height * 0.1).isActive = true
+        imageCenterYConstraint = logoImage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -20)
+        imageCenterYConstraint?.isActive = true
+        logoImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
+        logoImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
     }
     
     private func setupBottomView() {
+        let userInterfaceStyle = UITraitCollection.current.userInterfaceStyle
+        let animationName = (userInterfaceStyle == .light) ? "bottomImage-Light" : "bottomImage-Dark"
+        animationView = .init(name: animationName)
+        animationView.translatesAutoresizingMaskIntoConstraints = false
+        
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .loop
         animationView.animationSpeed = 1.2
         animationView.play()
         
         view.addSubview(animationView)
-        animationView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalTo(view.frame.width)
-            make.height.equalTo(180)
-            make.bottom.equalTo(view.snp.bottom).offset(20)
-        }
+        animationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        animationView.heightAnchor.constraint(equalToConstant: 180).isActive = true
+        animationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        animationView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20).isActive = true
     }
 }

@@ -10,21 +10,21 @@ import UIKit
 class LoginViewController: BaseViewController {
     
     //MARK: - Views
-    let titleImage: UIImageView = UIImageView()
-    let textFieldStack: UIStackView = UIStackView()
-    let emailTextField: UITextField = UnderLineTextField()
-    let pwTextField: UITextField = UnderLineTextField()
-    let pwCheckTextField: UITextField = UnderLineTextField()
+    var titleImage: UIImageView!
+    var textFieldStack: UIStackView!
+    var emailTextField: UITextField!
+    var pwTextField: UITextField!
+    var pwCheckTextField: UITextField!
 
     var autoLoginButton: UIButton!
     var signUpGuideLabel: UILabel!
     
-    let buttonStack: UIStackView = UIStackView()
-    let loginButton: UIButton = UIButton()
-    let signUpButton: UIButton = UIButton()
-    let cancelButton: UIButton = UIButton()
+    var buttonStack: UIStackView!
+    var loginButton: UIButton!
+    var signUpButton: UIButton!
+    var cancelButton: UIButton!
     
-    let startSignUpButton: UIButton = UIButton(type: .system)
+    var startSignUpButton: UIButton!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -231,28 +231,47 @@ class LoginViewController: BaseViewController {
         view.backgroundColor = UIColor.backgroundColor
         
         setupTitleImage()
-        setupTextFields()
+        setupTextFieldStack()
         setupAutoLoginButton()
         
-        setupButtons()
-        setupSignUpButton()
+        setupButtonStack()
+        setupStartSignUpButton()
         
         setupSignUpGuideLabel()
     }
     
     private func setupSignUpGuideLabel() {
         signUpGuideLabel = UILabel()
+        signUpGuideLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         signUpGuideLabel.text = "* 비밀번호는 8~50자의 알파벳, 숫자의 조합입니다."
         signUpGuideLabel.font = .systemFont(ofSize: 14)
         signUpGuideLabel.textColor = .lightGray
         signUpGuideLabel.numberOfLines = 0
         
         view.addSubview(signUpGuideLabel)
-        signUpGuideLabel.snp.makeConstraints { make in
-            make.width.equalTo(textFieldStack.snp.width)
-            make.left.equalTo(textFieldStack.snp.left)
-            make.top.equalTo(textFieldStack.snp.bottom).offset(20)
-        }
+        signUpGuideLabel.widthAnchor.constraint(equalTo: textFieldStack.widthAnchor).isActive = true
+        signUpGuideLabel.leftAnchor.constraint(equalTo: textFieldStack.leftAnchor).isActive = true
+        signUpGuideLabel.topAnchor.constraint(equalTo: textFieldStack.bottomAnchor, constant: 20).isActive = true
+    }
+    
+    private func setupTextFieldStack() {
+        textFieldStack = UIStackView()
+        textFieldStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        textFieldStack.axis = .vertical
+        textFieldStack.distribution = .fillEqually
+        textFieldStack.spacing = 30
+        textFieldStack.alignment = .leading
+        
+        setupEmailTextField()
+        setupPwTextField()
+        setupPwCheckTextField()
+        
+        view.addSubview(textFieldStack)
+        textFieldStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -160).isActive = true
+        textFieldStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        textFieldStack.topAnchor.constraint(equalTo: titleImage.bottomAnchor, constant: 40).isActive = true
     }
     
     private func setupAutoLoginButton() {
@@ -269,50 +288,36 @@ class LoginViewController: BaseViewController {
         textFieldStack.addArrangedSubview(autoLoginButton)
     }
     
-    private func setupSignUpButton() {
+    private func setupStartSignUpButton() {
+        startSignUpButton = UIButton(type: .system)
+        startSignUpButton.translatesAutoresizingMaskIntoConstraints = false
+        
         startSignUpButton.setTitle("아직 회원이 아니신가요?", for: .normal)
         startSignUpButton.setTitleColor(.lightGray, for: .normal)
 
         view.addSubview(startSignUpButton)
-        startSignUpButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(loginButton.snp.top).offset(-10)
-        }
+        startSignUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        startSignUpButton.bottomAnchor.constraint(equalTo: loginButton.topAnchor, constant: -10).isActive = true
     }
     
     private func setupTitleImage() {
+        titleImage = UIImageView()
+        titleImage.translatesAutoresizingMaskIntoConstraints = false
+        
         titleImage.image = UIImage(named: "LogoImage")
         titleImage.contentMode = .scaleAspectFit
         
         view.addSubview(titleImage)
-        titleImage.snp.makeConstraints { make in
-            make.height.equalTo(view.frame.height * 0.1)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-            make.right.equalToSuperview().offset(-40)
-            make.left.equalToSuperview().offset(40)
-        }
+        titleImage.heightAnchor.constraint(equalToConstant: view.frame.height * 0.1).isActive = true
+        titleImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        titleImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
+        titleImage.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
     }
     
-    private func setupTextFields() {
-        textFieldStack.translatesAutoresizingMaskIntoConstraints = false
-        textFieldStack.axis = .vertical
-        textFieldStack.distribution = .fillEqually
-        textFieldStack.spacing = 30
-        textFieldStack.alignment = .leading
+    private func setupEmailTextField() {
+        emailTextField = UnderLineTextField()
+        emailTextField.translatesAutoresizingMaskIntoConstraints = false
         
-        setupIdTextField()
-        setupPwTextField()
-        setupPwCheckTextField()
-        
-        view.addSubview(textFieldStack)
-        textFieldStack.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-160)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(titleImage.snp.bottom).offset(40)
-        }
-    }
-    
-    private func setupIdTextField() {
         emailTextField.placeholder = "email"
         emailTextField.clearButtonMode = .whileEditing
         emailTextField.keyboardType = .emailAddress
@@ -321,26 +326,26 @@ class LoginViewController: BaseViewController {
         emailTextField.autocapitalizationType = .none
         
         textFieldStack.addArrangedSubview(emailTextField)
-        emailTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+        emailTextField.widthAnchor.constraint(equalTo: emailTextField.superview!.widthAnchor).isActive = true
     }
     
     private func setupPwTextField() {
+        pwTextField = UnderLineTextField()
+        pwTextField.translatesAutoresizingMaskIntoConstraints = false
+        
         pwTextField.placeholder = "password"
         pwTextField.clearButtonMode = .whileEditing
         pwTextField.isSecureTextEntry = true
         pwTextField.returnKeyType = .done
         
         textFieldStack.addArrangedSubview(pwTextField)
-        pwTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+        pwTextField.widthAnchor.constraint(equalTo: pwTextField.superview!.widthAnchor).isActive = true
     }
     
     private func setupPwCheckTextField() {
+        pwCheckTextField = UnderLineTextField()
+        pwCheckTextField.translatesAutoresizingMaskIntoConstraints = false
+        
         pwCheckTextField.placeholder = "check password"
         pwCheckTextField.clearButtonMode = .whileEditing
         pwCheckTextField.isSecureTextEntry = true
@@ -348,14 +353,13 @@ class LoginViewController: BaseViewController {
         pwCheckTextField.returnKeyType = .done
         
         textFieldStack.addArrangedSubview(pwCheckTextField)
-        pwCheckTextField.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
+        pwCheckTextField.widthAnchor.constraint(equalTo: pwCheckTextField.superview!.widthAnchor).isActive = true
     }
     
-    private func setupButtons() {
+    private func setupButtonStack() {
+        buttonStack = UIStackView()
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        
         buttonStack.axis = .vertical
         buttonStack.distribution = .fillEqually
         buttonStack.spacing = 15
@@ -365,26 +369,28 @@ class LoginViewController: BaseViewController {
         setupCancelButton()
         
         view.addSubview(buttonStack)
-        buttonStack.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
+        buttonStack.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        buttonStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
     
     private func setupDoneButton() {
+        signUpButton = UIButton()
+        signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        
         signUpButton.applyMainButtonStyle(title: "회원가입")
         
         signUpButton.isHidden = true
         
         buttonStack.addArrangedSubview(signUpButton)
-        signUpButton.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(40)
-        }
+        signUpButton.widthAnchor.constraint(equalTo: signUpButton.superview!.widthAnchor).isActive = true
+        signUpButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
     private func setupCancelButton() {
+        cancelButton = UIButton()
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        
         cancelButton.applyMainButtonStyle(title: "취소")
         cancelButton.setBackgroundColor(.lightGray, for: .normal)
         cancelButton.setBackgroundColor(.darkGray, for: .selected)
@@ -392,20 +398,19 @@ class LoginViewController: BaseViewController {
         cancelButton.isHidden = true
         
         buttonStack.addArrangedSubview(cancelButton)
-        cancelButton.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(40)
-        }
+        cancelButton.widthAnchor.constraint(equalTo: cancelButton.superview!.widthAnchor).isActive = true
+        cancelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
     private func setupLoginButton() {
+        loginButton = UIButton()
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        
         loginButton.applyMainButtonStyle(title: "로그인")
         
         buttonStack.addArrangedSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(40)
-        }
+        loginButton.widthAnchor.constraint(equalTo: loginButton.superview!.widthAnchor).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
 }
 
