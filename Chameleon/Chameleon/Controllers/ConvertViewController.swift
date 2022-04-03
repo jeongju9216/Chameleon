@@ -80,20 +80,20 @@ class ConvertViewController: BaseViewController {
     
     private func setupGuideLabel() {
         guideLabel = UILabel()
+        guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
         guideLabel.text = "변환이 완료가 되면\n푸시 알림으로 알려드리겠습니다 🦎"
         guideLabel.textAlignment = .center
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)
-        guideLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-        }
+        guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
     }
     
     private func setupUploadView() {
         uploadImageView = UIImageView()
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         
         uploadImageView.backgroundColor = UIColor.backgroundColor
         
@@ -103,35 +103,31 @@ class ConvertViewController: BaseViewController {
         uploadImageView.layer.cornerRadius = 20
         
         view.addSubview(uploadImageView)
-        uploadImageView.snp.makeConstraints { make in
-            make.height.equalTo(uploadImageView.snp.width)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(guideLabel.snp.bottom).offset(20)
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
-            make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
-        }
+        uploadImageView.heightAnchor.constraint(equalTo: uploadImageView.widthAnchor).isActive = true
+        uploadImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        uploadImageView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
+        uploadImageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
+        uploadImageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
     }
     
     private func setupProgressStack() {
         progressStack = UIStackView()
-        
         progressStack.translatesAutoresizingMaskIntoConstraints = false
+        
         progressStack.axis = .vertical
         progressStack.spacing = 10
         progressStack.alignment = .center
         progressStack.distribution = .fill
         
         view.addSubview(progressStack)
-        progressStack.snp.makeConstraints({ make in
-            make.width.equalTo(view.frame.width * 0.8)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(uploadImageView.snp.bottom).offset(30)
-        })
-        
+        progressStack.widthAnchor.constraint(equalToConstant: view.frame.width * 0.8).isActive = true
+        progressStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 30).isActive = true
     }
     
     private func setupProgressLabel() {
         progressLabel = UILabel()
+        progressLabel.translatesAutoresizingMaskIntoConstraints = false
         
         progressLabel.text = "0%"
         progressLabel.font = UIFont.systemFont(ofSize: 14)
@@ -142,6 +138,8 @@ class ConvertViewController: BaseViewController {
     
     private func setupProgressView() {
         progressView = UIProgressView()
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        
         progressView.clipsToBounds = true
         progressView.layer.cornerRadius = 5
         
@@ -150,25 +148,20 @@ class ConvertViewController: BaseViewController {
         progressView.progress = 0
         
         progressStack.addArrangedSubview(progressView)
-        progressView.snp.makeConstraints({ make in
-            make.width.equalToSuperview()
-            make.height.equalTo(10)
-        })
+        progressView.widthAnchor.constraint(equalTo: progressView.superview!.widthAnchor).isActive = true
+        progressView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
     private func setupDoneButton() {
         doneButton = UIButton()
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
         
         doneButton.applyMainButtonStyle(title: "결과 보기")
         
         view.addSubview(doneButton)
-        doneButton.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
-            make.height.equalTo(40)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
+        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
-    
-    
 }
