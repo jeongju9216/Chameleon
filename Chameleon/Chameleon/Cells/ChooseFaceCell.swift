@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class ChooseFaceCell: UICollectionViewCell {
     var imageView: UIImageView!
@@ -82,6 +81,7 @@ class ChooseFaceCell: UICollectionViewCell {
     
     private func setupCheckImageView() {
         checkImageView = UIImageView()
+        checkImageView.translatesAutoresizingMaskIntoConstraints = false
         
         checkImageView.image = noneCheckImage
         checkImageView.clipsToBounds = true
@@ -89,15 +89,14 @@ class ChooseFaceCell: UICollectionViewCell {
         checkImageView.layer.borderWidth = 2
                         
         contentView.addSubview(checkImageView)
-        checkImageView.snp.makeConstraints({ make in
-            make.width.height.equalTo(size)
-            make.top.equalTo(contentView.safeAreaLayoutGuide).offset(10)
-            make.right.equalTo(contentView.safeAreaLayoutGuide).offset(-10)
-        })
+        checkImageView.widthAnchor.constraint(equalToConstant: CGFloat(size)).isActive = true
+        checkImageView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        checkImageView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
     }
     
     private func setupImageView() {
         imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFill
@@ -105,9 +104,8 @@ class ChooseFaceCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 10
         
         contentView.addSubview(imageView)
-        imageView.snp.makeConstraints { make in
-            make.width.height.equalToSuperview()
-        }
+        imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
     }
     
     func setupImage() {

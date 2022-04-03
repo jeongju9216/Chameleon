@@ -6,22 +6,23 @@
 //
 
 import UIKit
-import SnapKit
 
 class UnderLineTextField: UITextField {
-    private let underLineView: UIView = UIView()
+    private var underLineView: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        underLineView = UIView()
+        underLineView.translatesAutoresizingMaskIntoConstraints = false
+        
         underLineView.backgroundColor = .lightGray
         
         addSubview(underLineView)
-        underLineView.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.bottom).offset(5)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
-        }
+        underLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        underLineView.topAnchor.constraint(equalTo: self.bottomAnchor, constant: 5).isActive = true
+        underLineView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
+        underLineView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
