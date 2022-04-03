@@ -46,28 +46,29 @@ class ChooseFaceViewController: BaseViewController {
     
     private func setupFaceCollectionView() {
         faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
+        faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         faceCollectionView.backgroundColor = .backgroundColor
         faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 80, right: 10)
         faceCollectionView.showsVerticalScrollIndicator = false
         faceCollectionView.allowsMultipleSelection = true
         
         view.addSubview(faceCollectionView)
-        faceCollectionView.snp.makeConstraints { make in
-            make.width.height.equalToSuperview()
-        }
+        faceCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        faceCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
     
     private func setupConvertButton() {
         convertButton = UIButton()
+        convertButton.translatesAutoresizingMaskIntoConstraints = false
+        
         convertButton.applyMainButtonStyle(title: "변환하기")
         
         view.addSubview(convertButton)
-        convertButton.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
-            make.height.equalTo(40)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
+        convertButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        convertButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        convertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        convertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }
 
