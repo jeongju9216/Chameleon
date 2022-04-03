@@ -110,41 +110,41 @@ class MoreViewController: BaseViewController {
     
     private func setupTitleLabel() {
         titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
         titleLabel.text = "설정"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
         
         view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(20)
-        }
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
     }
     
     private func setupDeleteAccountButton() {
         deleteAccountButton = UIButton(type: .system)
+        deleteAccountButton.translatesAutoresizingMaskIntoConstraints = false
+        
         deleteAccountButton.setTitle("회원 탈퇴", for: .normal)
         deleteAccountButton.setTitleColor(.lightGray, for: .normal)
         deleteAccountButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         
         view.addSubview(deleteAccountButton)
-        deleteAccountButton.snp.makeConstraints { make in
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(20)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-10)
-        }
+        deleteAccountButton.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
+        deleteAccountButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
     }
     
     private func setupTableView() {
         tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         tableView.backgroundColor = .backgroundColor
         tableView.alwaysBounceVertical = false
         tableView.separatorInset.left = 20
         
         view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.bottom.equalTo(deleteAccountButton.snp.top).offset(-10)
-        }
+        tableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: deleteAccountButton.topAnchor, constant: -10).isActive = true
     }
 }
 
