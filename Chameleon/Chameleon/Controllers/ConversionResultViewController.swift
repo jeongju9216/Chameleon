@@ -41,7 +41,6 @@ class ConversionResultViewController: BaseViewController {
         }
         
         showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: action)
-//        showThreeButtonAlert(title: "알림", message: message, defaultButtonTitle: "저장하고 나가기", cancelButtonTitle: "취소", destructiveButtonTitle: "저장하지 않고 나가기", defaultAction: defaultAction, destructiveAction: destructiveAction)
     }
     
     //MARK: - Methods
@@ -68,20 +67,20 @@ class ConversionResultViewController: BaseViewController {
     
     private func setupGuideLabel() {
         guideLabel = UILabel()
+        guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
         guideLabel.text = "변환된 \(UploadInfo.shared.uploadTypeString)을 저장하고 공유해 보세요."
         guideLabel.textAlignment = .center
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)
-        guideLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-        }
+        guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
     }
     
     private func setupResultView() {
         resultView = UIView()
+        resultView.translatesAutoresizingMaskIntoConstraints = false
         
         resultView.backgroundColor = UIColor.backgroundColor
         
@@ -91,34 +90,32 @@ class ConversionResultViewController: BaseViewController {
         resultView.layer.cornerRadius = 20
         
         view.addSubview(resultView)
-        resultView.snp.makeConstraints { make in
-            make.height.equalTo(resultView.snp.width)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(guideLabel.snp.bottom).offset(20)
-            make.left.equalTo(view.safeAreaLayoutGuide).offset(40)
-            make.right.equalTo(view.safeAreaLayoutGuide).offset(-40)
-        }
+        resultView.heightAnchor.constraint(equalTo: resultView.widthAnchor).isActive = true
+        resultView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        resultView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
+        resultView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
+        resultView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
     }
     
     private func setupButtonStackView() {
         buttonStack = UIStackView()
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        
         buttonStack.axis = .horizontal
         buttonStack.spacing = 20
         buttonStack.distribution = .fillEqually
         buttonStack.alignment = .center
         
         view.addSubview(buttonStack)
-        buttonStack.snp.makeConstraints({ make in
-            make.width.equalTo(200)
-            make.height.equalTo(44)
-            make.centerX.equalToSuperview()
-            make.top.equalTo(resultView.snp.bottom).offset(20)
-        })
+        buttonStack.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        buttonStack.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        buttonStack.topAnchor.constraint(equalTo: resultView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupSaveButton() {
         saveButton = UIButton(type: .custom)
+        saveButton.translatesAutoresizingMaskIntoConstraints = false
         
         saveButton.setTitle("저장하기", for: .normal)
         saveButton.setTitleColor(.label, for: .normal)
@@ -134,6 +131,7 @@ class ConversionResultViewController: BaseViewController {
     
     private func setupShareButton() {
         shareButton = UIButton(type: .custom)
+        shareButton.translatesAutoresizingMaskIntoConstraints = false
         
         shareButton.setTitle("공유하기", for: .normal)
         shareButton.setTitleColor(.label, for: .normal)
@@ -149,15 +147,14 @@ class ConversionResultViewController: BaseViewController {
     
     private func setupDoneButton() {
         doneButton = UIButton()
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
         
         doneButton.applyMainButtonStyle(title: "종료하기")
         
         view.addSubview(doneButton)
-        doneButton.snp.makeConstraints { make in
-            make.width.equalTo(view.safeAreaLayoutGuide).offset(-80)
-            make.height.equalTo(40)
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
-        }
+        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }
