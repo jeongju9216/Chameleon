@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Photos
 
 class UploadViewController: BaseViewController {
 
@@ -40,6 +41,7 @@ class UploadViewController: BaseViewController {
     }
     
     @objc private func clickedUploadView(sender: UIImageView) {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
 
     }
     
