@@ -6,16 +6,15 @@
 //
 
 import UIKit
+import PhotosUI
 
 class UploadViewController: BaseViewController {
 
     //MARK: - Views
     var guideLabel: UILabel!
-    
     var uploadView: UIView!
     var uploadImageView: UIImageView!
     var uploadLabel: UILabel!
-    
     var uploadButton: UIButton!
 
     //MARK: - Life Cycles
