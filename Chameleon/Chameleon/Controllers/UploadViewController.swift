@@ -6,13 +6,12 @@
 //
 
 import UIKit
-import PhotosUI
 
 class UploadViewController: BaseViewController {
 
     //MARK: - Views
     var guideLabel: UILabel!
-    var uploadView: UIView!
+    var uploadView: UIImageView!
     var uploadImageView: UIImageView!
     var uploadLabel: UILabel!
     var uploadButton: UIButton!
@@ -24,6 +23,9 @@ class UploadViewController: BaseViewController {
         setupUploadUI()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickedUploadView(sender:)))
+        uploadView.addGestureRecognizer(tapGesture)
     }
     
     //MARK: - Actions
@@ -35,6 +37,10 @@ class UploadViewController: BaseViewController {
         loadingVC.guideString = "Loading"
         
         self.present(loadingVC, animated: true)
+    }
+    
+    @objc private func clickedUploadView(sender: UIImageView) {
+
     }
     
     //MARK: - Methods
@@ -75,9 +81,11 @@ class UploadViewController: BaseViewController {
     }
     
     private func setupUploadView() {
-        uploadView = UIView()
+        uploadView = UIImageView()
         uploadView.translatesAutoresizingMaskIntoConstraints = false
+        uploadView.isUserInteractionEnabled = true
         
+        uploadView.contentMode = .scaleAspectFill
         uploadView.backgroundColor = UIColor.backgroundColor
         
         uploadView.clipsToBounds = true
@@ -99,6 +107,7 @@ class UploadViewController: BaseViewController {
     private func setupUploadImageInView() {
         uploadImageView = UIImageView()
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+        uploadImageView.isUserInteractionEnabled = false
         
         let uploadImageName: String = (UploadInfo.shared.uploadType == .Photo) ? "photo" : "video"
         if let uploadImage = UIImage(systemName: uploadImageName) {
@@ -116,7 +125,8 @@ class UploadViewController: BaseViewController {
     private func setupUploadLabelInView() {
         uploadLabel = UILabel()
         uploadLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        uploadLabel.isUserInteractionEnabled = false
+
         uploadLabel.text = "Choose \(UploadInfo.shared.uploadType)"
         uploadLabel.textColor = .lightGray
         
