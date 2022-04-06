@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import Photos
+import PhotosUI
+import AVKit
+import AVFoundation
 
 class UploadViewController: BaseViewController {
     
@@ -17,12 +19,15 @@ class UploadViewController: BaseViewController {
     var uploadLabel: UILabel!
     var uploadButton: UIButton!
     
+    var imagePicker: UIImagePickerController!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUploadUI()
+        
+        setupImagePicker()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
         
@@ -41,12 +46,12 @@ class UploadViewController: BaseViewController {
         self.present(loadingVC, animated: true)
     }
     
-    @objc private func clickedUploadView(sender: UIImageView) {
+    @objc private func clickedUploadView(sender: UIImageView) {        
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {
         case .notDetermined: //아무것도 설정 X
             print("notDetermined")
-            
+
             PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
                 switch status {
                 case .authorized, .limited:
@@ -60,6 +65,12 @@ class UploadViewController: BaseViewController {
                     print("그 밖의 권한")
                 }
             })
+        default:
+            break
+        }
+
+        let status2 = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        switch status2 {
         case .restricted: //사용자를 통해 권한을 부여 받는 것이 아니지만, 라이브러리 권한에 제한이 생긴 경우. 사진을 얻어 올 수 없음
             print("restricted")
         case .denied: //거부
@@ -67,11 +78,10 @@ class UploadViewController: BaseViewController {
             DispatchQueue.main.async {
                 self.moveToSetting()
             }
-        case .authorized: //모든 사진 허용
-            print("authorized")
-        case .limited: //제한된 사진 허용
-            print("limited")
-        @unknown default:
+        case .authorized, .limited: //모든 사진 허용
+            print("authorized or limited")
+            self.present(imagePicker, animated: true)
+        default:
             break
         }
     }
@@ -93,6 +103,19 @@ class UploadViewController: BaseViewController {
     }
     
     //MARK: - Setup
+    private func setupImagePicker() {
+        imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = false
+        if UploadInfo.shared.uploadType == .Photo {
+            imagePicker.mediaTypes = ["public.image"]
+        } else {
+            imagePicker.mediaTypes = ["public.movie"]
+        }
+        
+        imagePicker.delegate = self
+    }
+    
     private func setupUploadUI() {
         view.backgroundColor = UIColor.backgroundColor
         
@@ -182,3 +205,58 @@ class UploadViewController: BaseViewController {
         uploadLabel.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 10).isActive = true
     }
 }
+
+extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        self.dismiss(animated: true) {
+            if UploadInfo.shared.uploadType == .Photo {
+                if let image = info[.originalImage] as? UIImage {
+                    self.showImage(image)
+                }
+            } else {
+                let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
+                print("videoURL:\(String(describing: videoURL))")
+                
+                self.getThumbnailFromUrl(videoURL!.absoluteString) { [weak self] (img) in
+                    if let img = img {
+                        self?.showImage(img)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func getThumbnailFromUrl(_ url: String?, _ completion: @escaping ((_ image: UIImage?)->Void)) {
+        guard let url = URL(string: url ?? "") else { return }
+
+        DispatchQueue.global().async {
+            let asset = AVAsset(url: url)
+//            let asset = AVURLAsset(url: url, options: nil)
+
+            let assetImgGenerate = AVAssetImageGenerator(asset: asset)
+            assetImgGenerate.appliesPreferredTrackTransform = true
+
+            let time = CMTimeMake(value: 2, timescale: 1)
+            do {
+                let img = try assetImgGenerate.copyCGImage(at: time, actualTime: nil)
+                let thumbnail = UIImage(cgImage: img)
+                completion(thumbnail)
+            } catch {
+                print("Error :: ", error.localizedDescription)
+                completion(nil)
+            }
+        }
+    }
+    
+    func showImage(_ image: UIImage) {
+        DispatchQueue.main.async {
+            self.uploadView.image = image
+            
+            self.uploadImageView.isHidden = true
+            self.uploadLabel.isHidden = true
+        }
+    }
+}
+
+//SampleFaceImage
