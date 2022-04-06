@@ -9,18 +9,19 @@ import UIKit
 import Photos
 
 class UploadViewController: BaseViewController {
-
+    
     //MARK: - Views
     var guideLabel: UILabel!
     var uploadView: UIImageView!
     var uploadImageView: UIImageView!
     var uploadLabel: UILabel!
     var uploadButton: UIButton!
-
+    
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         setupUploadUI()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
@@ -42,10 +43,54 @@ class UploadViewController: BaseViewController {
     
     @objc private func clickedUploadView(sender: UIImageView) {
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-
+        switch status {
+        case .notDetermined: //아무것도 설정 X
+            print("notDetermined")
+            
+            PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
+                switch status {
+                case .authorized, .limited:
+                    print("권한이 부여되")
+                case .denied:
+                    print("권한이 거부됨")
+                    DispatchQueue.main.async {
+                        self.moveToSetting()
+                    }
+                default:
+                    print("그 밖의 권한")
+                }
+            })
+        case .restricted: //사용자를 통해 권한을 부여 받는 것이 아니지만, 라이브러리 권한에 제한이 생긴 경우. 사진을 얻어 올 수 없음
+            print("restricted")
+        case .denied: //거부
+            print("denied")
+            DispatchQueue.main.async {
+                self.moveToSetting()
+            }
+        case .authorized: //모든 사진 허용
+            print("authorized")
+        case .limited: //제한된 사진 허용
+            print("limited")
+        @unknown default:
+            break
+        }
     }
     
     //MARK: - Methods
+    private func moveToSetting() {
+        let message = "앨범 접근이 거부 되었습니다.\n해당 기능을 사용하시려면 설정에서 권한을 허용해 주세요."
+        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "권한 설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
+            guard let settingURL = URL(string: UIApplication.openSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingURL) {
+                UIApplication.shared.open(settingURL, completionHandler: { (success) in
+                    print("Settings opened: \(success)")
+                })
+            }
+        })
+    }
     
     //MARK: - Setup
     private func setupUploadUI() {
@@ -128,7 +173,7 @@ class UploadViewController: BaseViewController {
         uploadLabel = UILabel()
         uploadLabel.translatesAutoresizingMaskIntoConstraints = false
         uploadLabel.isUserInteractionEnabled = false
-
+        
         uploadLabel.text = "Choose \(UploadInfo.shared.uploadType)"
         uploadLabel.textColor = .lightGray
         
