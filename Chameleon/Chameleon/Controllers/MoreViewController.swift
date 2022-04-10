@@ -77,7 +77,7 @@ class MoreViewController: BaseViewController {
             FirebaseService.shared.deleteAccount(completion: { [weak self] error in
                 if let error = error {
                     print("Delete Error: \(error)")
-                    self?.showOneButtonAlert(message: "에러가 발생했습니다. 다시 진행해 주세요.")
+                    self?.showOneButtonAlert(message: "\(error.localizedDescription)")
                 } else {
                     self?.showOneButtonAlert(message: "회원 탈퇴가 성공적으로 되었습니다.", action: { [weak self] _ in
                         self?.navigationController?.popToRootViewController(animated: true)
