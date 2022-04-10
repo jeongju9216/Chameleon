@@ -14,6 +14,9 @@ final class FirebaseService {
     
     func login(withEmail email: String, password: String, completion: ((AuthDataResult?, Error?) -> Void)?) {
         Auth.auth().signIn(withEmail: email, password: password, completion: completion)
+        
+        User.shared.email = email
+        User.shared.name = String((email.split(separator: "@"))[0])
     }
     
     func logout() {
@@ -24,24 +27,21 @@ final class FirebaseService {
         Auth.auth().createUser(withEmail: email, password: password, completion: completion)
     }
     
-    func addUser(withEmail email: String) {
-        guard let childName = User.shared.childName,
+    func addUser(_ user: Firebase.User) {
+        guard let userEmail = User.shared.email,
               let userName = User.shared.name else { return }
 
         let usersReference = Database.database().reference(withPath: "users")
                 
-        let userItem = usersReference.child(childName)
-        let values: [String: Any] = ["name": "\(userName)-name", "profile": "\(userName)-profile", "gender": "\(userName)-gender", "age": "\(userName)-age"]
+        let userItem = usersReference.child(user.uid)
+        let values: [String: Any] = ["email":"\(userEmail)", "name": "\(userName)-name", "profile": "\(userName)-profile", "gender": "\(userName)-gender", "age": "\(userName)-age"]
         
         userItem.setValue(values)
     }
     
     func deleteAccount(completion: ((Error?) -> Void)?) {
-        let user = Auth.auth().currentUser
-        user?.delete(completion: completion)
-        
-        let usersReference = Database.database().reference(withPath: "users")
-        
-        guard let key = usersReference.child(<#T##pathString: String##String#>)
+        guard let user = Auth.auth().currentUser else { return }
+        user.delete(completion: completion)
+        Database.database().reference(withPath: "users").child(user.uid).removeValue()
     }
 }

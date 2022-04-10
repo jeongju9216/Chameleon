@@ -76,7 +76,6 @@ class LaunchViewController: BaseViewController {
                     print("Login Error: \(error)")
                 } else {
                     self?.isAutoLogin = true
-                    User.shared.email = email
                 }
             })
         }

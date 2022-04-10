@@ -12,8 +12,4 @@ final class User {
     
     var email: String?
     var name: String?
-    
-    var childName: String? {
-        return email?.replacingOccurrences(of: ".", with: "_")
-    }
 }
