@@ -137,6 +137,10 @@ class LoginViewController: BaseViewController {
             } else {
                 self?.changeLayout(isLogin: true)
                 self?.showSuccessSignUpAlert()
+                
+                User.shared.email = email
+                User.shared.name = String((email.split(separator: "@"))[0])
+                FirebaseService.shared.addUser(withEmail: email)
             }
         })
     }
