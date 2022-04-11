@@ -97,6 +97,10 @@ class LoginViewController: BaseViewController {
                 
                 self?.clearTextFields()
                 
+                if let user = authResult?.user {
+                    FirebaseService.shared.fetchUserData(user: user)
+                }
+                
                 let homeVC = CustomTabBarController()
                 homeVC.modalPresentationStyle = .fullScreen
                 homeVC.modalTransitionStyle = .crossDissolve

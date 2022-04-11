@@ -14,9 +14,25 @@ final class FirebaseService {
     
     func login(withEmail email: String, password: String, completion: ((AuthDataResult?, Error?) -> Void)?) {
         Auth.auth().signIn(withEmail: email, password: password, completion: completion)
-        
-        User.shared.email = email
-        User.shared.name = String((email.split(separator: "@"))[0])
+    }
+    
+    func fetchUserData(user: Firebase.User) {
+        Database.database().reference(withPath: "users").child(user.uid).observeSingleEvent(of: .value) { snapshot in
+            print("fetchUserData snapshot: \(snapshot)")
+            
+            do {
+                let data = try JSONSerialization.data(withJSONObject: Array(arrayLiteral: snapshot.value), options: [])
+                print("data: \(data)")
+                
+                let decoder = JSONDecoder()
+                let userInfo: [UserInfo] = try decoder.decode([UserInfo].self, from: data)
+                print("uesrInfo: \(userInfo[0])")
+                
+                User.shared.fetchUserInfo(userInfo: userInfo[0])
+            } catch let error {
+                print("fetchUserData error: \(error.localizedDescription)")
+            }
+        }
     }
     
     func logout() {

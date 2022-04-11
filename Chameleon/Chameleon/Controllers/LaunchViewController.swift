@@ -75,6 +75,10 @@ class LaunchViewController: BaseViewController {
                 if let error = error {
                     print("Login Error: \(error)")
                 } else {
+                    if let user = authResult?.user {
+                        FirebaseService.shared.fetchUserData(user: user)
+                    }
+                    
                     self?.isAutoLogin = true
                 }
             })
