@@ -98,13 +98,30 @@ class LoginViewController: BaseViewController {
                 self?.clearTextFields()
                 
                 if let user = authResult?.user {
-                    FirebaseService.shared.fetchUserData(user: user)
+                    FirebaseService.shared.user = user
+                    
+                    FirebaseService.shared.fetchUserData(completion: { snapshot in
+                        FirebaseService.shared.decodeUserData(snapshot)
+                        
+                        print("User.shared.name: \(User.shared.name)")
+                        var vc: UIViewController?
+                        if User.shared.name == User.shared.defaultValue {
+                            vc = ProfileViewController()
+                        } else {
+                            vc = CustomTabBarController()
+                        }
+                        
+                        if let vc = vc {
+                            vc.modalPresentationStyle = .fullScreen
+                            vc.modalTransitionStyle = .crossDissolve
+                            self?.present(vc, animated: true, completion: nil)
+                        }
+                        
+                    })
+                    print("User: \(User.shared)")
                 }
                 
-                let homeVC = CustomTabBarController()
-                homeVC.modalPresentationStyle = .fullScreen
-                homeVC.modalTransitionStyle = .crossDissolve
-                self?.present(homeVC, animated: true, completion: nil)
+                
             } else {
                 print("Login Error: \(String(describing: error))")
                 self?.showFailedLoginAlert()
@@ -135,6 +152,8 @@ class LoginViewController: BaseViewController {
                 self?.showOneButtonAlert(title: "회원가입 실패", message: "이미 존재하는 이메일입니다.\n다른 이메일로 다시 시도해 주세요.")
                 return
             }
+            
+            FirebaseService.shared.user = user
         
             if let error = error { //에러
                 self?.showOneButtonAlert(title: "회원가입 실패", message: "Error(\(error.localizedDescription))가 발생했습니다.\n다시 시도해 주세요.")
@@ -142,7 +161,8 @@ class LoginViewController: BaseViewController {
                 self?.changeLayout(isLogin: true)
                 self?.showSuccessSignUpAlert()
                 
-                FirebaseService.shared.addUser(user)
+                User.shared.email = email
+                FirebaseService.shared.addUser()
             }
         })
     }

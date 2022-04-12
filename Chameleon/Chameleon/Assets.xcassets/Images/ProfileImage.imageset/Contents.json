@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "smiling-emoticon-square-face.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "smiling-emoticon-square-face-1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "smiling-emoticon-square-face-2.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

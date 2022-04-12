@@ -11,27 +11,30 @@ import Firebase
 
 final class FirebaseService {
     static let shared = FirebaseService()
+    var user: Firebase.User?
     
     func login(withEmail email: String, password: String, completion: ((AuthDataResult?, Error?) -> Void)?) {
         Auth.auth().signIn(withEmail: email, password: password, completion: completion)
     }
     
-    func fetchUserData(user: Firebase.User) {
-        Database.database().reference(withPath: "users").child(user.uid).observeSingleEvent(of: .value) { snapshot in
-            print("fetchUserData snapshot: \(snapshot)")
+    func fetchUserData(completion: @escaping (DataSnapshot) -> Void) {
+        guard let user = self.user else { return }
+
+        Database.database().reference(withPath: "users").child(user.uid).observeSingleEvent(of: .value, with: completion)
+    }
+    
+    func decodeUserData(_ snapshot: Firebase.DataSnapshot) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: Array(arrayLiteral: snapshot.value), options: [])
+            print("data: \(data)")
             
-            do {
-                let data = try JSONSerialization.data(withJSONObject: Array(arrayLiteral: snapshot.value), options: [])
-                print("data: \(data)")
-                
-                let decoder = JSONDecoder()
-                let userInfo: [UserInfo] = try decoder.decode([UserInfo].self, from: data)
-                print("uesrInfo: \(userInfo[0])")
-                
-                User.shared.fetchUserInfo(userInfo: userInfo[0])
-            } catch let error {
-                print("fetchUserData error: \(error.localizedDescription)")
-            }
+            let decoder = JSONDecoder()
+            let userInfo: [UserInfo] = try decoder.decode([UserInfo].self, from: data)
+//            print("uesrInfo: \(userInfo[0])")
+            
+            User.shared.fetch(userInfo: userInfo[0])
+        } catch let error {
+            print("fetchUserData error: \(error.localizedDescription)")
         }
     }
     
@@ -43,14 +46,18 @@ final class FirebaseService {
         Auth.auth().createUser(withEmail: email, password: password, completion: completion)
     }
     
-    func addUser(_ user: Firebase.User) {
-        guard let userEmail = User.shared.email,
-              let userName = User.shared.name else { return }
-
+    func addUser() {
+        guard let user = self.user else {
+            return
+        }
+        
         let usersReference = Database.database().reference(withPath: "users")
                 
         let userItem = usersReference.child(user.uid)
-        let values: [String: Any] = ["email":"\(userEmail)", "name": "\(userName)-name", "profile": "\(userName)-profile", "gender": "\(userName)-gender", "age": "\(userName)-age"]
+        let values: [String: Any] = ["email":"\(User.shared.email)", "name": "\(User.shared.name)", "profile": "\(User.shared.profile)", "gender": "\(User.shared.gender)", "age": "\(User.shared.age)"]
+        
+        print("addUser email: \(User.shared.email)")
+        print("addUser name: \(User.shared.name)")
         
         userItem.setValue(values)
     }

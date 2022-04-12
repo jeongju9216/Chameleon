@@ -15,11 +15,11 @@ class MoreViewController: BaseViewController {
     private var deleteAccountButton: UIButton!
     
     //MARK: - Properties
-    private var menus1: [String] = ["앱 정보", "도움말"]
+    private var menus1: [String] = ["내 정보", "앱 정보", "도움말"]
     private var menus2: [String] = ["알림 설정", "화면 설정"]
     private var menus3: [String] = ["문의하기", "로그아웃"]
     
-    private var menuIcons1: [String] = ["info.circle", "questionmark.circle"]
+    private var menuIcons1: [String] = ["face.smiling", "info.circle", "questionmark.circle"]
     private var menuIcons2: [String] = ["bell", "sun.min"]
     private var menuIcons3: [String] = ["person", "arrowshape.turn.up.left"]
     
@@ -50,8 +50,8 @@ class MoreViewController: BaseViewController {
             
             FirebaseService.shared.logout()
             
-            print("Remove Auth!!")
-
+            User.shared.removeAll()
+            
             UserDefaults.standard.removeObject(forKey: "email")
             UserDefaults.standard.removeObject(forKey: "password")
             UserDefaults.standard.synchronize()
@@ -79,6 +79,8 @@ class MoreViewController: BaseViewController {
                     print("Delete Error: \(error)")
                     self?.showOneButtonAlert(message: "\(error.localizedDescription)")
                 } else {
+                    User.shared.removeAll()
+                    
                     self?.showOneButtonAlert(message: "회원 탈퇴가 성공적으로 되었습니다.", action: { [weak self] _ in
                         self?.navigationController?.popToRootViewController(animated: true)
                         
@@ -152,6 +154,16 @@ extension MoreViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            switch menus1[indexPath.row] {
+            case "내 정보":
+                let vc = ProfileViewController()
+                vc.isFirst = false
+                
+                vc.modalPresentationStyle = .fullScreen
+                vc.modalTransitionStyle = .crossDissolve
+                self.navigationController?.pushViewController(vc, animated: true)
+            default: break
+            }
             break
         case 1:
             break

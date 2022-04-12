@@ -30,14 +30,6 @@ class LaunchViewController: BaseViewController {
         
         setupLogoImage()
         setupBottomView()
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            self.logoAnimation()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2.3) {
-            self.presentNextViewController()
-        }
     }
     
     //MARK: - Methods
@@ -56,10 +48,22 @@ class LaunchViewController: BaseViewController {
     private func presentNextViewController() {
         self.dismiss(animated: false, completion: {
             if self.isAutoLogin {
-                let homeVC = CustomTabBarController()
-                homeVC.modalPresentationStyle = .fullScreen
-                homeVC.modalTransitionStyle = .crossDissolve
-                self.present(homeVC, animated: true, completion: nil)
+                FirebaseService.shared.fetchUserData(completion: { snapshot in
+                    FirebaseService.shared.decodeUserData(snapshot)
+                    
+                    var vc: UIViewController?
+                    if User.shared.name == User.shared.defaultValue {
+                        vc = ProfileViewController()
+                    } else {
+                        vc = CustomTabBarController()
+                    }
+                    
+                    if let vc = vc {
+                        vc.modalPresentationStyle = .fullScreen
+                        vc.modalTransitionStyle = .crossDissolve
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                })
             } else {
                 let loginVC = LoginViewController()
                 loginVC.modalPresentationStyle = .fullScreen
@@ -74,12 +78,18 @@ class LaunchViewController: BaseViewController {
             FirebaseService.shared.login(withEmail: email, password: password, completion: { [weak self] (authResult, error) in
                 if let error = error {
                     print("Login Error: \(error)")
+                    self?.isAutoLogin = false
                 } else {
                     if let user = authResult?.user {
-                        FirebaseService.shared.fetchUserData(user: user)
+                        FirebaseService.shared.user = user
+                        self?.isAutoLogin = true
                     }
-                    
-                    self?.isAutoLogin = true
+                }
+                
+                self?.logoAnimation()
+                
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+                    self?.presentNextViewController()
                 }
             })
         }

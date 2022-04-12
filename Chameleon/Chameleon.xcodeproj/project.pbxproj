@@ -18,6 +18,7 @@
 		9B1A112727F837F700E2CE08 /* UploadInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A112627F837F700E2CE08 /* UploadInfo.swift */; };
 		9B1A112927F85D1300E2CE08 /* ConversionResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A112827F85D1300E2CE08 /* ConversionResultViewController.swift */; };
 		9B1A116A2804729B00E2CE08 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A11692804729B00E2CE08 /* ProfileViewController.swift */; };
+		9B1A116C28050F2A00E2CE08 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A116B28050F2A00E2CE08 /* UIImage.swift */; };
 		9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */; };
 		9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */; };
 		9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */; };
@@ -52,6 +53,7 @@
 		9B1A112627F837F700E2CE08 /* UploadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadInfo.swift; sourceTree = "<group>"; };
 		9B1A112827F85D1300E2CE08 /* ConversionResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionResultViewController.swift; sourceTree = "<group>"; };
 		9B1A11692804729B00E2CE08 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		9B1A116B28050F2A00E2CE08 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		9B4B8FA027E0B2390066C7E3 /* Chameleon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chameleon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
 				9B0D412C27EACC5D00E2FA10 /* UIButton.swift */,
 				9B0D413027EC0EBD00E2FA10 /* UIColor.swift */,
+				9B1A116B28050F2A00E2CE08 /* UIImage.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */,
 				9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */,
 				9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */,
+				9B1A116C28050F2A00E2CE08 /* UIImage.swift in Sources */,
 				9B1A112727F837F700E2CE08 /* UploadInfo.swift in Sources */,
 				9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */,
 				9BF442E027F3DF9400537C60 /* LoadingViewController.swift in Sources */,
