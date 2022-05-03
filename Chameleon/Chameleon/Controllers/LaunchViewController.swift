@@ -46,9 +46,11 @@ class LaunchViewController: BaseViewController {
         logoImage.contentMode = .scaleAspectFit
         
         view.addSubview(logoImage)
+        logoImage.widthAnchor.constraint(lessThanOrEqualToConstant: 320).isActive = true
+        logoImage.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         logoImage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -20).isActive = true
-        logoImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
-        logoImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
+//        logoImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
+//        logoImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
     }
     
     private func setupBottomView() {
