@@ -56,7 +56,9 @@ class UploadViewController: BaseViewController {
                 switch status {
                 case .authorized, .limited:
                     print("권한이 부여됨")
-                    self.present(self.imagePicker, animated: true)
+                    DispatchQueue.main.async {
+                        self.present(self.imagePicker, animated: true)
+                    }
                 case .denied:
                     print("권한이 거부됨")
                     DispatchQueue.main.async {
