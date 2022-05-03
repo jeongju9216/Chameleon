@@ -75,13 +75,6 @@ extension MoreViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             switch menus1[indexPath.row] {
-            case "내 정보":
-                let vc = ProfileViewController()
-                vc.isFirst = false
-                
-                vc.modalPresentationStyle = .fullScreen
-                vc.modalTransitionStyle = .crossDissolve
-                self.navigationController?.pushViewController(vc, animated: true)
             default: break
             }
             break

@@ -46,7 +46,7 @@ class LaunchViewController: BaseViewController {
         logoImage.contentMode = .scaleAspectFit
         
         view.addSubview(logoImage)
-        logoImage.heightAnchor.constraint(equalToConstant: view.frame.height * 0.1).isActive = true
+        logoImage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -20).isActive = true
         logoImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
         logoImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
     }
