@@ -15,13 +15,13 @@ class MoreViewController: BaseViewController {
     private var deleteAccountButton: UIButton!
     
     //MARK: - Properties
-    private var menus1: [String] = ["내 정보", "앱 정보", "도움말"]
+    private var menus1: [String] = ["앱 정보", "도움말"]//["내 정보", "앱 정보", "도움말"]
     private var menus2: [String] = ["알림 설정", "화면 설정"]
-    private var menus3: [String] = ["문의하기", "로그아웃"]
+//    private var menus3: [String] = ["문의하기", "로그아웃"]
     
-    private var menuIcons1: [String] = ["face.smiling", "info.circle", "questionmark.circle"]
+    private var menuIcons1: [String] = ["info.circle", "questionmark.circle"]//["face.smiling", "info.circle", "questionmark.circle"]
     private var menuIcons2: [String] = ["bell", "sun.min"]
-    private var menuIcons3: [String] = ["person", "arrowshape.turn.up.left"]
+//    private var menuIcons3: [String] = ["person", "arrowshape.turn.up.left"]
     
     
     //MARK: - Life Cycles
@@ -35,7 +35,9 @@ class MoreViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        deleteAccountButton.addTarget(self, action: #selector(clickedDeleteAccount(sender:)), for: .touchUpInside)
+        if let deleteAccountButton = deleteAccountButton {
+            deleteAccountButton.addTarget(self, action: #selector(clickedDeleteAccount(sender:)), for: .touchUpInside)
+        }
     }
     
     //MARK: - Actions
@@ -106,7 +108,7 @@ class MoreViewController: BaseViewController {
         setupNavigationBar(title: "")
         
         setupTitleLabel()
-        setupDeleteAccountButton()
+//        setupDeleteAccountButton()
         setupTableView()
     }
     
@@ -146,7 +148,11 @@ class MoreViewController: BaseViewController {
         view.addSubview(tableView)
         tableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: deleteAccountButton.topAnchor, constant: -10).isActive = true
+        if let deleteAccountButton = deleteAccountButton {
+            tableView.bottomAnchor.constraint(equalTo: deleteAccountButton.topAnchor, constant: -10).isActive = true
+        } else {
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 10).isActive = true
+        }
     }
 }
 
@@ -167,12 +173,12 @@ extension MoreViewController: UITableViewDelegate {
             break
         case 1:
             break
-        case 2:
-            switch menus3[indexPath.row] {
-            case "로그아웃":
-                showLogoutActionSheet()
-            default: break
-            }
+//        case 2:
+//            switch menus3[indexPath.row] {
+//            case "로그아웃":
+//                showLogoutActionSheet()
+//            default: break
+//            }
         default : break
         }
         
@@ -197,7 +203,7 @@ extension MoreViewController: UITableViewDataSource {
         switch section {
         case 0: return menus1.count
         case 1: return menus2.count
-        case 2: return menus3.count
+//        case 2: return menus3.count
         default : break
         }
         
@@ -216,9 +222,9 @@ extension MoreViewController: UITableViewDataSource {
         case 1:
             title = menus2[indexPath.row]
             iconName = menuIcons2[indexPath.row]
-        case 2:
-            title = menus3[indexPath.row]
-            iconName = menuIcons3[indexPath.row]
+//        case 2:
+//            title = menus3[indexPath.row]
+//            iconName = menuIcons3[indexPath.row]
         default : break
         }
         cell.textLabel?.text = title
