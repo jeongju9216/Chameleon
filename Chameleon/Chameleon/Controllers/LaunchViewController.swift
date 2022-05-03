@@ -16,12 +16,6 @@ class LaunchViewController: BaseViewController {
 
     //MARK: - Properties
     private var LoadingTime: Double = 2
-    private var isAutoLogin: Bool = true
-    private var usingAutoLogin: Bool = false
-    private var usingLogin: Bool = false
-    
-    var imageTopConstraint: NSLayoutConstraint?
-    var imageCenterYConstraint: NSLayoutConstraint?
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -29,88 +23,20 @@ class LaunchViewController: BaseViewController {
         
         view.backgroundColor = UIColor.backgroundColor
         
-        //todo: login
-//        checkAutoLogin()
-        
         setupLogoImage()
         setupBottomView()
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + LoadingTime) {
-            self.presentNextViewController()
+            self.presentNextVC()
         }
     }
     
     //MARK: - Methods
-    private func logoAnimation() {
-        if !isAutoLogin {
-            imageCenterYConstraint?.isActive = false
-            logoImage.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
-            
-            UIView.animate(withDuration: 0.3, animations: { [weak self] in
-                self?.animationView.isHidden = true
-                self?.view.layoutIfNeeded()
-            })
-        }
+    private func presentNextVC() {
+        let vc: UIViewController = CustomTabBarController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false, completion: nil)
     }
-    
-    private func presentNextViewController() {
-        self.dismiss(animated: false, completion: {
-            if self.isAutoLogin && self.usingAutoLogin {
-                FirebaseService.shared.fetchUserData(completion: { snapshot in
-                    FirebaseService.shared.decodeUserData(snapshot)
-                    
-                    var vc: UIViewController?
-                    if User.shared.name == User.shared.defaultValue {
-                        vc = ProfileViewController()
-                    } else {
-                        vc = CustomTabBarController()
-                    }
-                    
-                    if let vc = vc {
-                        vc.modalPresentationStyle = .fullScreen
-                        vc.modalTransitionStyle = .crossDissolve
-                        self.present(vc, animated: true, completion: nil)
-                    }
-                })
-            } else {
-                var vc: UIViewController?
-                if self.usingLogin {
-                    vc = LoginViewController()
-                } else {
-                    vc = CustomTabBarController()
-                }
-                
-                if let vc = vc {
-                    vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: false, completion: nil)
-                }
-            }
-        })
-    }
-    
-    private func checkAutoLogin() {
-        if let email = UserDefaults.standard.string(forKey: "email"),
-           let password = UserDefaults.standard.string(forKey: "password") {
-            FirebaseService.shared.login(withEmail: email, password: password, completion: { [weak self] (authResult, error) in
-                if let error = error {
-                    print("Login Error: \(error)")
-                    self?.isAutoLogin = false
-                } else {
-                    if let user = authResult?.user {
-                        FirebaseService.shared.user = user
-                        self?.isAutoLogin = true
-                    }
-                }
-                
-                self?.logoAnimation()
-                
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
-                    self?.presentNextViewController()
-                }
-            })
-        }
-    }
-    
     
     //MARK: - Setup
     private func setupLogoImage() {
@@ -121,8 +47,6 @@ class LaunchViewController: BaseViewController {
         
         view.addSubview(logoImage)
         logoImage.heightAnchor.constraint(equalToConstant: view.frame.height * 0.1).isActive = true
-        imageCenterYConstraint = logoImage.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -20)
-        imageCenterYConstraint?.isActive = true
         logoImage.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 40).isActive = true
         logoImage.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -40).isActive = true
     }
