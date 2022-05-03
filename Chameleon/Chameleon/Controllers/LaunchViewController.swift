@@ -15,7 +15,10 @@ class LaunchViewController: BaseViewController {
     var animationView: AnimationView!
 
     //MARK: - Properties
-    private var isAutoLogin: Bool = false
+    private var LoadingTime: Double = 2
+    private var isAutoLogin: Bool = true
+    private var usingAutoLogin: Bool = false
+    private var usingLogin: Bool = false
     
     var imageTopConstraint: NSLayoutConstraint?
     var imageCenterYConstraint: NSLayoutConstraint?
@@ -26,10 +29,15 @@ class LaunchViewController: BaseViewController {
         
         view.backgroundColor = UIColor.backgroundColor
         
-        checkAutoLogin()
+        //todo: login
+//        checkAutoLogin()
         
         setupLogoImage()
         setupBottomView()
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + LoadingTime) {
+            self.presentNextViewController()
+        }
     }
     
     //MARK: - Methods
@@ -47,7 +55,7 @@ class LaunchViewController: BaseViewController {
     
     private func presentNextViewController() {
         self.dismiss(animated: false, completion: {
-            if self.isAutoLogin {
+            if self.isAutoLogin && self.usingAutoLogin {
                 FirebaseService.shared.fetchUserData(completion: { snapshot in
                     FirebaseService.shared.decodeUserData(snapshot)
                     
@@ -65,9 +73,17 @@ class LaunchViewController: BaseViewController {
                     }
                 })
             } else {
-                let loginVC = LoginViewController()
-                loginVC.modalPresentationStyle = .fullScreen
-                self.present(loginVC, animated: false, completion: nil)
+                var vc: UIViewController?
+                if self.usingLogin {
+                    vc = LoginViewController()
+                } else {
+                    vc = CustomTabBarController()
+                }
+                
+                if let vc = vc {
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: false, completion: nil)
+                }
             }
         })
     }
@@ -94,6 +110,7 @@ class LaunchViewController: BaseViewController {
             })
         }
     }
+    
     
     //MARK: - Setup
     private func setupLogoImage() {
