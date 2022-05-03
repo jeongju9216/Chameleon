@@ -19,11 +19,7 @@ class ChooseFaceCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            if isSelected {
-                setClickStyle()
-            } else {
-                setNoneClickStyle()
-            }
+            isSelected ? setClickStyle() : setNoneClickStyle()
         }
     }
     
@@ -85,11 +81,12 @@ class ChooseFaceCell: UICollectionViewCell {
         
         checkImageView.image = noneCheckImage
         checkImageView.clipsToBounds = true
-        checkImageView.layer.cornerRadius = 14
+        checkImageView.layer.cornerRadius = CGFloat(size) / 2.0
         checkImageView.layer.borderWidth = 2
                         
         contentView.addSubview(checkImageView)
         checkImageView.widthAnchor.constraint(equalToConstant: CGFloat(size)).isActive = true
+        checkImageView.heightAnchor.constraint(equalTo: checkImageView.widthAnchor).isActive = true
         checkImageView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         checkImageView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
     }

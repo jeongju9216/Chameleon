@@ -55,7 +55,8 @@ class UploadViewController: BaseViewController {
             PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
                 switch status {
                 case .authorized, .limited:
-                    print("권한이 부여되")
+                    print("권한이 부여됨")
+                    self.present(self.imagePicker, animated: true)
                 case .denied:
                     print("권한이 거부됨")
                     DispatchQueue.main.async {
@@ -232,7 +233,6 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
 
         DispatchQueue.global().async {
             let asset = AVAsset(url: url)
-//            let asset = AVURLAsset(url: url, options: nil)
 
             let assetImgGenerate = AVAssetImageGenerator(asset: asset)
             assetImgGenerate.appliesPreferredTrackTransform = true
