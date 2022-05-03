@@ -95,27 +95,3 @@ class HomeViewController: BaseViewController {
         videoButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor).isActive = true
     }
 }
-
-
-//MARK: - Preivew
-//import SwiftUI
-//struct ViewControllerRepresentable: UIViewControllerRepresentable {
-//    typealias UIViewControllerType = HomeViewController
-//
-//    func makeUIViewController(context: Context) -> HomeViewController {
-//        return HomeViewController()
-//    }
-//
-//    func updateUIViewController(_ uiViewController: HomeViewController, context: Context) {
-//
-//    }
-//}
-//
-//@available(iOS 13.0.0, *)
-//struct ViewPreview: PreviewProvider {
-//    static var previews: some View {
-//        Group {
-//            ViewControllerRepresentable()
-//        }
-//    }
-//}

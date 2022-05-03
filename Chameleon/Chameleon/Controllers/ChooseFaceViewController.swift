@@ -75,7 +75,8 @@ class ChooseFaceViewController: BaseViewController {
 extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let interval: CGFloat = 10
-        let size = (UIScreen.main.bounds.width - interval * 4) / 3
+        let count = floor(UIScreen.main.bounds.width / 120)
+        let size = floor((UIScreen.main.bounds.width - interval * 4) / count)
         return CGSize(width: size, height: size)
     }
     
