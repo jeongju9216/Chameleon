@@ -214,8 +214,27 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
         
         self.dismiss(animated: true) {
             if UploadInfo.shared.uploadType == .Photo {
-                if let image = info[.originalImage] as? UIImage {
+                if let image = info[.originalImage] as? UIImage,
+                   let assetPath = info[.imageURL] as? URL {
                     self.showImage(image)
+                    
+                    let URLString = assetPath.absoluteString.lowercased()
+                    print("assetPath: \(assetPath) / URLString: \(URLString)")
+                    
+                    var imageType = "unknown"
+                    if (URLString.hasSuffix("jpg")) {
+                        imageType = "jpg"
+                    } else if (URLString.hasSuffix("jpeg")) {
+                        imageType = "jpeg"
+                    } else if (URLString.hasSuffix("png")) {
+                        imageType = "png"
+                    } else {
+                        print("Invalid Type")
+                    }
+                    print("imageType: \(imageType)")
+                    
+                    let imageFile = ImageFile(filename: "test", data: image.jpegData(compressionQuality: 1), type: imageType)
+                    HttpService.shared.uploadImage(params: [:], image: imageFile)
                 }
             } else {
                 let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
