@@ -218,7 +218,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                    let assetPath = info[.imageURL] as? URL {
                     
                     let URLString = assetPath.absoluteString.lowercased()
-                    print("assetPath: \(assetPath) / URLString: \(URLString)")
+//                    print("assetPath: \(assetPath) / URLString: \(URLString)")
                     
                     var imageType = "unknown"
                     if (URLString.hasSuffix("jpg")) {
@@ -232,18 +232,21 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                     }
                     print("imageType: \(imageType)")
                     
-                    var imageFile: ImageFile?
+                    let imageName = URLString.components(separatedBy: "/").last
+                    
+                    var imageData: Data?
                     switch imageType {
                     case "png":
-                        imageFile = ImageFile(filename: "png-test", data: image.pngData(), type: imageType)
+                        imageData = image.pngData()
                     case "jpg":
-                        imageFile = ImageFile(filename: "jpg-test", data: image.jpegData(compressionQuality: 1.0), type: imageType)
+                        imageData = image.jpegData(compressionQuality: 1.0)
                     case "jpeg":
-                        imageFile = ImageFile(filename: "jpeg-test", data: image.jpegData(compressionQuality: 1.0), type: imageType)
+                        imageData = image.jpegData(compressionQuality: 1.0)
                     default: break
                     }
                     
-                    if let imageFile = imageFile {
+                    if let imageData = imageData {
+                        let imageFile: ImageFile = ImageFile(filename: imageName ?? (self.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: imageType)
                         self.showImage(image)
                         
                         HttpService.shared.uploadImage(params: [:], image: imageFile)

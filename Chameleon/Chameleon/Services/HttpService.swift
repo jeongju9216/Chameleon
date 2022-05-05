@@ -18,7 +18,7 @@ class HttpService {
     private init() { }
     
     private let serverIP: String = "http://52.79.248.204:5000"
-    private let boundary: String = UUID().uuidString
+    private let boundary: String = "Boundary-\(UUID().uuidString)"
     
     func serverTest() {
         requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
@@ -27,9 +27,8 @@ class HttpService {
     }
     
     func multipartServerTest() {
-        requestMultipartForm(url: serverIP + "/test/post", params: ["message": "TEST"], completionHandler: { (result, response) in
+        requestMultipartForm(url: serverIP + "/test", params: ["message": "TEST"], completionHandler: { (result, response) in
             print("response: \(response)")
-            
         })
     }
     
@@ -37,7 +36,6 @@ class HttpService {
         print("\(#fileID) \(#line)-line, \(#function)")
         requestMultipartForm(url: serverIP + "/file/upload", params: params, image: image) { (result, response) in
             print("response: \(response)")
-            
         }
     }
     
@@ -221,16 +219,16 @@ extension HttpService {
     private func createUploadImageBody(params: [String: Any], image: ImageFile) -> Data {
         print("image: \(image.type) / \(image.filename) / \(image.data) / boundary: \(boundary)")
         
-        let boundaryPrefix = "--\(boundary)\r\n".data(using: .utf8)!
-        let endBoundary = "--\(boundary)--\r\n".data(using: .utf8)!
         let lineBreak = "\r\n"
+        let boundaryPrefix = "--\(boundary)\(lineBreak)".data(using: .utf8)!
+        let endBoundary = "--\(boundary)--\(lineBreak)".data(using: .utf8)!
         
         var body = Data()
                 
         body.append(boundaryPrefix)
         
         if let imageData = image.data {
-            body.append("Content-Disposition: form-data; name=\"file\"\(lineBreak)".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(image.filename)\"\(lineBreak)".data(using: .utf8)!)
             body.append("Content-Type: image/\(image.type)\(lineBreak + lineBreak)".data(using: .utf8)!)
             body.append(imageData)
             body.append(lineBreak.data(using: .utf8)!)

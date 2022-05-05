@@ -60,4 +60,10 @@ class BaseViewController: UIViewController {
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func getCurrentDateTime() -> String {
+        let dateFormatter = DateFormatter() //객체 생성
+        dateFormatter.dateFormat = "yyyyMMdd-HHmmss"
+        return dateFormatter.string(from: Date())
+    }
 }
