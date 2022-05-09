@@ -18,6 +18,7 @@ class LoadingViewController: BaseViewController {
     var bottomAnimationView: AnimationView!
     
     //MARK: - Properties
+    var mediaFile: MediaFile?
     var guideString: String = ""
     var animationName = UITraitCollection.current.userInterfaceStyle == .light ? "bottomImage-Light" : "bottomImage-Dark"
     
@@ -27,23 +28,33 @@ class LoadingViewController: BaseViewController {
         
         setupLoadingUI()
         
-        //test code
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+        if let mediaFile = mediaFile {
+            LoadingIndicator.showLoading()
+
+            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
+                print("result: \(result) / response: \(response)")
+                LoadingIndicator.hideLoading()
+                
+                self?.dismissLoading()
+            })
+        } else {
             self.dismissLoading()
         }
     }
     
     //MARK: - Methods
     private func dismissLoading() {
-        if let tvc = self.presentingViewController as? UITabBarController,
-           let nvc = tvc.selectedViewController as? UINavigationController,
-           let pvc = nvc.topViewController as? UploadViewController {
-            self.dismiss(animated: true) {
-                let chooseFaceVC = ChooseFaceViewController()
-                chooseFaceVC.modalPresentationStyle = .fullScreen
-                chooseFaceVC.modalTransitionStyle = .crossDissolve
+        DispatchQueue.main.async {
+            if let tvc = self.presentingViewController as? UITabBarController,
+               let nvc = tvc.selectedViewController as? UINavigationController,
+               let pvc = nvc.topViewController as? UploadViewController {
+                self.dismiss(animated: true) {
+                    let chooseFaceVC = ChooseFaceViewController()
+                    chooseFaceVC.modalPresentationStyle = .fullScreen
+                    chooseFaceVC.modalTransitionStyle = .crossDissolve
 
-                pvc.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                    pvc.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                }
             }
         }
     }

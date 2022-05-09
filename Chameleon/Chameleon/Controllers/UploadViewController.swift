@@ -21,6 +21,9 @@ class UploadViewController: BaseViewController {
     
     var imagePicker: UIImagePickerController!
     
+    //MARK: - Properties
+    var mediaFile: MediaFile?
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +45,7 @@ class UploadViewController: BaseViewController {
         loadingVC.modalTransitionStyle = .crossDissolve
         
         loadingVC.guideString = "Loading"
+        loadingVC.mediaFile = self.mediaFile
         
         self.present(loadingVC, animated: true)
     }
@@ -246,19 +250,38 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                     }
                     
                     if let imageData = imageData {
-                        let imageFile: ImageFile = ImageFile(filename: imageName ?? (self.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: imageType)
+                        self.mediaFile = MediaFile(filename: imageName ?? (self.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: "image/\(imageType)")
                         self.showImage(image)
                         
-                        HttpService.shared.uploadImage(params: [:], image: imageFile)
+//                        HttpService.shared.uploadMedia(params: [:], media: imageFile)
                     }
                 }
             } else {
                 let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
                 print("videoURL:\(String(describing: videoURL))")
                 
-                self.getThumbnailFromUrl(videoURL!.absoluteString) { [weak self] (img) in
-                    if let img = img {
-                        self?.showImage(img)
+                if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
+                    let absoluteURL = videoURL.absoluteString
+                    let URLString = absoluteURL.lowercased()
+//                    print("assetPath: \(assetPath) / URLString: \(URLString)")
+                    
+                    var videoType = "unknown"
+                    if (URLString.hasSuffix("mov")) {
+                        videoType = "mov"
+                    } else if (URLString.hasSuffix("mp4")) {
+                        videoType = "mp4"
+                    } else {
+                        print("Invalid Type")
+                    }
+                    print("videoType: \(videoType)")
+                    
+                    let videoName = URLString.components(separatedBy: "/").last
+                    self.mediaFile = MediaFile(filename: videoName ?? (self.getCurrentDateTime() + ".\(videoType)"), data: videoData, type: "video/\(videoType)")
+                    
+                    self.getThumbnailFromUrl(absoluteURL) { [weak self] (img) in
+                        if let img = img {
+                            self?.showImage(img)
+                        }
                     }
                 }
             }

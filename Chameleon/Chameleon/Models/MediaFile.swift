@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-struct ImageFile {
+struct MediaFile {
     let filename: String
     let data: Data?
     let type: String

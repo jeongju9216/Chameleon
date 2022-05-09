@@ -26,16 +26,29 @@ class LaunchViewController: BaseViewController {
         setupLogoImage()
         setupBottomView()
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + LoadingTime) {
-            self.presentNextVC()
-        }
+        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
+            print("[checkConnectedServer] result: \(result) / response: \(response)")
+            if result {
+                self?.presentNextVC()
+            } else {
+                DispatchQueue.main.async {
+                    self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
+                        
+                    })
+                }
+            }
+        })
+        
+        
     }
     
     //MARK: - Methods
     private func presentNextVC() {
-        let vc: UIViewController = CustomTabBarController()
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: false, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.LoadingTime) {
+            let vc: UIViewController = CustomTabBarController()
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: false, completion: nil)
+        }
     }
     
     //MARK: - Setup

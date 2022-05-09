@@ -61,6 +61,15 @@ class BaseViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    func showErrorAlert(erorr: String, action: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: "에러", message: erorr, preferredStyle: .alert)
+        
+        let doneAction = UIAlertAction(title: "확인", style: .default, handler: action)
+        alert.addAction(doneAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func getCurrentDateTime() -> String {
         let dateFormatter = DateFormatter() //객체 생성
         dateFormatter.dateFormat = "yyyyMMdd-HHmmss"

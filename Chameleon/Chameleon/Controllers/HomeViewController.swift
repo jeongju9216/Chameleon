@@ -26,9 +26,6 @@ class HomeViewController: BaseViewController {
         videoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
         videoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
         videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
-        
-        HttpService.shared.serverTest()
-        HttpService.shared.multipartServerTest()
     }
     
     //MARK: - Actions
