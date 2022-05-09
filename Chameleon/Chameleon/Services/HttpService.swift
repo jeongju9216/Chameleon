@@ -16,7 +16,7 @@ class HttpService {
     static let shared: HttpService = HttpService()
     private init() { }
     
-    private let serverIP: String = "http://52.78.140.3:5000"
+    private let serverIP: String = "api"
     private let boundary: String = "Boundary-\(UUID().uuidString)"
     
     var retryCount = 0
