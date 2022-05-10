@@ -24,7 +24,6 @@ class HttpService {
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
         print("Here?")
         requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
-//            var result = false
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -61,6 +60,7 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
+        request.timeoutInterval = 3
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -104,6 +104,7 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
+        request.timeoutInterval = 3
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = sendData
@@ -143,6 +144,7 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
+        request.timeoutInterval = 3
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
@@ -194,6 +196,7 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
+        request.timeoutInterval = 3
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
