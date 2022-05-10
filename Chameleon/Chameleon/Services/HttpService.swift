@@ -22,17 +22,19 @@ class HttpService {
     var retryCount = 0
     
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
-        print("Here?")
-        requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                print("Here")
-                self.retryCount += 1
-                self.checkConnectedServer(completionHandler: completionHandler)
-            }
-        })
+        completionHandler(true, "")
+        
+//        print("Here?")
+//        requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
+//            if result || self.retryCount == 3 {
+//                self.retryCount = 0
+//                completionHandler(result, response)
+//            } else {
+//                print("Here")
+//                self.retryCount += 1
+//                self.checkConnectedServer(completionHandler: completionHandler)
+//            }
+//        })
     }
     
     func multipartServerTest() {
