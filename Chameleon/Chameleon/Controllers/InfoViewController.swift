@@ -11,7 +11,7 @@ class InfoViewController: BaseViewController {
     
     //MARK: - Views
     private var closeButton: UIButton!
-    
+    private var iconImageView: UIImageView!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -32,6 +32,7 @@ class InfoViewController: BaseViewController {
         view.backgroundColor = .backgroundColor
         
         setupCloseButton()
+        setupIconImage()
     }
     
     private func setupCloseButton() {
@@ -43,5 +44,24 @@ class InfoViewController: BaseViewController {
         view.addSubview(closeButton)
         closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         closeButton.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
+    }
+    
+    private func setupIconImage() {
+        if let iconImage = UIImage(named: "AppIconImage") {
+            iconImageView = UIImageView(image: iconImage)
+        } else {
+            iconImageView = UIImageView()
+        }
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let size: CGFloat = 160
+        iconImageView.clipsToBounds = true
+        iconImageView.layer.cornerRadius = size / 5
+        
+        view.addSubview(iconImageView)
+        iconImageView.widthAnchor.constraint(equalToConstant: size).isActive = true
+        iconImageView.heightAnchor.constraint(equalTo: iconImageView.widthAnchor).isActive = true
+        iconImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 20).isActive = true
+        iconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
 }
