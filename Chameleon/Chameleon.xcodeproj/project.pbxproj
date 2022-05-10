@@ -90,11 +90,11 @@
 				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
 				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
 				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
-				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 				9BF442DF27F3DF9400537C60 /* LoadingViewController.swift */,
 				9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */,
 				9B1A112427F8322600E2CE08 /* ConvertViewController.swift */,
 				9B1A112827F85D1300E2CE08 /* ConversionResultViewController.swift */,
+				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 				9BC9C07E282A29B70038396E /* InfoViewController.swift */,
 			);
 			path = Controllers;

@@ -15,7 +15,7 @@ class MoreViewController: BaseViewController {
     private var deleteAccountButton: UIButton!
     
     //MARK: - Properties
-    private var menus1: [String] = ["앱 정보", "도움말"]
+    private var menus1: [String] = ["애플리케이션 정보", "도움말"]
     private var menus2: [String] = ["알림 설정", "화면 설정"]
     
     private var menuIcons1: [String] = ["info.circle", "questionmark.circle"]
@@ -75,6 +75,9 @@ extension MoreViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             switch menus1[indexPath.row] {
+            case "애플리케이션 정보":
+                let infoViewController = InfoViewController()
+                self.present(infoViewController, animated: true)
             default: break
             }
             break
