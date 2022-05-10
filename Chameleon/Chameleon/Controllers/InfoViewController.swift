@@ -17,9 +17,14 @@ class InfoViewController: BaseViewController {
         super.viewDidLoad()
         
         setupInfoView()
+        
+        closeButton.addTarget(self, action: #selector(clickedCloseButton(sender:)), for: .touchUpInside)
     }
     
     //MARK: - Actions
+    @objc private func clickedCloseButton(sender: UIButton) {
+        self.dismiss(animated: true)
+    }
     
     //MARK: - Methods
     private func setupInfoView() {
