@@ -14,6 +14,7 @@ class InfoViewController: BaseViewController {
     private var iconImageView: UIImageView!
     private var titleLabel: UILabel!
     private var versionLabel: UILabel!
+    private var updateButton: UIButton!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -22,6 +23,8 @@ class InfoViewController: BaseViewController {
         setupInfoView()
         
         closeButton.addTarget(self, action: #selector(clickedCloseButton(sender:)), for: .touchUpInside)
+        
+        updateButton.isEnabled = false
     }
     
     //MARK: - Actions
@@ -37,6 +40,8 @@ class InfoViewController: BaseViewController {
         setupIconImage()
         setupTitleLabel()
         setupVersionLabel()
+        
+        setupUpdateButton()
     }
     
     private func setupCloseButton() {
@@ -58,7 +63,7 @@ class InfoViewController: BaseViewController {
         }
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        let size: CGFloat = 150
+        let size: CGFloat = 120
         iconImageView.clipsToBounds = true
         iconImageView.layer.cornerRadius = size / 5
         
@@ -92,5 +97,18 @@ class InfoViewController: BaseViewController {
         view.addSubview(versionLabel)
         versionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    private func setupUpdateButton() {
+        updateButton = UIButton()
+        updateButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        updateButton.applyMainButtonStyle(title: "최신 버전 사용 중")
+        
+        view.addSubview(updateButton)
+        updateButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        updateButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        updateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }
