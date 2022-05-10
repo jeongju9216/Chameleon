@@ -13,6 +13,7 @@ class InfoViewController: BaseViewController {
     private var closeButton: UIButton!
     private var iconImageView: UIImageView!
     private var titleLabel: UILabel!
+    private var versionLabel: UILabel!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -35,6 +36,7 @@ class InfoViewController: BaseViewController {
         setupCloseButton()
         setupIconImage()
         setupTitleLabel()
+        setupVersionLabel()
     }
     
     private func setupCloseButton() {
@@ -79,5 +81,16 @@ class InfoViewController: BaseViewController {
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
-    
+    private func setupVersionLabel() {
+        versionLabel = UILabel()
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.numberOfLines = 0
+        
+        versionLabel.text = "현재 버전 : 0.0.1\n최신 버전 : 0.0.1"
+        versionLabel.font = UIFont.systemFont(ofSize: 16)
+        
+        view.addSubview(versionLabel)
+        versionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
 }
