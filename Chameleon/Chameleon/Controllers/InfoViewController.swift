@@ -12,6 +12,7 @@ class InfoViewController: BaseViewController {
     //MARK: - Views
     private var closeButton: UIButton!
     private var iconImageView: UIImageView!
+    private var titleLabel: UILabel!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -33,6 +34,7 @@ class InfoViewController: BaseViewController {
         
         setupCloseButton()
         setupIconImage()
+        setupTitleLabel()
     }
     
     private func setupCloseButton() {
@@ -54,7 +56,7 @@ class InfoViewController: BaseViewController {
         }
         iconImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        let size: CGFloat = 160
+        let size: CGFloat = 150
         iconImageView.clipsToBounds = true
         iconImageView.layer.cornerRadius = size / 5
         
@@ -64,4 +66,18 @@ class InfoViewController: BaseViewController {
         iconImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 20).isActive = true
         iconImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
+    
+    private func setupTitleLabel() {
+        titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        titleLabel.text = "카멜레온"
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 32)
+        
+        view.addSubview(titleLabel)
+        titleLabel.topAnchor.constraint(equalTo: iconImageView.bottomAnchor, constant: 20).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
+    
 }
