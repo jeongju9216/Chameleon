@@ -12,6 +12,7 @@ class InfoViewController: BaseViewController {
     //MARK: - Views
     private var closeButton: UIButton!
     
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
