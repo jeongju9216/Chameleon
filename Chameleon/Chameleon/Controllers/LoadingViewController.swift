@@ -35,8 +35,8 @@ class LoadingViewController: BaseViewController {
                 print("result: \(result) / response: \(response)")
                 LoadingIndicator.hideLoading()
                 
-                self?.guideString = "변환할 얼굴을 찾는 중"
-//                self?.dismissLoading()
+//                self?.guideString = "변환할 얼굴을 찾는 중"
+                self?.dismissLoading()
             })
         } else {
             self.dismissLoading()
