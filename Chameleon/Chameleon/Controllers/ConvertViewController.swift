@@ -35,9 +35,19 @@ class ConvertViewController: BaseViewController {
         
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
+        
+        let customBackButton = UIBarButtonItem(image: UIImage(named: "BackArrowIcon") , style: .plain, target: self, action: #selector(backAction(sender:)))
+        customBackButton.imageInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
+        self.navigationItem.leftBarButtonItem = customBackButton
     }
     
     //MARK: - Actions
+    @objc private func backAction(sender: UIBarButtonItem) {
+        self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "취소", defaultAction: { _ in
+            self.navigationController?.popViewController(animated: true)
+        })
+    }
+    
     @objc private func clickedDoneButton(sender: UIButton) {
         let conversionResultVC = ConversionResultViewController()
         conversionResultVC.modalPresentationStyle = .fullScreen
@@ -59,14 +69,14 @@ class ConvertViewController: BaseViewController {
     
     private func completeConvert() {
         doneButton.isHidden = false
-        guideLabel.text = "얼굴 변환이 완료 되었습니다.\n결과를 확인하세요."
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 완료")
+        guideLabel.text = "얼굴 변환이 완료되었습니다.\n결과를 확인하세요."
+        setupNavigationBar(title: "얼굴 변환 완료")
         navigationController?.navigationItem.hidesBackButton = true
     }
     
     //MARK: - Setup
     private func setupCovertUI() {
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 중")
+        setupNavigationBar(title: "얼굴 변환 중")
         view.backgroundColor = .backgroundColor
         
         setupUploadView()
@@ -83,7 +93,7 @@ class ConvertViewController: BaseViewController {
         guideLabel = UILabel()
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "얼굴 변환이 진행 중 입니다.\n잠시만 기다려 주세요."
+        guideLabel.text = "얼굴 변환이 진행 중입니다.\n잠시만 기다려 주세요."
         guideLabel.font = UIFont.systemFont(ofSize: 18)
         guideLabel.textAlignment = .center
         guideLabel.numberOfLines = 0
