@@ -250,7 +250,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                     }
                     
                     if let imageData = imageData {
-                        self.mediaFile = MediaFile(filename: imageName ?? (self.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: "image/\(imageType)")
+                        self.mediaFile = MediaFile(filename: imageName ?? (DateUtils.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: "image/\(imageType)")
                         self.showImage(image)
                         
 //                        HttpService.shared.uploadMedia(params: [:], media: imageFile)
@@ -276,7 +276,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                     print("videoType: \(videoType)")
                     
                     let videoName = URLString.components(separatedBy: "/").last
-                    self.mediaFile = MediaFile(filename: videoName ?? (self.getCurrentDateTime() + ".\(videoType)"), data: videoData, type: "video/\(videoType)")
+                    self.mediaFile = MediaFile(filename: videoName ?? (DateUtils.getCurrentDateTime() + ".\(videoType)"), data: videoData, type: "video/\(videoType)")
                     
                     self.getThumbnailFromUrl(absoluteURL) { [weak self] (img) in
                         if let img = img {

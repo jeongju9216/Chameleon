@@ -7,6 +7,25 @@
 
 import UIKit
 
+let testJson: String = """
+"{
+    “images”: [
+    {
+        ”url” : ”https://picsum.photos/200​”,
+        “name”: “test1",
+        “gender” : “m”,
+        “percent” : 90
+    },
+    {
+        ”url” : ”https://picsum.photos/200​”,
+        “name”: “test2",
+        “gender” : “w”,
+        “percent” : 30
+    }
+    ]
+}
+"""
+
 struct Response: Codable {
     let result: String
     let message: String?
@@ -17,24 +36,40 @@ class HttpService {
     private init() { }
     
     private let serverIP: String = "api"
-    private let boundary: String = "Boundary-\(UUID().uuidString)"
+    private let authorizationHeaderKey = "authorization"
+    private var authorization: String {
+        if let savekey: String = UserDefaults.standard.string(forKey: "authorization") {
+            return savekey
+        } else {
+            let savekey = makeAuthorization()
+            UserDefaults.standard.set(savekey, forKey: "authorization")
+            UserDefaults.standard.synchronize()
+            
+            return savekey
+        }
+    }
+    
+    func makeAuthorization() -> String {
+        return UUID().uuidString + "-" + DateUtils.getCurrentDateTime()
+    }
     
     var retryCount = 0
     
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
-        completionHandler(true, "")
+//        print("authorization: \(authorization)")
+//        completionHandler(true, "")
         
 //        print("Here?")
-//        requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
-//            if result || self.retryCount == 3 {
-//                self.retryCount = 0
-//                completionHandler(result, response)
-//            } else {
-//                print("Here")
-//                self.retryCount += 1
-//                self.checkConnectedServer(completionHandler: completionHandler)
-//            }
-//        })
+        requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                print("Here")
+                self.retryCount += 1
+                self.checkConnectedServer(completionHandler: completionHandler)
+            }
+        })
     }
     
     func multipartServerTest() {
@@ -64,6 +99,7 @@ extension HttpService {
         var request = URLRequest(url: url)
         request.timeoutInterval = 3
         request.httpMethod = "GET"
+        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard error == nil else {
@@ -108,6 +144,7 @@ extension HttpService {
         var request = URLRequest(url: url)
         request.timeoutInterval = 3
         request.httpMethod = "POST"
+        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = sendData
         
@@ -132,7 +169,7 @@ extension HttpService {
                 return
             }
             
-            completionHandler(true, output.result)
+            completionHandler(output.result == "ok", output)
         }.resume()
     }
 
@@ -146,9 +183,9 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
-        request.timeoutInterval = 3
         request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
+        request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
         let data = createUploadBody(params: params, media: media)
         
@@ -198,9 +235,9 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
-        request.timeoutInterval = 3
         request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
+        request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
         let data = createBody(params: params)
         
@@ -236,7 +273,7 @@ extension HttpService {
                 return
             }
             
-            completionHandler(true, output.result)
+            completionHandler(output.result == "ok", output)
         }.resume()
     }
 
@@ -244,8 +281,8 @@ extension HttpService {
 
 extension HttpService {
     private func createBody(params: [String: Any]) -> Data {
-        let boundaryPrefix = "--\(boundary)\r\n".data(using: .utf8)!
-        let endBoundary = "--\(boundary)--\r\n".data(using: .utf8)!
+        let boundaryPrefix = "--\(authorization)\r\n".data(using: .utf8)!
+        let endBoundary = "--\(authorization)--\r\n".data(using: .utf8)!
         let lineBreak = "\r\n"
         
         var body = Data()
@@ -262,11 +299,9 @@ extension HttpService {
     }
     
     private func createUploadBody(params: [String: Any], media: MediaFile) -> Data {
-        print("media: \(media.type) / \(media.filename) / \(media.data) / boundary: \(boundary)")
-        
         let lineBreak = "\r\n"
-        let boundaryPrefix = "--\(boundary)\(lineBreak)".data(using: .utf8)!
-        let endBoundary = "--\(boundary)--\(lineBreak)".data(using: .utf8)!
+        let boundaryPrefix = "--\(authorization)\(lineBreak)".data(using: .utf8)!
+        let endBoundary = "--\(authorization)--\(lineBreak)".data(using: .utf8)!
         
         var body = Data()
                 

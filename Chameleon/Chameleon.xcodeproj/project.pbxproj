@@ -27,6 +27,8 @@
 		9B4EF40B27F5A1BA0099CE05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */; };
 		9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C0782828E7840038396E /* LoadingIndicator.swift */; };
 		9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C07E282A29B70038396E /* InfoViewController.swift */; };
+		9BC9C083282B60F70038396E /* FaceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C082282B60F70038396E /* FaceModel.swift */; };
+		9BC9C086282B6D230038396E /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C085282B6D230038396E /* DateUtils.swift */; };
 		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
 		9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -61,6 +63,8 @@
 		9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9BC9C0782828E7840038396E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9BC9C07E282A29B70038396E /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		9BC9C082282B60F70038396E /* FaceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceModel.swift; sourceTree = "<group>"; };
+		9BC9C085282B6D230038396E /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
 		9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceCell.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 		9B4B8FA227E0B2390066C7E3 /* Chameleon */ = {
 			isa = PBXGroup;
 			children = (
+				9BC9C084282B6D0E0038396E /* Utils */,
 				9B4EF40C27F5BD890099CE05 /* Models */,
 				9B4EF40527F569F50099CE05 /* Cells */,
 				9B4EF40427F5651B0099CE05 /* Services */,
@@ -152,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				9B4EF40627F56A730099CE05 /* HttpService.swift */,
-				9BC9C0782828E7840038396E /* LoadingIndicator.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -170,8 +174,18 @@
 			children = (
 				9B1A112627F837F700E2CE08 /* UploadInfo.swift */,
 				9B197572282235F20051D3C6 /* MediaFile.swift */,
+				9BC9C082282B60F70038396E /* FaceModel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		9BC9C084282B6D0E0038396E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				9BC9C0782828E7840038396E /* LoadingIndicator.swift */,
+				9BC9C085282B6D230038396E /* DateUtils.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		9BF442CC27F2E01700537C60 /* LottieJsons */ = {
@@ -264,6 +278,7 @@
 			files = (
 				9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */,
 				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,
+				9BC9C083282B60F70038396E /* FaceModel.swift in Sources */,
 				9B0D412F27EB113E00E2FA10 /* HomeMenuButton.swift in Sources */,
 				9BF442DC27F3473300537C60 /* UploadViewController.swift in Sources */,
 				9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */,
@@ -273,6 +288,7 @@
 				9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */,
 				9B1A116C28050F2A00E2CE08 /* UIImage.swift in Sources */,
 				9B1A112727F837F700E2CE08 /* UploadInfo.swift in Sources */,
+				9BC9C086282B6D230038396E /* DateUtils.swift in Sources */,
 				9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */,
 				9BF442E027F3DF9400537C60 /* LoadingViewController.swift in Sources */,
 				9B197573282235F20051D3C6 /* MediaFile.swift in Sources */,
