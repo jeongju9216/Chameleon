@@ -23,8 +23,6 @@ class InfoViewController: BaseViewController {
         setupInfoView()
         
         closeButton.addTarget(self, action: #selector(clickedCloseButton(sender:)), for: .touchUpInside)
-        
-        updateButton.isEnabled = false
     }
     
     //MARK: - Actions
@@ -91,7 +89,7 @@ class InfoViewController: BaseViewController {
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.numberOfLines = 0
         
-        versionLabel.text = "현재 버전 : 0.0.1\n최신 버전 : 0.0.1"
+        versionLabel.text = "현재 버전 : \(BaseData.shared.version)\n최신 버전 : \(BaseData.shared.appStoreVersion)"
         versionLabel.font = UIFont.systemFont(ofSize: 16)
         
         view.addSubview(versionLabel)
@@ -103,7 +101,13 @@ class InfoViewController: BaseViewController {
         updateButton = UIButton()
         updateButton.translatesAutoresizingMaskIntoConstraints = false
         
-        updateButton.applyMainButtonStyle(title: "최신 버전 사용 중")
+        if BaseData.shared.isNeedUpdate {
+            updateButton.applyMainButtonStyle(title: "최신 버전으로 업데이트")
+            updateButton.isEnabled = true
+        } else {
+            updateButton.applyMainButtonStyle(title: "최신 버전입니다.")
+            updateButton.isEnabled = false
+        }
         
         view.addSubview(updateButton)
         updateButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true

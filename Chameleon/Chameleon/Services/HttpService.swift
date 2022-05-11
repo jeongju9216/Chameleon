@@ -71,6 +71,12 @@ class HttpService {
     var retryCount = 0
     
     //MARK: - GET
+    func loadVersion(completionHandler: @escaping (Bool, Any) -> Void) {
+        requestGet(url: serverIP + "/version", completionHandler: { (result, response) in
+            completionHandler(result, response)
+        })
+    }
+    
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
             if result || self.retryCount == 3 {

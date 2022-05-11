@@ -21,10 +21,14 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupAppInfo()
+        
         view.backgroundColor = UIColor.backgroundColor
         
         setupLogoImage()
         setupBottomView()
+        
+        
         
         presentNextVC()
 //        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
@@ -42,6 +46,11 @@ class LaunchViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    private func setupAppInfo() {
+        BaseData.shared.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+        print("version: \(BaseData.shared.version)")
+    }
+    
     private func presentNextVC() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.LoadingTime) {
             let vc: UIViewController = CustomTabBarController()
