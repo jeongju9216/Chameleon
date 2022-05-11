@@ -31,11 +31,9 @@ class LaunchViewController: BaseViewController {
             if result {
                 self?.presentNextVC()
             } else {
-                DispatchQueue.main.async {
-                    self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
-                        
-                    })
-                }
+                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
+                    
+                })
             }
         })
         

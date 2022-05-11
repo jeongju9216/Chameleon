@@ -7,12 +7,8 @@
 
 import Foundation
 
-struct FaceModel {
-    let images: [FaceImage]
-}
-
-struct FaceImage {
-    let url: String?
+struct FaceImage: Codable {
+    let url: String
     let name: String
     let gender: String
     let percent: Int

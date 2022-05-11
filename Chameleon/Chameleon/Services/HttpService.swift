@@ -8,20 +8,29 @@
 import UIKit
 
 let testJson: String = """
-"{
-    “images”: [
-    {
-        ”url” : ”https://picsum.photos/200​”,
-        “name”: “test1",
-        “gender” : “m”,
-        “percent” : 90
-    },
-    {
-        ”url” : ”https://picsum.photos/200​”,
-        “name”: “test2",
-        “gender” : “w”,
-        “percent” : 30
-    }
+{
+    \"result\" : \"ok\",
+    \"message\" : \"추출 얼굴 이미지\",
+    \"data\" :
+    [
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test1\",
+            \"gender\" : \"m\",
+            \"percent\" : 90
+        },
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test2\",
+            \"gender\" : \"w\",
+            \"percent\" : 6
+        },
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test3\",
+            \"gender\" : \"m\",
+            \"percent\" : 4
+        }
     ]
 }
 """
@@ -29,6 +38,12 @@ let testJson: String = """
 struct Response: Codable {
     let result: String
     let message: String?
+}
+
+struct FaceResponse: Codable {
+    let result: String
+    let message: String
+    let data: [FaceImage]?
 }
 
 class HttpService {
@@ -55,6 +70,7 @@ class HttpService {
     
     var retryCount = 0
     
+    //MARK: - GET
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
             if result || self.retryCount == 3 {
@@ -68,11 +84,31 @@ class HttpService {
         })
     }
     
+    func getFaces(completionHandler: @escaping (Bool, Any) -> Void) {
+        print("testJson: \(testJson)")
+        guard let output = try? JSONDecoder().decode(FaceResponse.self, from: testJson.data(using: .utf8)!) else {
+            print("Error: JSON Data Parsing failed")
+            completionHandler(false, "Error: JSON Data Parsing failed")
+            
+            return
+        }
+        completionHandler(output.result == "ok", output.data)
+//        requestGet(url: serverIP + "/faces", completionHandler: { (result, response) in
+//            completionHandler(result, response)
+//        })
+    }
+    
+    //MARK: - Post
+    
+    
+    //MARK: - Multipart
     func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
         requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
             completionHandler(result, response)
         }
     }
+    
+    
     
 }
 

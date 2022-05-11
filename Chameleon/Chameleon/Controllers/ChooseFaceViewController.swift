@@ -10,9 +10,12 @@ import UIKit
 class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Views
-    var faceCollectionView: UICollectionView!
+    private var faceCollectionView: UICollectionView!
     
-    var convertButton: UIButton!
+    private var convertButton: UIButton!
+    
+    //MARK: - Properties
+    var faceImages: [FaceImage] = []
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -92,19 +95,17 @@ extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
 extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return faceImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
     
-        if indexPath.row % 2 == 0 {
-            cell.image = UIImage(named: "SampleFaceImage")
-        } else {
-            cell.image = UIImage(named: "ChameleonImage")
-        }
+        
         cell.setupImage()
         
         return cell
     }
+    
+    
 }

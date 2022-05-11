@@ -27,41 +27,68 @@ class LoadingViewController: BaseViewController {
         super.viewDidLoad()
         
         setupLoadingUI()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        if let mediaFile = mediaFile {
+        let uploadVC = getUploadViewController()
+        if let uploadVC = uploadVC {
+            guard let mediaFile = mediaFile else {
+                self.dismiss(animated: true, completion: {
+                    uploadVC.showErrorAlert(erorr: "파일이 존재하지 않습니다. 다시 시도해 주세요.")
+                })
+                return
+            }
+
             LoadingIndicator.showLoading()
 
             HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
                 print("[uploadMedia] result: \(result) / response: \(response)")
                 LoadingIndicator.hideLoading()
-                self?.dismissLoading(result: result)
+                
+                var result = true
+                if result {
+                    //get faces
+                    HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
+                        print("[getFaces] result: \(result) / response: \(response)")
+                        
+                        DispatchQueue.main.async {
+                            let faceImages: [FaceImage] = response as? [FaceImage] ?? []
+                            
+                            let chooseFaceVC = ChooseFaceViewController()
+                            chooseFaceVC.faceImages = faceImages
+                            
+                            chooseFaceVC.modalPresentationStyle = .fullScreen
+                            chooseFaceVC.modalTransitionStyle = .crossDissolve
+
+                            self?.dismiss(animated: true, completion: {
+                                uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                            })
+                        }
+                    })
+                } else {
+                    DispatchQueue.main.async {
+                        self?.dismiss(animated: true, completion: {
+                            uploadVC.showErrorAlert(erorr: "업로드에 실패했습니다. 다시 시도해 주세요.")
+                        })
+                    }
+                }
+                
             })
         } else {
-            self.dismissLoading()
+            print("uploadVC is nil")
         }
     }
     
     //MARK: - Methods
-    private func dismissLoading(result: Bool? = nil) {
-        DispatchQueue.main.async {
-            if let tvc = self.presentingViewController as? UITabBarController,
-               let nvc = tvc.selectedViewController as? UINavigationController,
-               let uploadVC = nvc.topViewController as? UploadViewController {
-                self.dismiss(animated: true, completion: {
-                    if let result = result {
-                        if result {
-                            let chooseFaceVC = ChooseFaceViewController()
-                            chooseFaceVC.modalPresentationStyle = .fullScreen
-                            chooseFaceVC.modalTransitionStyle = .crossDissolve
-
-                            uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
-                        } else {
-                            uploadVC.showErrorAlert(erorr: "업로드에 실패했습니다. 다시 시도해 주세요.")
-                        }
-                    }
-                })
-            }
+    private func getUploadViewController() -> UploadViewController? {
+        guard let tvc = self.presentingViewController as? UITabBarController,
+           let nvc = tvc.selectedViewController as? UINavigationController,
+           let uploadVC = nvc.topViewController as? UploadViewController else {
+            return nil
         }
+        return uploadVC
     }
     
     private func animationLoadingTimer() {
