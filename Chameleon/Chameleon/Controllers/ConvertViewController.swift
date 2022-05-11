@@ -46,7 +46,7 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Methods
     @objc private func progressConvert(sender: UIProgressView) {
-        time += 0.05
+        time += 0.1
 
         progressView.setProgress(time, animated: true)
         progressLabel.text = "\(Int(time * 100))%"
@@ -59,8 +59,9 @@ class ConvertViewController: BaseViewController {
     
     private func completeConvert() {
         doneButton.isHidden = false
-        guideLabel.text = "변환이 완료 되었습니다.\n결과를 확인하세요."
+        guideLabel.text = "얼굴 변환이 완료 되었습니다.\n결과를 확인하세요."
         setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 완료")
+        navigationController?.navigationItem.hidesBackButton = true
     }
     
     //MARK: - Setup
@@ -68,9 +69,9 @@ class ConvertViewController: BaseViewController {
         setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 중")
         view.backgroundColor = .backgroundColor
         
-        setupGuideLabel()
         setupUploadView()
-        
+        setupGuideLabel()
+
         setupProgressStack()
         setupProgressLabel()
         setupProgressView()
@@ -82,13 +83,14 @@ class ConvertViewController: BaseViewController {
         guideLabel = UILabel()
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "변환이 완료가 되면\n푸시 알림으로 알려드리겠습니다 🦎"
+        guideLabel.text = "얼굴 변환이 진행 중 입니다.\n잠시만 기다려 주세요."
+        guideLabel.font = UIFont.systemFont(ofSize: 18)
         guideLabel.textAlignment = .center
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)
         guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        guideLabel.bottomAnchor.constraint(equalTo: uploadImageView.topAnchor, constant: -40).isActive = true
     }
     
     private func setupUploadView() {
@@ -99,17 +101,13 @@ class ConvertViewController: BaseViewController {
         uploadImageView.backgroundColor = UIColor.backgroundColor
         
         uploadImageView.clipsToBounds = true
-//        uploadImageView.layer.borderColor = UIColor.edgeColor.cgColor
-//        uploadImageView.layer.borderWidth = 2
         uploadImageView.layer.cornerRadius = 20
         
         view.addSubview(uploadImageView)
-        uploadImageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        uploadImageView.heightAnchor.constraint(equalTo: uploadImageView.widthAnchor).isActive = true
+        uploadImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        uploadImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
         uploadImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        uploadImageView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
-        uploadImageView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
-        uploadImageView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
+        uploadImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
     }
     
     private func setupProgressStack() {
@@ -122,9 +120,9 @@ class ConvertViewController: BaseViewController {
         progressStack.distribution = .fill
         
         view.addSubview(progressStack)
-        progressStack.widthAnchor.constraint(equalToConstant: view.frame.width * 0.8).isActive = true
+        progressStack.widthAnchor.constraint(equalToConstant: view.frame.width * 0.6).isActive = true
         progressStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 30).isActive = true
+        progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupProgressLabel() {
