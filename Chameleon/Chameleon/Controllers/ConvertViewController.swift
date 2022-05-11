@@ -93,16 +93,18 @@ class ConvertViewController: BaseViewController {
     
     private func setupUploadView() {
         uploadImageView = UIImageView()
+        uploadImageView.image = UIImage(named: "ChameleonImage")
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         
         uploadImageView.backgroundColor = UIColor.backgroundColor
         
         uploadImageView.clipsToBounds = true
-        uploadImageView.layer.borderColor = UIColor.edgeColor.cgColor
-        uploadImageView.layer.borderWidth = 2
+//        uploadImageView.layer.borderColor = UIColor.edgeColor.cgColor
+//        uploadImageView.layer.borderWidth = 2
         uploadImageView.layer.cornerRadius = 20
         
         view.addSubview(uploadImageView)
+        uploadImageView.widthAnchor.constraint(equalToConstant: 120).isActive = true
         uploadImageView.heightAnchor.constraint(equalTo: uploadImageView.widthAnchor).isActive = true
         uploadImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         uploadImageView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true

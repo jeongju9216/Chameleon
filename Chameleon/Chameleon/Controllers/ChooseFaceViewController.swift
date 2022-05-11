@@ -100,9 +100,8 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
-    
         
-        cell.setupImage()
+        cell.setupImage(url: faceImages[indexPath.item].url)
         
         return cell
     }

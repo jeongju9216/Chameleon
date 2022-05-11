@@ -27,6 +27,8 @@ class LoadingViewController: BaseViewController {
         super.viewDidLoad()
         
         setupLoadingUI()
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -40,42 +42,52 @@ class LoadingViewController: BaseViewController {
                 })
                 return
             }
+            
+            let chooseFaceVC = ChooseFaceViewController()
+            chooseFaceVC.faceImages = []
+            
+            chooseFaceVC.modalPresentationStyle = .fullScreen
+            chooseFaceVC.modalTransitionStyle = .crossDissolve
 
-            LoadingIndicator.showLoading()
-
-            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                print("[uploadMedia] result: \(result) / response: \(response)")
-                LoadingIndicator.hideLoading()
-                
-                var result = true
-                if result {
-                    //get faces
-                    HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
-                        print("[getFaces] result: \(result) / response: \(response)")
-                        
-                        DispatchQueue.main.async {
-                            let faceImages: [FaceImage] = response as? [FaceImage] ?? []
-                            
-                            let chooseFaceVC = ChooseFaceViewController()
-                            chooseFaceVC.faceImages = faceImages
-                            
-                            chooseFaceVC.modalPresentationStyle = .fullScreen
-                            chooseFaceVC.modalTransitionStyle = .crossDissolve
-
-                            self?.dismiss(animated: true, completion: {
-                                uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
-                            })
-                        }
-                    })
-                } else {
-                    DispatchQueue.main.async {
-                        self?.dismiss(animated: true, completion: {
-                            uploadVC.showErrorAlert(erorr: "업로드에 실패했습니다. 다시 시도해 주세요.")
-                        })
-                    }
-                }
-                
+            self.dismiss(animated: true, completion: {
+                uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
             })
+
+//            LoadingIndicator.showLoading()
+//
+//            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
+//                print("[uploadMedia] result: \(result) / response: \(response)")
+//                LoadingIndicator.hideLoading()
+//
+//                var result = true
+//                if result {
+//                    //get faces
+//                    HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
+//                        print("[getFaces] result: \(result) / response: \(response)")
+//
+//                        DispatchQueue.main.async {
+//                            let faceImages: [FaceImage] = response as? [FaceImage] ?? []
+//
+//                            let chooseFaceVC = ChooseFaceViewController()
+//                            chooseFaceVC.faceImages = faceImages
+//
+//                            chooseFaceVC.modalPresentationStyle = .fullScreen
+//                            chooseFaceVC.modalTransitionStyle = .crossDissolve
+//
+//                            self?.dismiss(animated: true, completion: {
+//                                uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
+//                            })
+//                        }
+//                    })
+//                } else {
+//                    DispatchQueue.main.async {
+//                        self?.dismiss(animated: true, completion: {
+//                            uploadVC.showErrorAlert(erorr: "업로드에 실패했습니다. 다시 시도해 주세요.")
+//                        })
+//                    }
+//                }
+//
+//            })
         } else {
             print("uploadVC is nil")
         }

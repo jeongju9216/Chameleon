@@ -105,8 +105,18 @@ class ChooseFaceCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
     }
     
-    func setupImage() {
-        imageView.image = image
+    func setupImage(url: String) {
+        if let url = URL(string: url) {
+            DispatchQueue.global().async { [weak self] in
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+                    DispatchQueue.main.async {
+                        self?.imageView.image = image
+                    }
+                }
+            }
+        } else {
+            imageView.image = UIImage(named: "ChameleonImage")
+        }
     }
-    
 }
