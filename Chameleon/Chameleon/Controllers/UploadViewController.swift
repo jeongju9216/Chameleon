@@ -329,6 +329,8 @@ extension UploadViewController {
             
             self.uploadImageView.isHidden = true
             self.uploadLabel.isHidden = true
+            
+            self.uploadButton.isEnabled = true
         }
     }
 }
