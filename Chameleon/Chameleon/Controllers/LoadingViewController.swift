@@ -32,11 +32,9 @@ class LoadingViewController: BaseViewController {
             LoadingIndicator.showLoading()
 
             HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                print("result: \(result) / response: \(response)")
+                print("[uploadMedia] result: \(result) / response: \(response)")
                 LoadingIndicator.hideLoading()
-                
-//                self?.guideString = "변환할 얼굴을 찾는 중"
-                self?.dismissLoading()
+                self?.dismissLoading(result: result)
             })
         } else {
             self.dismissLoading()
@@ -44,18 +42,24 @@ class LoadingViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func dismissLoading() {
+    private func dismissLoading(result: Bool? = nil) {
         DispatchQueue.main.async {
             if let tvc = self.presentingViewController as? UITabBarController,
                let nvc = tvc.selectedViewController as? UINavigationController,
-               let pvc = nvc.topViewController as? UploadViewController {
-                self.dismiss(animated: true) {
-                    let chooseFaceVC = ChooseFaceViewController()
-                    chooseFaceVC.modalPresentationStyle = .fullScreen
-                    chooseFaceVC.modalTransitionStyle = .crossDissolve
+               let uploadVC = nvc.topViewController as? UploadViewController {
+                self.dismiss(animated: true, completion: {
+                    if let result = result {
+                        if result {
+                            let chooseFaceVC = ChooseFaceViewController()
+                            chooseFaceVC.modalPresentationStyle = .fullScreen
+                            chooseFaceVC.modalTransitionStyle = .crossDissolve
 
-                    pvc.navigationController?.pushViewController(chooseFaceVC, animated: true)
-                }
+                            uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                        } else {
+                            uploadVC.showErrorAlert(erorr: "업로드에 실패했습니다. 다시 시도해 주세요.")
+                        }
+                    }
+                })
             }
         }
     }

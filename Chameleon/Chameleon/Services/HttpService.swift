@@ -35,7 +35,7 @@ class HttpService {
     static let shared: HttpService = HttpService()
     private init() { }
     
-    private let serverIP: String = "api"
+    private let serverIP: String = "http://52.79.188.183:5000"
     private let authorizationHeaderKey = "authorization"
     private var authorization: String {
         if let savekey: String = UserDefaults.standard.string(forKey: "authorization") {
@@ -56,10 +56,6 @@ class HttpService {
     var retryCount = 0
     
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
-//        print("authorization: \(authorization)")
-//        completionHandler(true, "")
-        
-//        print("Here?")
         requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
             if result || self.retryCount == 3 {
                 self.retryCount = 0
@@ -72,14 +68,7 @@ class HttpService {
         })
     }
     
-    func multipartServerTest() {
-        requestMultipartForm(url: serverIP + "/test", params: ["message": "TEST"], completionHandler: { (result, response) in
-            print("\(self.serverIP + "/test") response: \(response)")
-        })
-    }
-    
     func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        print("\(#fileID) \(#line)-line, \(#function)")
         requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
             completionHandler(result, response)
         }
