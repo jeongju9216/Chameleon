@@ -21,6 +21,10 @@ class ChooseFaceViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for i in 0..<10 {
+            faceImages.append(FaceImage(url: "", name: "", gender: "", percent: 90))
+        }
+        
         setupChooseFaceUI()
         
         faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
@@ -105,6 +109,4 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
         
         return cell
     }
-    
-    
 }
