@@ -16,6 +16,7 @@ class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Properties
     var faceImages: [FaceImage] = []
+    var selectedIndex: [Int] = []
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -105,8 +106,28 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
         
-        cell.setupImage(url: faceImages[indexPath.item].url)
+        cell.setupImage(url: faceImages[indexPath.row].url)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+            cell.setSelectedStyle()
+            selectedIndex.append(indexPath.row)
+            
+            print("select: \(indexPath.row) / selectedIndex: \(selectedIndex)")
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+            cell.setDeselectedStyle()
+            if let removeItem = selectedIndex.firstIndex(of: indexPath.row) {
+                selectedIndex.remove(at: removeItem)
+            }
+            
+            print("deselect: \(indexPath.row) / selectedIndex: \(selectedIndex)")
+        }
     }
 }

@@ -17,12 +17,6 @@ class ChooseFaceCell: UICollectionViewCell {
     
     private let size = 28
     
-    override var isSelected: Bool {
-        didSet {
-            isSelected ? setClickStyle() : setNoneClickStyle()
-        }
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
@@ -36,7 +30,7 @@ class ChooseFaceCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
-    private func setClickStyle() {
+    func setSelectedStyle() {
         checkImageView.image = checkImage
         
         checkImageView.tintColor = .mainColor
@@ -46,7 +40,7 @@ class ChooseFaceCell: UICollectionViewCell {
         contentView.layer.borderColor = UIColor.mainColor.cgColor
     }
     
-    private func setNoneClickStyle() {
+    func setDeselectedStyle() {
         checkImageView.image = noneCheckImage
         
         checkImageView.tintColor = .black
@@ -66,7 +60,7 @@ class ChooseFaceCell: UICollectionViewCell {
         setupImages()
         setupCheckImageView()
         
-        setNoneClickStyle()
+        setDeselectedStyle()
     }
 
     private func setupImages() {
