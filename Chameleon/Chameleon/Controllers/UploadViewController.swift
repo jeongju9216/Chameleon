@@ -147,6 +147,7 @@ class UploadViewController: BaseViewController {
     private func setupUploadButton() {
         uploadButton = UIButton(type: .custom)
         uploadButton.translatesAutoresizingMaskIntoConstraints = false
+        uploadButton.isEnabled = false
         
         uploadButton.applyMainButtonStyle(title: "업로드")
         
@@ -214,71 +215,29 @@ class UploadViewController: BaseViewController {
 }
 
 extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
         self.dismiss(animated: true) {
             if UploadInfo.shared.uploadType == .Photo {
                 if let image = info[.originalImage] as? UIImage,
                    let assetPath = info[.imageURL] as? URL {
                     
-                    let URLString = assetPath.absoluteString.lowercased()
-//                    print("assetPath: \(assetPath) / URLString: \(URLString)")
-                    
-                    var imageType = "unknown"
-                    if (URLString.hasSuffix("jpg")) {
-                        imageType = "jpg"
-                    } else if (URLString.hasSuffix("jpeg")) {
-                        imageType = "jpeg"
-                    } else if (URLString.hasSuffix("png")) {
-                        imageType = "png"
-                    } else {
-                        print("Invalid Type")
-                    }
-                    print("imageType: \(imageType)")
-                    
-                    let imageName = URLString.components(separatedBy: "/").last
-                    
-                    var imageData: Data?
-                    switch imageType {
-                    case "png":
-                        imageData = image.pngData()
-                    case "jpg":
-                        imageData = image.jpegData(compressionQuality: 1.0)
-                    case "jpeg":
-                        imageData = image.jpegData(compressionQuality: 1.0)
-                    default: break
-                    }
+                    let (imageType, imageName) = self.parsingImageInfo(url: assetPath)
+                    let imageData = self.createImageData(image, type: imageType)
                     
                     if let imageData = imageData {
-                        self.mediaFile = MediaFile(filename: imageName ?? (DateUtils.getCurrentDateTime() + ".\(imageType)"), data: imageData, type: "image/\(imageType)")
+                        self.mediaFile = MediaFile(filename: imageName, data: imageData, type: "image/\(imageType)")
                         self.showImage(image)
-                        
-//                        HttpService.shared.uploadMedia(params: [:], media: imageFile)
                     }
                 }
             } else {
                 let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
-                print("videoURL:\(String(describing: videoURL))")
                 
                 if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
-                    let absoluteURL = videoURL.absoluteString
-                    let URLString = absoluteURL.lowercased()
-//                    print("assetPath: \(assetPath) / URLString: \(URLString)")
+                    let (videoType, videoName) = self.parsingVideoInfo(url: videoURL)
+                    self.mediaFile = MediaFile(filename: videoName, data: videoData, type: "video/\(videoType)")
                     
-                    var videoType = "unknown"
-                    if (URLString.hasSuffix("mov")) {
-                        videoType = "mov"
-                    } else if (URLString.hasSuffix("mp4")) {
-                        videoType = "mp4"
-                    } else {
-                        print("Invalid Type")
-                    }
-                    print("videoType: \(videoType)")
-                    
-                    let videoName = URLString.components(separatedBy: "/").last
-                    self.mediaFile = MediaFile(filename: videoName ?? (DateUtils.getCurrentDateTime() + ".\(videoType)"), data: videoData, type: "video/\(videoType)")
-                    
-                    self.getThumbnailFromUrl(absoluteURL) { [weak self] (img) in
+                    self.getThumbnailFromUrl(videoURL.absoluteString) { [weak self] (img) in
                         if let img = img {
                             self?.showImage(img)
                         }
@@ -286,6 +245,61 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
                 }
             }
         }
+    }
+}
+
+extension UploadViewController {
+    func parsingImageInfo(url: URL) -> (String, String) {
+        let URLString = url.absoluteString.lowercased()
+
+        var imageType = "unknown"
+        if (URLString.hasSuffix("jpg")) {
+            imageType = "jpg"
+        } else if (URLString.hasSuffix("jpeg")) {
+            imageType = "jpeg"
+        } else if (URLString.hasSuffix("png")) {
+            imageType = "png"
+        } else {
+            print("Invalid Type")
+        }
+        print("imageType: \(imageType)")
+        
+        let imageName = URLString.components(separatedBy: "/").last ?? (DateUtils.getCurrentDateTime() + ".\(imageType)")
+
+        return (imageType, imageName)
+    }
+    
+    func createImageData(_ image: UIImage, type: String) -> Data? {
+        var imageData: Data?
+        switch type {
+        case "png":
+            imageData = image.pngData()
+        case "jpg":
+            imageData = image.jpegData(compressionQuality: 1.0)
+        case "jpeg":
+            imageData = image.jpegData(compressionQuality: 1.0)
+        default: break
+        }
+    
+        return imageData
+    }
+    
+    func parsingVideoInfo(url: URL) -> (String, String) {
+        let URLString = url.absoluteString.lowercased()
+        
+        var videoType = "unknown"
+        if (URLString.hasSuffix("mov")) {
+            videoType = "mov"
+        } else if (URLString.hasSuffix("mp4")) {
+            videoType = "mp4"
+        } else {
+            print("Invalid Type")
+        }
+        print("videoType: \(videoType)")
+        
+        let videoName = URLString.components(separatedBy: "/").last ?? (DateUtils.getCurrentDateTime() + ".\(videoType)")
+        
+        return (videoType, videoName)
     }
     
     private func getThumbnailFromUrl(_ url: String?, _ completion: @escaping ((_ image: UIImage?)->Void)) {
@@ -318,5 +332,3 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
         }
     }
 }
-
-//SampleFaceImage

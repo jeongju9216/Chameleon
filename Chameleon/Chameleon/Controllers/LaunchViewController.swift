@@ -26,17 +26,18 @@ class LaunchViewController: BaseViewController {
         setupLogoImage()
         setupBottomView()
         
-        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
-            print("[checkConnectedServer] result: \(result) / response: \(response)")
-            if result {
-                self?.presentNextVC()
-            } else {
-                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
-                    
-                })
-            }
-        })
-        
+        presentNextVC()
+//        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
+//            print("[checkConnectedServer] result: \(result) / response: \(response)")
+//            if result {
+//                self?.presentNextVC()
+//            } else {
+//                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
+//
+//                })
+//            }
+//        })
+//
         
     }
     
