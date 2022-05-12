@@ -35,12 +35,18 @@ class UploadViewController: BaseViewController {
         setupImagePicker()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
+        segmentedControl.addTarget(self, action: #selector(changedSegmentedControl(sender:)), for: .valueChanged)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickedUploadView(sender:)))
         uploadView.addGestureRecognizer(tapGesture)
     }
     
     //MARK: - Actions
+    @objc private func changedSegmentedControl(sender: UISegmentedControl) {
+        print("selected: \(sender.selectedSegmentIndex)")
+        UploadData.shared.convertType = sender.selectedSegmentIndex
+    }
+    
     @objc private func clickedUpload(sender: UIButton) {
         let loadingVC = LoadingViewController()
         loadingVC.modalPresentationStyle = .fullScreen
@@ -116,7 +122,7 @@ class UploadViewController: BaseViewController {
         imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = false
-        if UploadInfo.shared.uploadType == .Photo {
+        if UploadData.shared.uploadType == .Photo {
             imagePicker.mediaTypes = ["public.image"]
         } else {
             imagePicker.mediaTypes = ["public.movie"]
@@ -128,7 +134,7 @@ class UploadViewController: BaseViewController {
     private func setupUploadUI() {
         view.backgroundColor = UIColor.backgroundColor
         
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadType)")
+        setupNavigationBar(title: "\(UploadData.shared.uploadType)")
         setupGuideLabel()
         setupUploadView()
         setupSegmentedControl()
@@ -139,7 +145,7 @@ class UploadViewController: BaseViewController {
         guideLabel = UILabel()
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "변환할 \(UploadInfo.shared.uploadTypeString)을 선택해 주세요."
+        guideLabel.text = "변환할 \(UploadData.shared.uploadTypeString)을 선택해 주세요."
         guideLabel.numberOfLines = 0
         
         view.addSubview(guideLabel)
@@ -207,7 +213,7 @@ class UploadViewController: BaseViewController {
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         uploadImageView.isUserInteractionEnabled = false
         
-        let uploadImageName: String = (UploadInfo.shared.uploadType == .Photo) ? "photo" : "video"
+        let uploadImageName: String = (UploadData.shared.uploadType == .Photo) ? "photo" : "video"
         if let uploadImage = UIImage(systemName: uploadImageName) {
             uploadImageView.image = uploadImage.withRenderingMode(.alwaysTemplate)
             uploadImageView.tintColor = .lightGray
@@ -225,7 +231,7 @@ class UploadViewController: BaseViewController {
         uploadLabel.translatesAutoresizingMaskIntoConstraints = false
         uploadLabel.isUserInteractionEnabled = false
         
-        uploadLabel.text = "Choose \(UploadInfo.shared.uploadType)"
+        uploadLabel.text = "Choose \(UploadData.shared.uploadType)"
         uploadLabel.textColor = .lightGray
         
         uploadView.addSubview(uploadLabel)
@@ -238,7 +244,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         self.dismiss(animated: true) {
-            if UploadInfo.shared.uploadType == .Photo {
+            if UploadData.shared.uploadType == .Photo {
                 if let image = info[.originalImage] as? UIImage,
                    let assetPath = info[.imageURL] as? URL {
                     

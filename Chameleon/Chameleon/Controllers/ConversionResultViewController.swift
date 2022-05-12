@@ -34,7 +34,7 @@ class ConversionResultViewController: BaseViewController {
     
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
-        let message = "변환된 \(UploadInfo.shared.uploadTypeString)은 종료 후 즉시 폐기되며\n처음부터 다시 진행하셔야 합니다.\n종료하시겠습니까?"
+        let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 폐기되며\n처음부터 다시 진행하셔야 합니다.\n종료하시겠습니까?"
         
         let action: ((UIAlertAction) -> Void) = { action in
             self.goBackHome()
@@ -50,7 +50,7 @@ class ConversionResultViewController: BaseViewController {
     
     //MARK: - Setup
     private func setupConversionResultUI() {
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 결과")
+        setupNavigationBar(title: "\(UploadData.shared.uploadTypeString) 변환 결과")
         navigationItem.hidesBackButton = true
         
         view.backgroundColor = .backgroundColor
@@ -69,7 +69,7 @@ class ConversionResultViewController: BaseViewController {
         guideLabel = UILabel()
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "변환된 \(UploadInfo.shared.uploadTypeString)을 저장하고 공유해 보세요."
+        guideLabel.text = "변환된 \(UploadData.shared.uploadTypeString)을 저장하고 공유해 보세요."
         guideLabel.textAlignment = .center
         guideLabel.numberOfLines = 0
         

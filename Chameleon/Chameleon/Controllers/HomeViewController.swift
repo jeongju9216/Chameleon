@@ -39,9 +39,9 @@ class HomeViewController: BaseViewController {
         let uploadVC = UploadViewController()
         
         if sender == photoButton {
-            UploadInfo.shared.uploadType = .Photo
+            UploadData.shared.uploadType = .Photo
         } else {
-            UploadInfo.shared.uploadType = .Video
+            UploadData.shared.uploadType = .Video
         }
         
         uploadVC.modalPresentationStyle = .fullScreen
