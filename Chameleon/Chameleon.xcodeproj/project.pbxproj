@@ -29,6 +29,7 @@
 		9BC9C083282B60F70038396E /* FaceImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C082282B60F70038396E /* FaceImage.swift */; };
 		9BC9C086282B6D230038396E /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C085282B6D230038396E /* DateUtils.swift */; };
 		9BC9C088282BFABD0038396E /* BaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C087282BFABD0038396E /* BaseData.swift */; };
+		9BC9C08D282CF9E10038396E /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C08C282CF9E10038396E /* GuideViewController.swift */; };
 		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
 		9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -65,6 +66,7 @@
 		9BC9C082282B60F70038396E /* FaceImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceImage.swift; sourceTree = "<group>"; };
 		9BC9C085282B6D230038396E /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		9BC9C087282BFABD0038396E /* BaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseData.swift; sourceTree = "<group>"; };
+		9BC9C08C282CF9E10038396E /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
 		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
 		9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceCell.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				9B1A112827F85D1300E2CE08 /* ConversionResultViewController.swift */,
 				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
 				9BC9C07E282A29B70038396E /* InfoViewController.swift */,
+				9BC9C08C282CF9E10038396E /* GuideViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */,
 				9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */,
 				9B1A112727F837F700E2CE08 /* UploadData.swift in Sources */,
+				9BC9C08D282CF9E10038396E /* GuideViewController.swift in Sources */,
 				9BC9C086282B6D230038396E /* DateUtils.swift in Sources */,
 				9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */,
 				9BC9C088282BFABD0038396E /* BaseData.swift in Sources */,
