@@ -104,8 +104,8 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Methods
     private func moveToSetting() {
-        let message = "앨범 접근이 거부 되었습니다.\n해당 기능을 사용하시려면 설정에서 권한을 허용해 주세요."
-        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "권한 설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
+        let message = "사진 접근이 거부 되었습니다.\n설정에서 권한을 허용해 주세요."
+        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
             guard let settingURL = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }

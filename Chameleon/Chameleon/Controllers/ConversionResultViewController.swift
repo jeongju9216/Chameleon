@@ -50,12 +50,18 @@ class ConversionResultViewController: BaseViewController {
            
            showErrorAlert(erorr: "저장을 실패했습니다.\n다시 시도해 주세요.")
        } else {
-           showOneButtonAlert(message: "저장 되었습니다.")
+           showOneButtonAlert(message: "앨범에 저장 되었습니다.")
        }
     }
 
     @objc private func clickedShareButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")
+        
+        if let resultImage = resultImage {
+            let vc = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
+            vc.excludedActivityTypes = [.saveToCameraRoll]
+            present(vc, animated: true)
+        }
         
     }
     

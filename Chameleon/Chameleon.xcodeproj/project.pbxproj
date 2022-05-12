@@ -442,8 +442,8 @@
 				DEVELOPMENT_TEAM = 5VPZU4RB4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 추가하는 권한";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 가져오는 권한";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -472,8 +472,8 @@
 				DEVELOPMENT_TEAM = 5VPZU4RB4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "사진을 추가하는 권한";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 가져오는 권한";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
