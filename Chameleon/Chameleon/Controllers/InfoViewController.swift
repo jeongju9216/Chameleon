@@ -47,6 +47,7 @@ class InfoViewController: BaseViewController {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         
         closeButton.setTitle("닫기", for: .normal)
+        closeButton.setTitleColor(.label, for: .normal)
         
         view.addSubview(closeButton)
         closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true

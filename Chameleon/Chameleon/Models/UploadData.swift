@@ -19,11 +19,11 @@ final class UploadData {
         var message = ""
         switch convertType {
         case ConvertType.face.rawValue:
-            message = "얼굴을 가짜 얼굴로 변환합니다."
+            message = "얼굴을 페이크 얼굴로 변환합니다."
         case ConvertType.mosaic.rawValue:
             message = "얼굴을 모자이크 합니다."
         case ConvertType.all.rawValue:
-            message = "얼굴을 가짜 얼굴로 변환하고 모자이크 합니다."
+            message = "얼굴을 페이크 얼굴로 변환하고 모자이크 합니다."
         default: break
         }
         

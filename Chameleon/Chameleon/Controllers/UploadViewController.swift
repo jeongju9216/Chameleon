@@ -24,7 +24,7 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Properties
     var mediaFile: MediaFile?
-    var segmentedItem: [String] = ["얼굴 변환", "모자이크", "모두"]
+    var segmentedItem: [String] = ["페이크 얼굴", "모자이크", "모두"]
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
