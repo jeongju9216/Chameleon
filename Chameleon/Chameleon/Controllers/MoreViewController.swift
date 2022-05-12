@@ -78,6 +78,9 @@ extension MoreViewController: UITableViewDelegate {
             case "애플리케이션 정보":
                 let infoViewController = InfoViewController()
                 self.present(infoViewController, animated: true)
+            case "도움말":
+                let guideViewController = GuideViewController()
+                self.present(guideViewController, animated: true)
             default: break
             }
             break
