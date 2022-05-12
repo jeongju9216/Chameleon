@@ -10,7 +10,8 @@ import UIKit
 class ConversionResultViewController: BaseViewController {
     
     //MARK: - Views
-    private var resultView: UIView!
+    private var resultImageView: UIImageView!
+    private var resultImage: UIImage?
     
     private var buttonStack: UIStackView!
     private var saveButton: UIButton!
@@ -20,23 +21,42 @@ class ConversionResultViewController: BaseViewController {
     
     //MARK: - Properties
     private let buttonSize: Int = 24
+    var resultImageURL: URL?
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupConversionResultUI()
+        loadResultImage()
         
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(clickedSaveButton(sender:)), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
     }
     
     //MARK: - Actions
     @objc private func clickedSaveButton(sender: UIButton) {
+        print("\(#fileID) \(#line)-line, \(#function)")
         
+        if let resultImage = resultImage {
+            UIImageWriteToSavedPhotosAlbum(resultImage, self, #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
+        }
     }
     
+    @objc func saveImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+       if let error = error {
+           print("saveImage error: \(error)")
+           
+           showErrorAlert(erorr: "저장을 실패했습니다.\n다시 시도해 주세요.")
+       } else {
+           showOneButtonAlert(message: "저장 되었습니다.")
+       }
+    }
+
     @objc private func clickedShareButton(sender: UIButton) {
-    
+        print("\(#fileID) \(#line)-line, \(#function)")
+        
     }
     
     @objc private func clickedDoneButton(sender: UIButton) {
@@ -71,21 +91,35 @@ class ConversionResultViewController: BaseViewController {
     }
     
     private func setupResultView() {
-        resultView = UIView()
-        resultView.translatesAutoresizingMaskIntoConstraints = false
+        resultImageView = UIImageView()
+        resultImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        resultView.backgroundColor = UIColor.backgroundColor
+        resultImageView.backgroundColor = UIColor.backgroundColor
         
-        resultView.clipsToBounds = true
-        resultView.layer.borderColor = UIColor.edgeColor.cgColor
-        resultView.layer.borderWidth = 2
-        resultView.layer.cornerRadius = 20
+        resultImageView.clipsToBounds = true
+        resultImageView.layer.borderColor = UIColor.edgeColor.cgColor
+        resultImageView.layer.borderWidth = 2
+        resultImageView.layer.cornerRadius = 20
         
-        view.addSubview(resultView)
-        resultView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
-        resultView.heightAnchor.constraint(equalTo: resultView.widthAnchor).isActive = true
-        resultView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        resultView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        view.addSubview(resultImageView)
+        resultImageView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
+        resultImageView.heightAnchor.constraint(equalTo: resultImageView.widthAnchor).isActive = true
+        resultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        resultImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+    }
+    
+    private func loadResultImage() {
+        if let url = URL(string: "https://picsum.photos/800") {
+            DispatchQueue.global().async { [weak self] in
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+                    DispatchQueue.main.async {
+                        self?.resultImage = image
+                        self?.resultImageView.image = self?.resultImage
+                    }
+                }
+            }
+        }
     }
     
     private func setupButtonStackView() {
@@ -101,7 +135,7 @@ class ConversionResultViewController: BaseViewController {
         buttonStack.widthAnchor.constraint(equalToConstant: 200).isActive = true
         buttonStack.heightAnchor.constraint(equalToConstant: 44).isActive = true
         buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        buttonStack.topAnchor.constraint(equalTo: resultView.bottomAnchor, constant: 20).isActive = true
+        buttonStack.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupSaveButton() {
