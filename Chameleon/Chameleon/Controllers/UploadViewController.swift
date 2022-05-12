@@ -13,16 +13,18 @@ import AVFoundation
 class UploadViewController: BaseViewController {
     
     //MARK: - Views
-    var guideLabel: UILabel!
-    var uploadView: UIImageView!
-    var uploadImageView: UIImageView!
-    var uploadLabel: UILabel!
-    var uploadButton: UIButton!
+    private var guideLabel: UILabel!
+    private var uploadView: UIImageView!
+    private var uploadImageView: UIImageView!
+    private var uploadLabel: UILabel!
+    private var segmentedControl: UISegmentedControl!
+    private var uploadButton: UIButton!
     
-    var imagePicker: UIImagePickerController!
+    private var imagePicker: UIImagePickerController!
     
     //MARK: - Properties
     var mediaFile: MediaFile?
+    var segmentedItem: [String] = ["얼굴 변환", "모자이크", "모두"]
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -129,6 +131,7 @@ class UploadViewController: BaseViewController {
         setupNavigationBar(title: "\(UploadInfo.shared.uploadType)")
         setupGuideLabel()
         setupUploadView()
+        setupSegmentedControl()
         setupUploadButton()
     }
     
@@ -142,6 +145,22 @@ class UploadViewController: BaseViewController {
         view.addSubview(guideLabel)
         guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+    }
+    
+    private func setupSegmentedControl() {
+        segmentedControl = UISegmentedControl(items: segmentedItem)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentTintColor = .mainColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white, .font: UIFont.boldSystemFont(ofSize: 14)], for: .selected)
+        
+        view.addSubview(segmentedControl)
+        segmentedControl.widthAnchor.constraint(equalTo: uploadView.widthAnchor).isActive = true
+        segmentedControl.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: uploadView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupUploadButton() {
@@ -172,11 +191,12 @@ class UploadViewController: BaseViewController {
         uploadView.layer.cornerRadius = 20
         
         view.addSubview(uploadView)
+        
+        print("80%: \(view.frame.width * 0.8)")
+        uploadView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
         uploadView.heightAnchor.constraint(equalTo: uploadView.widthAnchor).isActive = true
         uploadView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         uploadView.topAnchor.constraint(equalTo: guideLabel.topAnchor, constant: 40).isActive = true
-        uploadView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
-        uploadView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
         
         setupUploadImageInView()
         setupUploadLabelInView()

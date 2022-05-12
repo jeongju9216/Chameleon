@@ -90,11 +90,10 @@ class ConversionResultViewController: BaseViewController {
         resultView.layer.cornerRadius = 20
         
         view.addSubview(resultView)
+        resultView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
         resultView.heightAnchor.constraint(equalTo: resultView.widthAnchor).isActive = true
         resultView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         resultView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
-        resultView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
-        resultView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
     }
     
     private func setupButtonStackView() {
