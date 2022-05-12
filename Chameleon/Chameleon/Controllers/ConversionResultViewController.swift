@@ -10,18 +10,16 @@ import UIKit
 class ConversionResultViewController: BaseViewController {
     
     //MARK: - Views
-    var guideLabel: UILabel!
+    private var resultView: UIView!
     
-    var resultView: UIView!
+    private var buttonStack: UIStackView!
+    private var saveButton: UIButton!
+    private var shareButton: UIButton!
     
-    var buttonStack: UIStackView!
-    var saveButton: UIButton!
-    var shareButton: UIButton!
-    
-    var doneButton: UIButton!
+    private var doneButton: UIButton!
     
     //MARK: - Properties
-    let buttonSize: Int = 24
+    private let buttonSize: Int = 24
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -33,8 +31,16 @@ class ConversionResultViewController: BaseViewController {
     }
     
     //MARK: - Actions
+    @objc private func clickedSaveButton(sender: UIButton) {
+        
+    }
+    
+    @objc private func clickedShareButton(sender: UIButton) {
+    
+    }
+    
     @objc private func clickedDoneButton(sender: UIButton) {
-        let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 폐기되며\n처음부터 다시 진행하셔야 합니다.\n종료하시겠습니까?"
+        let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
         
         let action: ((UIAlertAction) -> Void) = { action in
             self.goBackHome()
@@ -55,7 +61,6 @@ class ConversionResultViewController: BaseViewController {
         
         view.backgroundColor = .backgroundColor
         
-        setupGuideLabel()
         setupResultView()
         
         setupButtonStackView()
@@ -63,19 +68,6 @@ class ConversionResultViewController: BaseViewController {
         setupShareButton()
         
         setupDoneButton()
-    }
-    
-    private func setupGuideLabel() {
-        guideLabel = UILabel()
-        guideLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        guideLabel.text = "변환된 \(UploadData.shared.uploadTypeString)을 저장하고 공유해 보세요."
-        guideLabel.textAlignment = .center
-        guideLabel.numberOfLines = 0
-        
-        view.addSubview(guideLabel)
-        guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
     }
     
     private func setupResultView() {
@@ -93,7 +85,7 @@ class ConversionResultViewController: BaseViewController {
         resultView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
         resultView.heightAnchor.constraint(equalTo: resultView.widthAnchor).isActive = true
         resultView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        resultView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
+        resultView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
     }
     
     private func setupButtonStackView() {

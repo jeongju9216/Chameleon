@@ -30,6 +30,24 @@ let testJson: String = """
             \"name\": \"test3\",
             \"gender\" : \"m\",
             \"percent\" : 4
+        },
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test1\",
+            \"gender\" : \"m\",
+            \"percent\" : 90
+        },
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test2\",
+            \"gender\" : \"w\",
+            \"percent\" : 6
+        },
+        {
+            \"url\" : \"https://picsum.photos/200\",
+            \"name\": \"test3\",
+            \"gender\" : \"m\",
+            \"percent\" : 4
         }
     ]
 }

@@ -43,14 +43,22 @@ class LoadingViewController: BaseViewController {
                 return
             }
             
-            let chooseFaceVC = ChooseFaceViewController()
-            chooseFaceVC.faceImages = []
-            
-            chooseFaceVC.modalPresentationStyle = .fullScreen
-            chooseFaceVC.modalTransitionStyle = .crossDissolve
+            HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
+                print("[getFaces] result: \(result) / response: \(response)")
 
-            self.dismiss(animated: true, completion: {
-                uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                DispatchQueue.main.async {
+                    let faceImages: [FaceImage] = response as? [FaceImage] ?? []
+
+                    let chooseFaceVC = ChooseFaceViewController()
+                    chooseFaceVC.faceImages = faceImages
+
+                    chooseFaceVC.modalPresentationStyle = .fullScreen
+                    chooseFaceVC.modalTransitionStyle = .crossDissolve
+
+                    self?.dismiss(animated: true, completion: {
+                        uploadVC.navigationController?.pushViewController(chooseFaceVC, animated: true)
+                    })
+                }
             })
 
 //            LoadingIndicator.showLoading()

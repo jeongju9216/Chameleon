@@ -36,6 +36,7 @@ class ChooseFaceCell: UICollectionViewCell {
         checkImageView.tintColor = .mainColor
         checkImageView.alpha = 1
         checkImageView.layer.borderColor = UIColor.mainColor.cgColor
+        checkImageView.backgroundColor = .white
         
         contentView.layer.borderColor = UIColor.mainColor.cgColor
     }
