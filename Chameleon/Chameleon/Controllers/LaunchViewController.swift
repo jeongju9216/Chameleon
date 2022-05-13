@@ -29,7 +29,7 @@ class LaunchViewController: BaseViewController {
         HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
             print("[loadVersion] result: \(result) / response: \(response)")
             if result {
-                self?.setupAppInfo(appstoreVersion: (response as! Response).message ?? "0.0.0")
+                self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")
                 self?.presentNextVC()
             } else {
                 self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
@@ -40,11 +40,11 @@ class LaunchViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setupAppInfo(appstoreVersion: String) {
-        BaseData.shared.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-        BaseData.shared.appStoreVersion = appstoreVersion
+    private func setupAppInfo(lastetVersion: String) {
+        BaseData.shared.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+        BaseData.shared.lastetVersion = lastetVersion
 
-        print("version: \(BaseData.shared.version) / app store version: \(BaseData.shared.appStoreVersion)")
+        print("currentVersion: \(BaseData.shared.currentVersion) / lastetVersion: \(BaseData.shared.lastetVersion)")
     }
     
     private func presentNextVC() {

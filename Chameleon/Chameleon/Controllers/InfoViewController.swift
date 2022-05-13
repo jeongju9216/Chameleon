@@ -90,7 +90,7 @@ class InfoViewController: BaseViewController {
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
         versionLabel.numberOfLines = 0
         
-        versionLabel.text = "현재 버전 : \(BaseData.shared.version)\n최신 버전 : \(BaseData.shared.appStoreVersion)"
+        versionLabel.text = "현재 버전 : \(BaseData.shared.currentVersion)\n최신 버전 : \(BaseData.shared.lastetVersion)"
         versionLabel.font = UIFont.systemFont(ofSize: 16)
         
         view.addSubview(versionLabel)

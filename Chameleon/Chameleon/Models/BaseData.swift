@@ -13,12 +13,12 @@ final class BaseData {
     let appleID = ""
     let bundleID = "com.jeong9216.Chameleon"
     
-    var version = "0.0.1"
-    var appStoreVersion = "0.0.1"
+    var currentVersion = "0.0.1"
+    var lastetVersion = "0.0.1"
     
     var isNeedUpdate: Bool {
         get {
-            let compareResult = version.compare(appStoreVersion, options: .numeric)
+            let compareResult = currentVersion.compare(lastetVersion, options: .numeric)
             switch compareResult {
             case .orderedAscending:
                 return true
