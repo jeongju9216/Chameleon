@@ -21,6 +21,7 @@ class ConvertViewController: BaseViewController {
     var doneButton: UIButton!
     
     //MARK: - Properties
+    var isDone: Bool { Int(time * 100) == 100 }
     var time: Float = 0.0
     var timer: Timer?
     
@@ -30,28 +31,41 @@ class ConvertViewController: BaseViewController {
         
         setupCovertUI()
         
-        doneButton.isHidden = true
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        let customBackButton = UIBarButtonItem(image: UIImage(named: "BackArrowIcon") , style: .plain, target: self, action: #selector(backAction(sender:)))
-        customBackButton.imageInsets = UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0)
-        self.navigationItem.leftBarButtonItem = customBackButton
+        self.navigationItem.hidesBackButton = true
+        if let tabitems = self.tabBarController?.tabBar.items {
+            tabitems[0].isEnabled = false
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.navigationItem.hidesBackButton = false
+        if let tabitems = self.tabBarController?.tabBar.items {
+            tabitems[0].isEnabled = true
+        }
     }
     
     //MARK: - Actions
-    @objc private func backAction(sender: UIBarButtonItem) {
-        self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "취소", defaultAction: { _ in
-            self.navigationController?.popViewController(animated: true)
-        })
-    }
-    
     @objc private func clickedDoneButton(sender: UIButton) {
-        let conversionResultVC = ConversionResultViewController()
-        conversionResultVC.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(conversionResultVC, animated: true)
+        if isDone {
+            let conversionResultVC = ConversionResultViewController()
+            conversionResultVC.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(conversionResultVC, animated: true)
+        } else {
+            self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
+                self.navigationController?.popViewController(animated: true)
+            })
+        }
     }
     
     //MARK: - Methods
@@ -68,10 +82,11 @@ class ConvertViewController: BaseViewController {
     }
     
     private func completeConvert() {
-        doneButton.isHidden = false
+        doneButton.setTitle("결과 보기", for: .normal)
+        
         guideLabel.text = "얼굴 변환이 완료되었습니다.\n결과를 확인하세요."
+        
         setupNavigationBar(title: "얼굴 변환 완료")
-        navigationController?.navigationItem.hidesBackButton = true
     }
     
     //MARK: - Setup
@@ -166,7 +181,7 @@ class ConvertViewController: BaseViewController {
         doneButton = UIButton()
         doneButton.translatesAutoresizingMaskIntoConstraints = false
         
-        doneButton.applyMainButtonStyle(title: "결과 보기")
+        doneButton.applyMainButtonStyle(title: "변환 중단")
         
         view.addSubview(doneButton)
         doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
