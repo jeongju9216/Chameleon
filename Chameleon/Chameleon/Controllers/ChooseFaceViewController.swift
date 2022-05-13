@@ -22,7 +22,6 @@ class ChooseFaceViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupChooseFaceUI()
         
         if let faceCollectionView = faceCollectionView {
@@ -39,17 +38,19 @@ class ChooseFaceViewController: BaseViewController {
         let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
         print("sendFaces jsonData: \(jsonData)")
         
-        LoadingIndicator.showLoading()
-        
-        HttpService.shared.sendFaces(params: jsonData) { [weak self] (result, response) in
-            LoadingIndicator.hideLoading()
-            if result {
-                let convertVC = ConvertViewController()
-                convertVC.modalPresentationStyle = .fullScreen
-                
-                self?.navigationController?.pushViewController(convertVC, animated: true)
-            } else {
-                self?.showErrorAlert(erorr: "에러가 발생했습니다.\n다시 시도해 주세요.")
+        if let viewController = self.navigationController?.topViewController {
+            LoadingIndicator.showLoading()
+            
+            HttpService.shared.sendFaces(params: jsonData) { [weak self] (result, response) in
+                LoadingIndicator.hideLoading()
+                if result {
+                    let convertVC = ConvertViewController()
+                    convertVC.modalPresentationStyle = .fullScreen
+
+                    self?.navigationController?.pushViewController(convertVC, animated: true)
+                } else {
+                    self?.showErrorAlert(erorr: "에러가 발생했습니다.\n다시 시도해 주세요.")
+                }
             }
         }
     }
@@ -59,7 +60,6 @@ class ChooseFaceViewController: BaseViewController {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "바꾸지 않을 얼굴 선택")
         
-        faceImages = []
         if faceImages.isEmpty {
             setupEmptyGuideLabel()
         } else {

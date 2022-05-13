@@ -20,33 +20,31 @@ class LaunchViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupAppInfo()
-        
+                
         view.backgroundColor = UIColor.backgroundColor
         
         setupLogoImage()
         setupBottomView()
         
-        presentNextVC()
-//        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
-//            print("[checkConnectedServer] result: \(result) / response: \(response)")
-//            if result {
-//                self?.presentNextVC()
-//            } else {
-//                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
-//
-//                })
-//            }
-//        })
-//
-        
+        HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
+            print("[loadVersion] result: \(result) / response: \(response)")
+            if result {
+                self?.setupAppInfo(appstoreVersion: (response as! Response).message ?? "0.0.0")
+                self?.presentNextVC()
+            } else {
+                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
+                    self?.presentNextVC()
+                })
+            }
+        })
     }
     
     //MARK: - Methods
-    private func setupAppInfo() {
+    private func setupAppInfo(appstoreVersion: String) {
         BaseData.shared.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-        print("version: \(BaseData.shared.version)")
+        BaseData.shared.appStoreVersion = appstoreVersion
+
+        print("version: \(BaseData.shared.version) / app store version: \(BaseData.shared.appStoreVersion)")
     }
     
     private func presentNextVC() {

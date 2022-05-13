@@ -69,7 +69,7 @@ class HttpService {
     static let shared: HttpService = HttpService()
     private init() { }
     
-    private let serverIP: String = "http://52.79.188.183:5000"
+    private let serverIP: String = "http://118.91.7.160"
     private let authorizationHeaderKey = "authorization"
     private var authorization: String {
         if let savekey: String = UserDefaults.standard.string(forKey: "authorization") {

@@ -29,7 +29,6 @@ class UploadViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUploadUI()
         
         setupImagePicker()
@@ -44,6 +43,7 @@ class UploadViewController: BaseViewController {
     //MARK: - Actions
     @objc private func changedSegmentedControl(sender: UISegmentedControl) {
         print("selected: \(sender.selectedSegmentIndex)")
+        
         UploadData.shared.convertType = sender.selectedSegmentIndex
         segmentedControlLabel.text = UploadData.shared.convertTypeString
     }
@@ -248,31 +248,39 @@ class UploadViewController: BaseViewController {
 extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        self.dismiss(animated: true) {
+        picker.dismiss(animated: true) { [weak self] in
             if UploadData.shared.uploadType == .Photo {
-                if let image = info[.originalImage] as? UIImage,
-                   let assetPath = info[.imageURL] as? URL {
-                    
-                    let (imageType, imageName) = self.parsingImageInfo(url: assetPath)
-                    let imageData = self.createImageData(image, type: imageType)
-                    
-                    if let imageData = imageData {
-                        self.mediaFile = MediaFile(filename: imageName, data: imageData, type: "image/\(imageType)")
-                        self.showImage(image)
-                    }
-                }
+                self?.setImageData(info: info)
             } else {
-                let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
-                
-                if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
-                    let (videoType, videoName) = self.parsingVideoInfo(url: videoURL)
-                    self.mediaFile = MediaFile(filename: videoName, data: videoData, type: "video/\(videoType)")
-                    
-                    self.getThumbnailFromUrl(videoURL.absoluteString) { [weak self] (img) in
-                        if let img = img {
-                            self?.showImage(img)
-                        }
-                    }
+                self?.setVideoData(info: info)
+            }
+        }
+    }
+    
+    private func setImageData(info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage,
+           let assetPath = info[.imageURL] as? URL {
+            
+            let (imageType, imageName) = self.parsingImageInfo(url: assetPath)
+            let imageData = self.createImageData(image, type: imageType)
+            
+            if let imageData = imageData {
+                self.mediaFile = MediaFile(filename: imageName, data: imageData, type: "image/\(imageType)")
+                self.showImage(image)
+            }
+        }
+    }
+    
+    private func setVideoData(info: [UIImagePickerController.InfoKey : Any]) {
+        let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
+        
+        if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
+            let (videoType, videoName) = self.parsingVideoInfo(url: videoURL)
+            self.mediaFile = MediaFile(filename: videoName, data: videoData, type: "video/\(videoType)")
+            
+            self.getThumbnailFromUrl(videoURL.absoluteString) { [weak self] (img) in
+                if let img = img {
+                    self?.showImage(img)
                 }
             }
         }
@@ -280,7 +288,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
 }
 
 extension UploadViewController {
-    func parsingImageInfo(url: URL) -> (String, String) {
+    private func parsingImageInfo(url: URL) -> (String, String) {
         let URLString = url.absoluteString.lowercased()
 
         var imageType = "unknown"
@@ -300,7 +308,7 @@ extension UploadViewController {
         return (imageType, imageName)
     }
     
-    func createImageData(_ image: UIImage, type: String) -> Data? {
+    private func createImageData(_ image: UIImage, type: String) -> Data? {
         var imageData: Data?
         switch type {
         case "png":
@@ -315,7 +323,7 @@ extension UploadViewController {
         return imageData
     }
     
-    func parsingVideoInfo(url: URL) -> (String, String) {
+    private func parsingVideoInfo(url: URL) -> (String, String) {
         let URLString = url.absoluteString.lowercased()
         
         var videoType = "unknown"
@@ -354,14 +362,14 @@ extension UploadViewController {
         }
     }
     
-    func showImage(_ image: UIImage) {
+    private func showImage(_ image: UIImage) {
         DispatchQueue.main.async {
             self.uploadView.image = image
             
             self.uploadImageView.isHidden = true
             self.uploadLabel.isHidden = true
             
-            self.uploadButton.isEnabled = true
+            self.uploadButton.isEnabled = true            
         }
     }
 }

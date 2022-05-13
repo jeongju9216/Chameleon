@@ -27,8 +27,6 @@ class LoadingViewController: BaseViewController {
         super.viewDidLoad()
         
         setupLoadingUI()
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
