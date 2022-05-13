@@ -16,10 +16,11 @@ class GuideViewController: BaseViewController {
     private var guideLabel: UILabel!
     
     //MARK: - Properties
+    private let titleText: String = "사진 속 얼굴을 세상에 존재하지 않는\n페이크 얼굴로 바꿔 보세요"
     private let guideText: String = "원하는 사진을 선택하세요.\n|\n" +
                                     "업로드 버튼을 누르세요.\n|\n" +
                                     "변환하지 않을 얼굴을 선택하세요.\n|\n" +
-                                    "변환이 완료되면 \"결과 보기\" 버튼이 나옵니다.\n버튼을 눌러 결과를 확인하세요.\n|\n" +
+                                    "변환이 완료되면\n결과 보기 버튼을 눌러\n결과를 확인하세요.\n|\n" +
                                     "사진을 저장하고\n다른 사람에게 공유하세요."
     
     //MARK: - Life Cycles
@@ -75,8 +76,9 @@ class GuideViewController: BaseViewController {
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        titleLabel.text = "사진 속 얼굴을 세상에 존재하지 않는\n페이크 얼굴로 바꿔 보세요"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        let fontSize: CGFloat = 20
+        titleLabel.attributedText = createAttributedString(string: titleText, fontSize: fontSize, lineheight: 1.2)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: fontSize)
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         
@@ -91,27 +93,35 @@ class GuideViewController: BaseViewController {
         guideLabel = UILabel()
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        let fontSize: CGFloat = 18
+        guideLabel.attributedText = createAttributedString(string: guideText, fontSize: fontSize, lineheight: 1.5)
+        guideLabel.font = .systemFont(ofSize: fontSize)
         guideLabel.numberOfLines = 0
         guideLabel.lineBreakMode = .byCharWrapping
-        
-        let style = NSMutableParagraphStyle()
-        let fontSize: CGFloat = 18
-        let lineheight = fontSize * 1.5  //font size * multiple
-        style.minimumLineHeight = lineheight
-        style.maximumLineHeight = lineheight
-        style.alignment = .center
-
-        guideLabel.attributedText = NSAttributedString(
-          string: guideText,
-          attributes: [
-            .paragraphStyle: style
-          ])
-        guideLabel.font = .systemFont(ofSize: fontSize)
         
         view.addSubview(guideLabel)
         guideLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         guideLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
         guideLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
+    }
+    
+    private func createAttributedString(string: String, fontSize: CGFloat, lineheight: Double) -> NSMutableAttributedString {
+        let style = NSMutableParagraphStyle()
+
+        let lineheight = fontSize * lineheight
+        style.minimumLineHeight = lineheight
+        style.maximumLineHeight = lineheight
+        style.alignment = .center
+
+        let attributedString = NSMutableAttributedString(string: string, attributes: [.paragraphStyle: style])
+        let accentText: [String] = ["페이크 얼굴", "업로드", "결과 보기"]
+        for text in accentText {
+            let range = (string as NSString).range(of: text)
+            attributedString.addAttribute(.foregroundColor, value: UIColor.mainColor, range: range)
+            attributedString.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: fontSize), range: range)
+        }
+        
+        return attributedString
     }
 }
