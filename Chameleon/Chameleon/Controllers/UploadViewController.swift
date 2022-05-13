@@ -118,7 +118,6 @@ class UploadViewController: BaseViewController {
         })
     }
     
-    //MARK: - Setup
     private func setupImagePicker() {
         imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
@@ -200,10 +199,15 @@ class UploadViewController: BaseViewController {
         view.addSubview(uploadView)
         
         print("80%: \(view.frame.width * 0.8)")
-        uploadView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
+        let width = min(view.frame.width * 0.8, 600)
+        uploadView.widthAnchor.constraint(equalToConstant: width).isActive = true
         uploadView.heightAnchor.constraint(equalTo: uploadView.widthAnchor).isActive = true
         uploadView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        uploadView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        if width < 600 {
+            uploadView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        } else {
+            uploadView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -120).isActive = true
+        }
         
         setupUploadImageInView()
         setupUploadLabelInView()
