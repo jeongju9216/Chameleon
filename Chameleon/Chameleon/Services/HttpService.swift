@@ -56,6 +56,7 @@ let testJson: String = """
 struct Response: Codable {
     let result: String
     let message: String?
+    let data: String?
 }
 
 struct FaceResponse: Codable {
@@ -91,7 +92,13 @@ class HttpService {
     //MARK: - GET
     func loadVersion(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/version", completionHandler: { (result, response) in
-            completionHandler(result, response)
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.loadVersion(completionHandler: completionHandler)
+            }
         })
     }
     
@@ -101,7 +108,6 @@ class HttpService {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
-                print("Here")
                 self.retryCount += 1
                 self.checkConnectedServer(completionHandler: completionHandler)
             }
@@ -123,7 +129,17 @@ class HttpService {
     }
     
     //MARK: - Post
-    
+    func sendFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+        requestPost(url: serverIP + "/faces", param: params, completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.sendFaces(params: params, completionHandler: completionHandler)
+            }
+        })
+    }
     
     //MARK: - Multipart
     func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
@@ -168,14 +184,20 @@ extension HttpService {
                 return
             }
 
-            guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
+            if let output = try? JSONDecoder().decode(Response.self, from: data) {
+                completionHandler(output.result == "ok", output)
+            } else {
                 print("Error: JSON Data Parsing failed")
-                completionHandler(false, "Error: JSON Data Parsing failed")
                 
-                return
+                guard let output = try? JSONDecoder().decode(FaceResponse.self, from: data) else {
+                    print("Error: JSON Data Parsing failed")
+                    
+                    completionHandler(false, "Error: JSON Data Parsing failed")
+                    return
+                }
+                
+                completionHandler(output.result == "ok", output)
             }
-            
-            completionHandler(output.result == "ok", output)
         }.resume()
     }
     
@@ -197,21 +219,29 @@ extension HttpService {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard error == nil else {
                 print("Error: error calling Post -> \(error!)")
+                
+                completionHandler(false, "Error: error calling GET -> \(error!)")
                 return
             }
             
             guard let data = data else {
                 print("Error: Did not receive data")
+                
+                completionHandler(false, "Error: Did not receive data")
                 return
             }
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
                 print("Error: HTTP request failed")
+                
+                completionHandler(false, "Error: HTTP request failed")
                 return
             }
 
             guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
                 print("Error: JSON Data Parsing failed")
+                
+                completionHandler(false, "Error: JSON Data Parsing failed")
                 return
             }
             

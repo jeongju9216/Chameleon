@@ -11,6 +11,7 @@ class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Views
     private var faceCollectionView: UICollectionView!
+    private var emptyGuideLabel: UILabel!
     
     private var convertButton: UIButton!
     
@@ -24,19 +25,33 @@ class ChooseFaceViewController: BaseViewController {
         
         setupChooseFaceUI()
         
-        faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
-        faceCollectionView.delegate = self
-        faceCollectionView.dataSource = self
+        if let faceCollectionView = faceCollectionView {
+            faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
+            faceCollectionView.delegate = self
+            faceCollectionView.dataSource = self
+        }
         
         convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
     }
         
     //MARK: - Actions
     @objc private func clickedCovertButton(sender: UIButton) {
-        let convertVC = ConvertViewController()
-        convertVC.modalPresentationStyle = .fullScreen
+        let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
+        print("sendFaces jsonData: \(jsonData)")
         
-        self.navigationController?.pushViewController(convertVC, animated: true)
+        LoadingIndicator.showLoading()
+        
+        HttpService.shared.sendFaces(params: jsonData) { [weak self] (result, response) in
+            LoadingIndicator.hideLoading()
+            if result {
+                let convertVC = ConvertViewController()
+                convertVC.modalPresentationStyle = .fullScreen
+                
+                self?.navigationController?.pushViewController(convertVC, animated: true)
+            } else {
+                self?.showErrorAlert(erorr: "에러가 발생했습니다.\n다시 시도해 주세요.")
+            }
+        }
     }
     
     //MARK: - Setup
@@ -44,8 +59,26 @@ class ChooseFaceViewController: BaseViewController {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "바꾸지 않을 얼굴 선택")
         
-        setupFaceCollectionView()
+        faceImages = []
+        if faceImages.isEmpty {
+            setupEmptyGuideLabel()
+        } else {
+            setupFaceCollectionView()
+        }
+        
         setupConvertButton()
+    }
+    
+    private func setupEmptyGuideLabel() {
+        emptyGuideLabel = UILabel()
+        emptyGuideLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        emptyGuideLabel.text = "얼굴을 찾을 수 없습니다."
+        emptyGuideLabel.numberOfLines = 0
+        
+        view.addSubview(emptyGuideLabel)
+        emptyGuideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyGuideLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
     }
     
     private func setupFaceCollectionView() {
