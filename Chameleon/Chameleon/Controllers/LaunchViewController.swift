@@ -28,8 +28,6 @@ class LaunchViewController: BaseViewController {
         setupLogoImage()
         setupBottomView()
         
-        
-        
         presentNextVC()
 //        HttpService.shared.checkConnectedServer(completionHandler: { [weak self] (result, response) in
 //            print("[checkConnectedServer] result: \(result) / response: \(response)")

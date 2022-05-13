@@ -131,9 +131,6 @@ class HttpService {
             completionHandler(result, response)
         }
     }
-    
-    
-    
 }
 
 extension HttpService {
