@@ -44,7 +44,6 @@ class ChooseFaceViewController: BaseViewController {
             if result {
                 let convertVC = ConvertViewController()
                 convertVC.modalPresentationStyle = .fullScreen
-
                 self?.navigationController?.pushViewController(convertVC, animated: true)
             } else {
                 self?.showErrorAlert()

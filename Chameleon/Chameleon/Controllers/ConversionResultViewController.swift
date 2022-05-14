@@ -72,13 +72,11 @@ class ConversionResultViewController: BaseViewController {
             
             HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
                 if result {
-                    
+                    self?.goBackHome()
                 } else {
-                    
+                    self?.showErrorAlert()
                 }
             })
-            
-            self.goBackHome()
         })
     }
     

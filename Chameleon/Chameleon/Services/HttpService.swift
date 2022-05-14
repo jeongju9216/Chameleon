@@ -304,7 +304,7 @@ extension HttpService {
             guard error == nil else {
                 print("Error: error calling Post -> \(error!)")
                 completionHandler(false, "Error: error calling Post")
-                
+
                 return
             }
             
@@ -316,10 +316,7 @@ extension HttpService {
             }
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                let res = response as? HTTPURLResponse
-                let code = res?.statusCode
-                print("Error: HTTP request failed: \(code)")
-                completionHandler(false, "Error: HTTP request failed: \(code)")
+                completionHandler(false, "Error: HTTP request failed")
 
                 return
             }
@@ -368,10 +365,8 @@ extension HttpService {
             }
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                let res = response as? HTTPURLResponse
-                let code = res?.statusCode
-                print("Error: HTTP request failed: \(code)")
-                completionHandler(false, "Error: HTTP request failed: \(code)")
+                print("Error: HTTP request failed")
+                completionHandler(false, "Error: HTTP request failed")
                 
                 return
             }
