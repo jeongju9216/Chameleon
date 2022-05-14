@@ -115,28 +115,62 @@ class HttpService {
     }
     
     func getFaces(completionHandler: @escaping (Bool, Any) -> Void) {
-        print("testJson: \(testJson)")
-        guard let output = try? JSONDecoder().decode(FaceResponse.self, from: testJson.data(using: .utf8)!) else {
-            print("Error: JSON Data Parsing failed")
-            completionHandler(false, "Error: JSON Data Parsing failed")
-            
-            return
-        }
-        completionHandler(output.result == "ok", output.data)
-//        requestGet(url: serverIP + "/faces", completionHandler: { (result, response) in
-//            completionHandler(result, response)
-//        })
+        requestGet(url: serverIP + "/faces", completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.getFaces(completionHandler: completionHandler)
+            }
+        })
+    }
+    
+    func downloadResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
+        requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.downloadResultFile(completionHandler: completionHandler)
+            }
+        })
     }
     
     //MARK: - Post
-    func sendFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+    func sendUnconvertedFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
         requestPost(url: serverIP + "/faces", param: params, completionHandler: { (result, response) in
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
                 self.retryCount += 1
-                self.sendFaces(params: params, completionHandler: completionHandler)
+                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
+            }
+        })
+    }
+    
+    func deleteFiles(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+        requestPost(url: serverIP + "/file/delete", param: params, completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.deleteFiles(params: params, completionHandler: completionHandler)
+            }
+        })
+    }
+    
+    func cancelFiles(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+        requestPost(url: serverIP + "/file/cancel", param: params, completionHandler: { (result, response) in
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.cancelFiles(params: params, completionHandler: completionHandler)
             }
         })
     }
@@ -250,7 +284,7 @@ extension HttpService {
     }
 
     func requestMultipartForm(url: String, params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        print("[requestMultipartForm] url: \(url)")
+        print("[requestMultipartForm 1] url: \(url)")
         guard let url = URL(string: url) else {
             print("Error: cannot create URL")
             completionHandler(false, "Error: cannot create URL")
@@ -260,7 +294,7 @@ extension HttpService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
+        request.addValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
         let data = createUploadBody(params: params, media: media)
@@ -302,7 +336,7 @@ extension HttpService {
     }
 
     func requestMultipartForm(url: String, params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        print("[requestMultipartForm] url: \(url)")
+        print("[requestMultipartForm 2] url: \(url)")
         guard let url = URL(string: url) else {
             print("Error: cannot create URL")
             completionHandler(false, "Error: JSON Data Parsing failed")
@@ -312,7 +346,7 @@ extension HttpService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
+        request.addValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
         let data = createBody(params: params)
@@ -384,7 +418,9 @@ extension HttpService {
         body.append(boundaryPrefix)
         
         if let imageData = media.data {
-            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(media.filename)\"\(lineBreak)".data(using: .utf8)!)
+            let filename: String = (authorization + ".\((media.type).components(separatedBy: "/").last!)")
+            print("filename: \(filename)")
+            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\(lineBreak)".data(using: .utf8)!)
             body.append("Content-Type: \(media.type)\(lineBreak + lineBreak)".data(using: .utf8)!)
             body.append(imageData)
             body.append(lineBreak.data(using: .utf8)!)

@@ -41,7 +41,7 @@ class ChooseFaceViewController: BaseViewController {
         if let viewController = self.navigationController?.topViewController {
             LoadingIndicator.showLoading()
             
-            HttpService.shared.sendFaces(params: jsonData) { [weak self] (result, response) in
+            HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
                 LoadingIndicator.hideLoading()
                 if result {
                     let convertVC = ConvertViewController()
