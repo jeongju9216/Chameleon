@@ -151,26 +151,26 @@ class HttpService {
         })
     }
     
-    func deleteFiles(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/delete", param: params, completionHandler: { (result, response) in
+    func deleteFiles(completionHandler: @escaping (Bool, Any) -> Void) {
+        requestPost(url: serverIP + "/file/delete", param: ["message": "delete"], completionHandler: { (result, response) in
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
                 self.retryCount += 1
-                self.deleteFiles(params: params, completionHandler: completionHandler)
+                self.deleteFiles(completionHandler: completionHandler)
             }
         })
     }
     
-    func cancelFiles(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/cancel", param: params, completionHandler: { (result, response) in
+    func cancelFiles(completionHandler: @escaping (Bool, Any) -> Void) {
+        requestPost(url: serverIP + "/file/cancel", param: ["message": "delete"], completionHandler: { (result, response) in
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
                 self.retryCount += 1
-                self.cancelFiles(params: params, completionHandler: completionHandler)
+                self.cancelFiles(completionHandler: completionHandler)
             }
         })
     }

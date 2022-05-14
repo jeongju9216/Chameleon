@@ -38,19 +38,16 @@ class ChooseFaceViewController: BaseViewController {
         let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
         print("sendFaces jsonData: \(jsonData)")
         
-        if let viewController = self.navigationController?.topViewController {
-            LoadingIndicator.showLoading()
-            
-            HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
-                LoadingIndicator.hideLoading()
-                if result {
-                    let convertVC = ConvertViewController()
-                    convertVC.modalPresentationStyle = .fullScreen
+        LoadingIndicator.showLoading()
+        HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
+            LoadingIndicator.hideLoading()
+            if result {
+                let convertVC = ConvertViewController()
+                convertVC.modalPresentationStyle = .fullScreen
 
-                    self?.navigationController?.pushViewController(convertVC, animated: true)
-                } else {
-                    self?.showErrorAlert(erorr: "에러가 발생했습니다.\n다시 시도해 주세요.")
-                }
+                self?.navigationController?.pushViewController(convertVC, animated: true)
+            } else {
+                self?.showErrorAlert()
             }
         }
     }

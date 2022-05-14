@@ -22,10 +22,7 @@ class LoadingViewController: BaseViewController {
     var mediaFile: MediaFile?
     var guideString: String = ""
     var animationName = UITraitCollection.current.userInterfaceStyle == .light ? "bottomImage-Light" : "bottomImage-Dark"
-    
-    let fileErrorMessage: String = "파일이 존재하지 않습니다. 다시 시도해 주세요."
-    let uploadErrorMessage: String = "업로드에 실패했습니다. 다시 시도해 주세요."
-    
+        
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +37,7 @@ class LoadingViewController: BaseViewController {
         if let uploadVC = uploadVC {
             guard let mediaFile = self.mediaFile else {
                 self.dismiss(animated: true) {
-                    uploadVC.showErrorAlert(erorr: self.fileErrorMessage)
+                    uploadVC.showErrorAlert()
                 }
                 return
             }
@@ -56,7 +53,7 @@ class LoadingViewController: BaseViewController {
                     LoadingIndicator.hideLoading()
                     DispatchQueue.main.async {
                         self?.dismiss(animated: true, completion: {
-                            uploadVC.showErrorAlert(erorr: self?.uploadErrorMessage ?? "")
+                            uploadVC.showErrorAlert()
                         })
                     }
                 }

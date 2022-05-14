@@ -8,6 +8,7 @@
 import UIKit
 
 class BaseViewController: UIViewController {
+    
     func setupNavigationBar(title: String) {
         navigationItem.title = title
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
@@ -51,7 +52,7 @@ class BaseViewController: UIViewController {
         }
     }
     
-    func showErrorAlert(erorr: String, action: ((UIAlertAction) -> Void)? = nil) {
+    func showErrorAlert(erorr: String = "에러가 발생했습니다.\n다시 시도해 주세요.", action: ((UIAlertAction) -> Void)? = nil) {
         DispatchQueue.main.async {
             let alert = UIAlertController(title: "에러", message: erorr, preferredStyle: .alert)
             

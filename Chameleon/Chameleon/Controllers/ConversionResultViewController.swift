@@ -47,8 +47,7 @@ class ConversionResultViewController: BaseViewController {
     @objc func saveImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
        if let error = error {
            print("saveImage error: \(error)")
-           
-           showErrorAlert(erorr: "저장을 실패했습니다.\n다시 시도해 주세요.")
+           showErrorAlert()
        } else {
            showOneButtonAlert(message: "앨범에 저장 되었습니다.")
        }
@@ -68,11 +67,19 @@ class ConversionResultViewController: BaseViewController {
     @objc private func clickedDoneButton(sender: UIButton) {
         let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
         
-        let action: ((UIAlertAction) -> Void) = { action in
+        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
+            LoadingIndicator.showLoading()
+            
+            HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
+                if result {
+                    
+                } else {
+                    
+                }
+            })
+            
             self.goBackHome()
-        }
-        
-        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: action)
+        })
     }
     
     //MARK: - Methods
