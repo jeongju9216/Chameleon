@@ -69,27 +69,21 @@ class LoadingViewController: BaseViewController {
     
     //MARK: - Methods
     private func getFacesFromServer() {
-        var list: [FaceImage] = []
-        for i in 0..<3 {
-            list.append(FaceImage(url: "", name: "", gender: "", percent: i))
-        }
-        self.moveToChooseFaceVC(faceImages: list)
+        HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
+            LoadingIndicator.hideLoading()
+            print("[getFaces] result: \(result) / response: \(response)")
 
-//        HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
-//            LoadingIndicator.hideLoading()
-//            print("[getFaces] result: \(result) / response: \(response)")
-//
-//            if result {
-//                let faceImages: [FaceImage] = response as? [FaceImage] ?? []
-//                DispatchQueue.main.async {
-//                    self?.moveToChooseFaceVC(faceImages: faceImages)
-//                }
-//            } else {
-//                self?.showErrorAlert(action: { action in
-//                    self?.dismiss(animated: true)
-//                })
-//            }
-//        })
+            if result {
+                let faceImages: [FaceImage] = response as? [FaceImage] ?? []
+                DispatchQueue.main.async {
+                    self?.moveToChooseFaceVC(faceImages: faceImages)
+                }
+            } else {
+                self?.showErrorAlert(action: { action in
+                    self?.dismiss(animated: true)
+                })
+            }
+        })
     }
     
     private func moveToChooseFaceVC(faceImages: [FaceImage]) {

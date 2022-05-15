@@ -122,19 +122,17 @@ class ConversionResultViewController: BaseViewController {
     }
     
     private func loadResultImage() {
-        self.resultImage = UIImage(named: "sample3_after")
-        self.resultImageView.image = self.resultImage
-//        if let url = URL(string: "https://picsum.photos/800") {
-//            DispatchQueue.global().async { [weak self] in
-//                if let data = try? Data(contentsOf: url) {
-//                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
-//                    DispatchQueue.main.async {
-//                        self?.resultImage = image
-//                        self?.resultImageView.image = self?.resultImage
-//                    }
-//                }
-//            }
-//        }
+        if let url = URL(string: "https://picsum.photos/800") {
+            DispatchQueue.global().async { [weak self] in
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+                    DispatchQueue.main.async {
+                        self?.resultImage = image
+                        self?.resultImageView.image = self?.resultImage
+                    }
+                }
+            }
+        }
     }
     
     private func setupButtonStackView() {

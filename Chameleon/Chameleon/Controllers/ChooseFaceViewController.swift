@@ -17,15 +17,6 @@ class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Properties
     var faceImages: [FaceImage] = []
-    let sampleFaces: [UIImage?] = [UIImage(named: "sample_000"), UIImage(named: "sample_001"), UIImage(named: "sample_003"),
-                                   UIImage(named: "sample_004"), UIImage(named: "sample_005"), UIImage(named: "sample_006"),
-                                   UIImage(named: "sample_007"), UIImage(named: "sample_008"), UIImage(named: "sample_009"),
-                                   UIImage(named: "sample_010"), UIImage(named: "sample_011"), UIImage(named: "sample_012"),
-                                   UIImage(named: "sample_013"), UIImage(named: "sample_014"), UIImage(named: "sample_015"),
-                                   UIImage(named: "sample_016"), UIImage(named: "sample_017")]
-    let sample2Faces: [UIImage?] = [UIImage(named: "sample2_000")]
-    let sample3Faces: [UIImage?] = [UIImage(named: "sample3_000"), UIImage(named: "sample3_001"), UIImage(named: "sample3_002")]
-    
     var selectedIndex: [Int] = []
     
     //MARK: - Life Cycles
@@ -47,25 +38,19 @@ class ChooseFaceViewController: BaseViewController {
         let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
         print("sendFaces jsonData: \(jsonData)")
         
-        DispatchQueue.main.async {
-            let convertVC = ConvertViewController()
-            convertVC.modalPresentationStyle = .fullScreen
-            self.navigationController?.pushViewController(convertVC, animated: true)
+        LoadingIndicator.showLoading()
+        HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
+            LoadingIndicator.hideLoading()
+            if result {
+                DispatchQueue.main.async {
+                    let convertVC = ConvertViewController()
+                    convertVC.modalPresentationStyle = .fullScreen
+                    self?.navigationController?.pushViewController(convertVC, animated: true)
+                }
+            } else {
+                self?.showErrorAlert()
+            }
         }
-        
-//        LoadingIndicator.showLoading()
-//        HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
-//            LoadingIndicator.hideLoading()
-//            if result {
-//                DispatchQueue.main.async {
-//                    let convertVC = ConvertViewController()
-//                    convertVC.modalPresentationStyle = .fullScreen
-//                    self?.navigationController?.pushViewController(convertVC, animated: true)
-//                }
-//            } else {
-//                self?.showErrorAlert()
-//            }
-//        }
     }
     
     //MARK: - Setup
@@ -148,11 +133,7 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
         
-        if let sampleImage = sample3Faces[indexPath.row] {
-            cell.setupImage(image: sampleImage)
-        }
-        
-        //cell.setupImage(url: faceImages[indexPath.row].url)
+        cell.setupImage(url: faceImages[indexPath.row].url)
         
         return cell
     }
