@@ -114,4 +114,8 @@ class ChooseFaceCell: UICollectionViewCell {
             imageView.image = UIImage(named: "ChameleonImage")
         }
     }
+    
+    func setupImage(image: UIImage) {
+        imageView.image = image
+    }
 }

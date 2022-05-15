@@ -7,52 +7,6 @@
 
 import UIKit
 
-let testJson: String = """
-{
-    \"result\" : \"ok\",
-    \"message\" : \"추출 얼굴 이미지\",
-    \"data\" :
-    [
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test1\",
-            \"gender\" : \"m\",
-            \"percent\" : 90
-        },
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test2\",
-            \"gender\" : \"w\",
-            \"percent\" : 6
-        },
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test3\",
-            \"gender\" : \"m\",
-            \"percent\" : 4
-        },
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test1\",
-            \"gender\" : \"m\",
-            \"percent\" : 90
-        },
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test2\",
-            \"gender\" : \"w\",
-            \"percent\" : 6
-        },
-        {
-            \"url\" : \"https://picsum.photos/200\",
-            \"name\": \"test3\",
-            \"gender\" : \"m\",
-            \"percent\" : 4
-        }
-    ]
-}
-"""
-
 struct Response: Codable {
     let result: String
     let message: String?
@@ -68,6 +22,8 @@ struct FaceResponse: Codable {
 class HttpService {
     static let shared: HttpService = HttpService()
     private init() { }
+    
+    var retryCount = 0
     
     private let serverIP: String = "http://118.91.7.160"
     private let authorizationHeaderKey = "authorization"
@@ -87,7 +43,6 @@ class HttpService {
         return UUID().uuidString + "-" + DateUtils.getCurrentDateTime()
     }
     
-    var retryCount = 0
     
     //MARK: - GET
     func loadVersion(completionHandler: @escaping (Bool, Any) -> Void) {
@@ -116,13 +71,14 @@ class HttpService {
     
     func getFaces(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/faces", completionHandler: { (result, response) in
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.getFaces(completionHandler: completionHandler)
-            }
+            completionHandler(result, response)
+//            if result || self.retryCount == 3 {
+//                self.retryCount = 0
+//                completionHandler(result, response)
+//            } else {
+//                self.retryCount += 1
+//                self.getFaces(completionHandler: completionHandler)
+//            }
         })
     }
     
@@ -213,7 +169,7 @@ extension HttpService {
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
                 print("Error: HTTP request failed")
-                completionHandler(false, "Error: HTTP request failed")
+                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
                 
                 return
             }
@@ -268,7 +224,7 @@ extension HttpService {
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
                 print("Error: HTTP request failed")
                 
-                completionHandler(false, "Error: HTTP request failed")
+                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
                 return
             }
 
@@ -316,7 +272,7 @@ extension HttpService {
             }
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                completionHandler(false, "Error: HTTP request failed")
+                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
 
                 return
             }
@@ -366,7 +322,7 @@ extension HttpService {
             
             guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
                 print("Error: HTTP request failed")
-                completionHandler(false, "Error: HTTP request failed")
+                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
                 
                 return
             }
@@ -413,9 +369,7 @@ extension HttpService {
         body.append(boundaryPrefix)
         
         if let imageData = media.data {
-            let filename: String = (authorization + ".\((media.type).components(separatedBy: "/").last!)")
-            print("filename: \(filename)")
-            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(filename)\"\(lineBreak)".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(media.filename)\"\(lineBreak)".data(using: .utf8)!)
             body.append("Content-Type: \(media.type)\(lineBreak + lineBreak)".data(using: .utf8)!)
             body.append(imageData)
             body.append(lineBreak.data(using: .utf8)!)

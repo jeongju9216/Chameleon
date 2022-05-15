@@ -29,7 +29,7 @@ class ConversionResultViewController: BaseViewController {
         
         setupConversionResultUI()
         loadResultImage()
-        
+
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(clickedSaveButton(sender:)), for: .touchUpInside)
         shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
@@ -61,7 +61,6 @@ class ConversionResultViewController: BaseViewController {
             vc.excludedActivityTypes = [.saveToCameraRoll]
             present(vc, animated: true)
         }
-        
     }
     
     @objc private func clickedDoneButton(sender: UIButton) {
@@ -71,7 +70,8 @@ class ConversionResultViewController: BaseViewController {
             LoadingIndicator.showLoading()
             
             HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
-                if result {
+                LoadingIndicator.hideLoading()
+                if result || true {
                     self?.goBackHome()
                 } else {
                     self?.showErrorAlert()
@@ -82,7 +82,9 @@ class ConversionResultViewController: BaseViewController {
     
     //MARK: - Methods
     private func goBackHome() {
-        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.async {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     //MARK: - Setup
@@ -120,17 +122,19 @@ class ConversionResultViewController: BaseViewController {
     }
     
     private func loadResultImage() {
-        if let url = URL(string: "https://picsum.photos/800") {
-            DispatchQueue.global().async { [weak self] in
-                if let data = try? Data(contentsOf: url) {
-                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
-                    DispatchQueue.main.async {
-                        self?.resultImage = image
-                        self?.resultImageView.image = self?.resultImage
-                    }
-                }
-            }
-        }
+        self.resultImage = UIImage(named: "sample3_after")
+        self.resultImageView.image = self.resultImage
+//        if let url = URL(string: "https://picsum.photos/800") {
+//            DispatchQueue.global().async { [weak self] in
+//                if let data = try? Data(contentsOf: url) {
+//                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+//                    DispatchQueue.main.async {
+//                        self?.resultImage = image
+//                        self?.resultImageView.image = self?.resultImage
+//                    }
+//                }
+//            }
+//        }
     }
     
     private func setupButtonStackView() {

@@ -162,6 +162,8 @@ class UploadViewController: BaseViewController {
         segmentedControlLabel.translatesAutoresizingMaskIntoConstraints = false
         
         segmentedControlLabel.text = UploadData.shared.convertTypeString
+        segmentedControlLabel.textColor = .gray
+        segmentedControlLabel.font = UIFont.systemFont(ofSize: 15)
         segmentedControlLabel.numberOfLines = 0
         
         view.addSubview(segmentedControlLabel)
