@@ -17,12 +17,6 @@ class ChooseFaceCell: UICollectionViewCell {
     
     private let size = 28
     
-    override var isSelected: Bool {
-        didSet {
-            isSelected ? setClickStyle() : setNoneClickStyle()
-        }
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
@@ -36,17 +30,18 @@ class ChooseFaceCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
-    private func setClickStyle() {
+    func setSelectedStyle() {
         checkImageView.image = checkImage
         
         checkImageView.tintColor = .mainColor
         checkImageView.alpha = 1
         checkImageView.layer.borderColor = UIColor.mainColor.cgColor
+        checkImageView.backgroundColor = .white
         
         contentView.layer.borderColor = UIColor.mainColor.cgColor
     }
     
-    private func setNoneClickStyle() {
+    func setDeselectedStyle() {
         checkImageView.image = noneCheckImage
         
         checkImageView.tintColor = .black
@@ -66,7 +61,7 @@ class ChooseFaceCell: UICollectionViewCell {
         setupImages()
         setupCheckImageView()
         
-        setNoneClickStyle()
+        setDeselectedStyle()
     }
 
     private func setupImages() {
@@ -105,8 +100,22 @@ class ChooseFaceCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
     }
     
-    func setupImage() {
-        imageView.image = image
+    func setupImage(url: String) {
+        if let url = URL(string: url) {
+            DispatchQueue.global().async { [weak self] in
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+                    DispatchQueue.main.async {
+                        self?.imageView.image = image
+                    }
+                }
+            }
+        } else {
+            imageView.image = UIImage(named: "ChameleonImage")
+        }
     }
     
+    func setupImage(image: UIImage) {
+        imageView.image = image
+    }
 }

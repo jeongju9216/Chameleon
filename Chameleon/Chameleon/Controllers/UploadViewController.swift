@@ -13,35 +13,48 @@ import AVFoundation
 class UploadViewController: BaseViewController {
     
     //MARK: - Views
-    var guideLabel: UILabel!
-    var uploadView: UIImageView!
-    var uploadImageView: UIImageView!
-    var uploadLabel: UILabel!
-    var uploadButton: UIButton!
+    private var uploadView: UIImageView!
+    private var uploadImageView: UIImageView!
+    private var uploadLabel: UILabel!
+    private var segmentedControl: UISegmentedControl!
+    private var segmentedControlLabel: UILabel!
+    private var uploadButton: UIButton!
     
-    var imagePicker: UIImagePickerController!
+    private var imagePicker: UIImagePickerController!
+    
+    //MARK: - Properties
+    var mediaFile: MediaFile?
+    var segmentedItem: [String] = ["페이크 얼굴", "모자이크", "모두"]
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUploadUI()
         
         setupImagePicker()
         
         uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
+        segmentedControl.addTarget(self, action: #selector(changedSegmentedControl(sender:)), for: .valueChanged)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickedUploadView(sender:)))
         uploadView.addGestureRecognizer(tapGesture)
     }
     
     //MARK: - Actions
+    @objc private func changedSegmentedControl(sender: UISegmentedControl) {
+        print("selected: \(sender.selectedSegmentIndex)")
+        
+        UploadData.shared.convertType = sender.selectedSegmentIndex
+        segmentedControlLabel.text = UploadData.shared.convertTypeString
+    }
+    
     @objc private func clickedUpload(sender: UIButton) {
         let loadingVC = LoadingViewController()
         loadingVC.modalPresentationStyle = .fullScreen
         loadingVC.modalTransitionStyle = .crossDissolve
         
         loadingVC.guideString = "Loading"
+        loadingVC.mediaFile = self.mediaFile
         
         self.present(loadingVC, animated: true)
     }
@@ -91,8 +104,8 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Methods
     private func moveToSetting() {
-        let message = "앨범 접근이 거부 되었습니다.\n해당 기능을 사용하시려면 설정에서 권한을 허용해 주세요."
-        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "권한 설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
+        let message = "사진 접근이 거부 되었습니다.\n설정에서 권한을 허용해 주세요."
+        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
             guard let settingURL = URL(string: UIApplication.openSettingsURLString) else {
                 return
             }
@@ -105,12 +118,11 @@ class UploadViewController: BaseViewController {
         })
     }
     
-    //MARK: - Setup
     private func setupImagePicker() {
         imagePicker = UIImagePickerController()
         imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = false
-        if UploadInfo.shared.uploadType == .Photo {
+        if UploadData.shared.uploadType == .Photo {
             imagePicker.mediaTypes = ["public.image"]
         } else {
             imagePicker.mediaTypes = ["public.movie"]
@@ -122,27 +134,47 @@ class UploadViewController: BaseViewController {
     private func setupUploadUI() {
         view.backgroundColor = UIColor.backgroundColor
         
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadType)")
-        setupGuideLabel()
+        setupNavigationBar(title: "\(UploadData.shared.uploadType)")
         setupUploadView()
+        setupSegmentedControl()
+        setupSegmentedControlLabel()
         setupUploadButton()
     }
     
-    private func setupGuideLabel() {
-        guideLabel = UILabel()
-        guideLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupSegmentedControl() {
+        segmentedControl = UISegmentedControl(items: segmentedItem)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "변환할 \(UploadInfo.shared.uploadTypeString)을 선택해 주세요."
-        guideLabel.numberOfLines = 0
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.selectedSegmentTintColor = .mainColor
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
+        segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white, .font: UIFont.boldSystemFont(ofSize: 14)], for: .selected)
         
-        view.addSubview(guideLabel)
-        guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        view.addSubview(segmentedControl)
+        segmentedControl.widthAnchor.constraint(equalTo: uploadView.widthAnchor).isActive = true
+        segmentedControl.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: uploadView.bottomAnchor, constant: 20).isActive = true
+    }
+    
+    private func setupSegmentedControlLabel() {
+        segmentedControlLabel = UILabel()
+        segmentedControlLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        segmentedControlLabel.text = UploadData.shared.convertTypeString
+        segmentedControlLabel.textColor = .gray
+        segmentedControlLabel.font = UIFont.systemFont(ofSize: 15)
+        segmentedControlLabel.numberOfLines = 0
+        
+        view.addSubview(segmentedControlLabel)
+        segmentedControlLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        segmentedControlLabel.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupUploadButton() {
         uploadButton = UIButton(type: .custom)
         uploadButton.translatesAutoresizingMaskIntoConstraints = false
+        uploadButton.isEnabled = false
         
         uploadButton.applyMainButtonStyle(title: "업로드")
         
@@ -167,11 +199,17 @@ class UploadViewController: BaseViewController {
         uploadView.layer.cornerRadius = 20
         
         view.addSubview(uploadView)
+        
+        print("80%: \(view.frame.width * 0.8)")
+        let width = min(view.frame.width * 0.8, 600)
+        uploadView.widthAnchor.constraint(equalToConstant: width).isActive = true
         uploadView.heightAnchor.constraint(equalTo: uploadView.widthAnchor).isActive = true
         uploadView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        uploadView.topAnchor.constraint(equalTo: guideLabel.topAnchor, constant: 40).isActive = true
-        uploadView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
-        uploadView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
+        if width < 600 {
+            uploadView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        } else {
+            uploadView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -120).isActive = true
+        }
         
         setupUploadImageInView()
         setupUploadLabelInView()
@@ -182,7 +220,7 @@ class UploadViewController: BaseViewController {
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         uploadImageView.isUserInteractionEnabled = false
         
-        let uploadImageName: String = (UploadInfo.shared.uploadType == .Photo) ? "photo" : "video"
+        let uploadImageName: String = (UploadData.shared.uploadType == .Photo) ? "photo" : "video"
         if let uploadImage = UIImage(systemName: uploadImageName) {
             uploadImageView.image = uploadImage.withRenderingMode(.alwaysTemplate)
             uploadImageView.tintColor = .lightGray
@@ -200,7 +238,7 @@ class UploadViewController: BaseViewController {
         uploadLabel.translatesAutoresizingMaskIntoConstraints = false
         uploadLabel.isUserInteractionEnabled = false
         
-        uploadLabel.text = "Choose \(UploadInfo.shared.uploadType)"
+        uploadLabel.text = "Choose \(UploadData.shared.uploadType)"
         uploadLabel.textColor = .lightGray
         
         uploadView.addSubview(uploadLabel)
@@ -210,24 +248,99 @@ class UploadViewController: BaseViewController {
 }
 
 extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        self.dismiss(animated: true) {
-            if UploadInfo.shared.uploadType == .Photo {
-                if let image = info[.originalImage] as? UIImage {
-                    self.showImage(image)
-                }
+        picker.dismiss(animated: true) { [weak self] in
+            if UploadData.shared.uploadType == .Photo {
+                self?.setImageData(info: info)
             } else {
-                let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
-                print("videoURL:\(String(describing: videoURL))")
-                
-                self.getThumbnailFromUrl(videoURL!.absoluteString) { [weak self] (img) in
-                    if let img = img {
-                        self?.showImage(img)
-                    }
+                self?.setVideoData(info: info)
+            }
+        }
+    }
+    
+    private func setImageData(info: [UIImagePickerController.InfoKey : Any]) {
+        if let image = info[.originalImage] as? UIImage,
+           let assetPath = info[.imageURL] as? URL {
+            
+            let (imageType, imageName) = self.parsingImageInfo(url: assetPath)
+            let imageData = self.createImageData(image, type: imageType)
+            
+            if let imageData = imageData {
+                self.mediaFile = MediaFile(filename: imageName, data: imageData, type: "image/\(imageType)")
+                self.showImage(image)
+            }
+        }
+    }
+    
+    private func setVideoData(info: [UIImagePickerController.InfoKey : Any]) {
+        let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as? URL
+        
+        if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
+            let (videoType, videoName) = self.parsingVideoInfo(url: videoURL)
+            self.mediaFile = MediaFile(filename: videoName, data: videoData, type: "video/\(videoType)")
+            
+            self.getThumbnailFromUrl(videoURL.absoluteString) { [weak self] (img) in
+                if let img = img {
+                    self?.showImage(img)
                 }
             }
         }
+    }
+}
+
+extension UploadViewController {
+    private func parsingImageInfo(url: URL) -> (String, String) {
+        let URLString = url.absoluteString.lowercased()
+
+        var imageType = "unknown"
+        if (URLString.hasSuffix("jpg")) {
+            imageType = "jpg"
+        } else if (URLString.hasSuffix("jpeg")) {
+            imageType = "jpeg"
+        } else if (URLString.hasSuffix("png")) {
+            imageType = "png"
+        } else {
+            print("Invalid Type")
+        }
+        print("imageType: \(imageType)")
+        
+        let imageName = URLString.components(separatedBy: "/").last ?? (DateUtils.getCurrentDateTime() + ".\(imageType)")
+
+        return (imageType, imageName)
+    }
+    
+    private func createImageData(_ image: UIImage, type: String) -> Data? {
+        var imageData: Data?
+        switch type {
+        case "png":
+            imageData = image.pngData()
+        case "jpg":
+            imageData = image.jpegData(compressionQuality: 1.0)
+        case "jpeg":
+            imageData = image.jpegData(compressionQuality: 1.0)
+        default: break
+        }
+    
+        return imageData
+    }
+    
+    private func parsingVideoInfo(url: URL) -> (String, String) {
+        let URLString = url.absoluteString.lowercased()
+        
+        var videoType = "unknown"
+        if (URLString.hasSuffix("mov")) {
+            videoType = "mov"
+        } else if (URLString.hasSuffix("mp4")) {
+            videoType = "mp4"
+        } else {
+            print("Invalid Type")
+        }
+        print("videoType: \(videoType)")
+        
+        let videoName = URLString.components(separatedBy: "/").last ?? (DateUtils.getCurrentDateTime() + ".\(videoType)")
+        
+        return (videoType, videoName)
     }
     
     private func getThumbnailFromUrl(_ url: String?, _ completion: @escaping ((_ image: UIImage?)->Void)) {
@@ -251,14 +364,14 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
         }
     }
     
-    func showImage(_ image: UIImage) {
+    private func showImage(_ image: UIImage) {
         DispatchQueue.main.async {
             self.uploadView.image = image
             
             self.uploadImageView.isHidden = true
             self.uploadLabel.isHidden = true
+            
+            self.uploadButton.isEnabled = true            
         }
     }
 }
-
-//SampleFaceImage

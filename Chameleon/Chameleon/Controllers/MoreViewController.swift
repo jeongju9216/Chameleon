@@ -15,11 +15,11 @@ class MoreViewController: BaseViewController {
     private var deleteAccountButton: UIButton!
     
     //MARK: - Properties
-    private var menus1: [String] = ["앱 정보", "도움말"]
-    private var menus2: [String] = ["알림 설정", "화면 설정"]
+    private var menus1: [String] = ["애플리케이션 정보", "도움말"]
+//    private var menus2: [String] = ["알림 설정", "화면 설정"]
     
     private var menuIcons1: [String] = ["info.circle", "questionmark.circle"]
-    private var menuIcons2: [String] = ["bell", "sun.min"]
+//    private var menuIcons2: [String] = ["bell", "sun.min"]
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -75,6 +75,12 @@ extension MoreViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             switch menus1[indexPath.row] {
+            case "애플리케이션 정보":
+                let infoViewController = InfoViewController()
+                self.present(infoViewController, animated: true)
+            case "도움말":
+                let guideViewController = GuideViewController()
+                self.present(guideViewController, animated: true)
             default: break
             }
             break
@@ -101,7 +107,7 @@ extension MoreViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return menus1.count
-        case 1: return menus2.count
+//        case 1: return menus2.count
         default : break
         }
         
@@ -117,9 +123,9 @@ extension MoreViewController: UITableViewDataSource {
         case 0:
             title = menus1[indexPath.row]
             iconName = menuIcons1[indexPath.row]
-        case 1:
-            title = menus2[indexPath.row]
-            iconName = menuIcons2[indexPath.row]
+//        case 1:
+//            title = menus2[indexPath.row]
+//            iconName = menuIcons2[indexPath.row]
         default : break
         }
         

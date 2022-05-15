@@ -23,9 +23,11 @@ class HomeViewController: BaseViewController {
         photoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
         photoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
         photoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
+        
         videoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
         videoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
         videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
+        videoButton.isHidden = true
     }
     
     //MARK: - Actions
@@ -39,9 +41,9 @@ class HomeViewController: BaseViewController {
         let uploadVC = UploadViewController()
         
         if sender == photoButton {
-            UploadInfo.shared.uploadType = .Photo
+            UploadData.shared.uploadType = .Photo
         } else {
-            UploadInfo.shared.uploadType = .Video
+            UploadData.shared.uploadType = .Video
         }
         
         uploadVC.modalPresentationStyle = .fullScreen

@@ -62,13 +62,13 @@ class HomeMenuButton: UIButton {
         menuStackView.isUserInteractionEnabled = false
         
         menuStackView.axis = .vertical
-        menuStackView.spacing = 15
+        menuStackView.spacing = 10
         menuStackView.distribution = .fill
         menuStackView.alignment = .center
         
         self.addSubview(menuStackView)
         menuStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        menuStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 8).isActive = true
+        menuStackView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 5).isActive = true
     }
     
     private func setupMenuImageView() {

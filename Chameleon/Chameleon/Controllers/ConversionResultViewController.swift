@@ -10,52 +10,90 @@ import UIKit
 class ConversionResultViewController: BaseViewController {
     
     //MARK: - Views
-    var guideLabel: UILabel!
+    private var resultImageView: UIImageView!
+    private var resultImage: UIImage?
     
-    var resultView: UIView!
+    private var buttonStack: UIStackView!
+    private var saveButton: UIButton!
+    private var shareButton: UIButton!
     
-    var buttonStack: UIStackView!
-    var saveButton: UIButton!
-    var shareButton: UIButton!
-    
-    var doneButton: UIButton!
+    private var doneButton: UIButton!
     
     //MARK: - Properties
-    let buttonSize: Int = 24
+    private let buttonSize: Int = 24
+    var resultImageURL: URL?
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupConversionResultUI()
-        
+        loadResultImage()
+
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(clickedSaveButton(sender:)), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
     }
     
     //MARK: - Actions
-    @objc private func clickedDoneButton(sender: UIButton) {
-        let message = "변환된 \(UploadInfo.shared.uploadTypeString)은 종료 후 즉시 폐기되며\n처음부터 다시 진행하셔야 합니다.\n종료하시겠습니까?"
+    @objc private func clickedSaveButton(sender: UIButton) {
+        print("\(#fileID) \(#line)-line, \(#function)")
         
-        let action: ((UIAlertAction) -> Void) = { action in
-            self.goBackHome()
+        if let resultImage = resultImage {
+            UIImageWriteToSavedPhotosAlbum(resultImage, self, #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
         }
+    }
+    
+    @objc func saveImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+       if let error = error {
+           print("saveImage error: \(error)")
+           showErrorAlert()
+       } else {
+           showOneButtonAlert(message: "앨범에 저장 되었습니다.")
+       }
+    }
+
+    @objc private func clickedShareButton(sender: UIButton) {
+        print("\(#fileID) \(#line)-line, \(#function)")
         
-        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: action)
+        if let resultImage = resultImage {
+            let vc = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
+            vc.excludedActivityTypes = [.saveToCameraRoll]
+            present(vc, animated: true)
+        }
+    }
+    
+    @objc private func clickedDoneButton(sender: UIButton) {
+        let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
+        
+        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
+            LoadingIndicator.showLoading()
+            
+            HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
+                LoadingIndicator.hideLoading()
+                if result || true {
+                    self?.goBackHome()
+                } else {
+                    self?.showErrorAlert()
+                }
+            })
+        })
     }
     
     //MARK: - Methods
     private func goBackHome() {
-        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.async {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     //MARK: - Setup
     private func setupConversionResultUI() {
-        setupNavigationBar(title: "\(UploadInfo.shared.uploadTypeString) 변환 결과")
+        setupNavigationBar(title: "\(UploadData.shared.uploadTypeString) 변환 결과")
         navigationItem.hidesBackButton = true
         
         view.backgroundColor = .backgroundColor
         
-        setupGuideLabel()
         setupResultView()
         
         setupButtonStackView()
@@ -65,36 +103,36 @@ class ConversionResultViewController: BaseViewController {
         setupDoneButton()
     }
     
-    private func setupGuideLabel() {
-        guideLabel = UILabel()
-        guideLabel.translatesAutoresizingMaskIntoConstraints = false
+    private func setupResultView() {
+        resultImageView = UIImageView()
+        resultImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLabel.text = "변환된 \(UploadInfo.shared.uploadTypeString)을 저장하고 공유해 보세요."
-        guideLabel.textAlignment = .center
-        guideLabel.numberOfLines = 0
+        resultImageView.backgroundColor = UIColor.backgroundColor
         
-        view.addSubview(guideLabel)
-        guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        resultImageView.clipsToBounds = true
+        resultImageView.layer.borderColor = UIColor.edgeColor.cgColor
+        resultImageView.layer.borderWidth = 2
+        resultImageView.layer.cornerRadius = 20
+        
+        view.addSubview(resultImageView)
+        resultImageView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
+        resultImageView.heightAnchor.constraint(equalTo: resultImageView.widthAnchor).isActive = true
+        resultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        resultImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
     }
     
-    private func setupResultView() {
-        resultView = UIView()
-        resultView.translatesAutoresizingMaskIntoConstraints = false
-        
-        resultView.backgroundColor = UIColor.backgroundColor
-        
-        resultView.clipsToBounds = true
-        resultView.layer.borderColor = UIColor.edgeColor.cgColor
-        resultView.layer.borderWidth = 2
-        resultView.layer.cornerRadius = 20
-        
-        view.addSubview(resultView)
-        resultView.heightAnchor.constraint(equalTo: resultView.widthAnchor).isActive = true
-        resultView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        resultView.topAnchor.constraint(equalTo: guideLabel.bottomAnchor, constant: 20).isActive = true
-        resultView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 40).isActive = true
-        resultView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -40).isActive = true
+    private func loadResultImage() {
+        if let url = URL(string: "https://picsum.photos/800") {
+            DispatchQueue.global().async { [weak self] in
+                if let data = try? Data(contentsOf: url) {
+                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
+                    DispatchQueue.main.async {
+                        self?.resultImage = image
+                        self?.resultImageView.image = self?.resultImage
+                    }
+                }
+            }
+        }
     }
     
     private func setupButtonStackView() {
@@ -110,7 +148,7 @@ class ConversionResultViewController: BaseViewController {
         buttonStack.widthAnchor.constraint(equalToConstant: 200).isActive = true
         buttonStack.heightAnchor.constraint(equalToConstant: 44).isActive = true
         buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        buttonStack.topAnchor.constraint(equalTo: resultView.bottomAnchor, constant: 20).isActive = true
+        buttonStack.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupSaveButton() {

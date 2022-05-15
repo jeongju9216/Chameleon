@@ -10,29 +10,47 @@ import UIKit
 class ChooseFaceViewController: BaseViewController {
     
     //MARK: - Views
-    var faceCollectionView: UICollectionView!
+    private var faceCollectionView: UICollectionView!
+    private var emptyGuideLabel: UILabel!
     
-    var convertButton: UIButton!
+    private var convertButton: UIButton!
+    
+    //MARK: - Properties
+    var faceImages: [FaceImage] = []
+    var selectedIndex: [Int] = []
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupChooseFaceUI()
         
-        faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
-        faceCollectionView.delegate = self
-        faceCollectionView.dataSource = self
+        if let faceCollectionView = faceCollectionView {
+            faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
+            faceCollectionView.delegate = self
+            faceCollectionView.dataSource = self
+        }
         
         convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
     }
         
     //MARK: - Actions
     @objc private func clickedCovertButton(sender: UIButton) {
-        let convertVC = ConvertViewController()
-        convertVC.modalPresentationStyle = .fullScreen
+        let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
+        print("sendFaces jsonData: \(jsonData)")
         
-        self.navigationController?.pushViewController(convertVC, animated: true)
+        LoadingIndicator.showLoading()
+        HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
+            LoadingIndicator.hideLoading()
+            if result {
+                DispatchQueue.main.async {
+                    let convertVC = ConvertViewController()
+                    convertVC.modalPresentationStyle = .fullScreen
+                    self?.navigationController?.pushViewController(convertVC, animated: true)
+                }
+            } else {
+                self?.showErrorAlert()
+            }
+        }
     }
     
     //MARK: - Setup
@@ -40,8 +58,25 @@ class ChooseFaceViewController: BaseViewController {
         view.backgroundColor = UIColor.backgroundColor
         setupNavigationBar(title: "바꾸지 않을 얼굴 선택")
         
-        setupFaceCollectionView()
+        if faceImages.isEmpty {
+            setupEmptyGuideLabel()
+        } else {
+            setupFaceCollectionView()
+        }
+        
         setupConvertButton()
+    }
+    
+    private func setupEmptyGuideLabel() {
+        emptyGuideLabel = UILabel()
+        emptyGuideLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        emptyGuideLabel.text = "얼굴을 찾을 수 없습니다."
+        emptyGuideLabel.numberOfLines = 0
+        
+        view.addSubview(emptyGuideLabel)
+        emptyGuideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        emptyGuideLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
     }
     
     private func setupFaceCollectionView() {
@@ -92,19 +127,34 @@ extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
 extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30
+        return faceImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
-    
-        if indexPath.row % 2 == 0 {
-            cell.image = UIImage(named: "SampleFaceImage")
-        } else {
-            cell.image = UIImage(named: "ChameleonImage")
-        }
-        cell.setupImage()
+        
+        cell.setupImage(url: faceImages[indexPath.row].url)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+            cell.setSelectedStyle()
+            selectedIndex.append(indexPath.row)
+            
+            print("select: \(indexPath.row) / selectedIndex: \(selectedIndex)")
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+            cell.setDeselectedStyle()
+            if let removeItem = selectedIndex.firstIndex(of: indexPath.row) {
+                selectedIndex.remove(at: removeItem)
+            }
+            
+            print("deselect: \(indexPath.row) / selectedIndex: \(selectedIndex)")
+        }
     }
 }
