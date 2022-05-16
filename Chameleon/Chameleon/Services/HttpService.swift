@@ -70,15 +70,18 @@ class HttpService {
     }
     
     func getFaces(completionHandler: @escaping (Bool, Any) -> Void) {
+        print("\(#fileID) \(#line)-line, \(#function)")
         requestGet(url: serverIP + "/faces", completionHandler: { (result, response) in
-            completionHandler(result, response)
-//            if result || self.retryCount == 3 {
-//                self.retryCount = 0
-//                completionHandler(result, response)
-//            } else {
-//                self.retryCount += 1
-//                self.getFaces(completionHandler: completionHandler)
-//            }
+//            completionHandler(result, response)
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(5)) {
+                    self.getFaces(completionHandler: completionHandler)
+                }
+            }
         })
     }
     

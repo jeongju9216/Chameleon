@@ -22,7 +22,7 @@ class LoadingViewController: BaseViewController {
     var mediaFile: MediaFile?
     var guideString: String = ""
     var animationName = UITraitCollection.current.userInterfaceStyle == .light ? "bottomImage-Light" : "bottomImage-Dark"
-        
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,41 +34,37 @@ class LoadingViewController: BaseViewController {
         super.viewDidAppear(animated)
         
         uploadVC = getUploadViewController()
-        if let uploadVC = uploadVC {
-            guard let mediaFile = self.mediaFile else {
-                self.dismiss(animated: true) {
-                    uploadVC.showErrorAlert()
-                }
-                return
+        guard let uploadVC = uploadVC, let mediaFile = self.mediaFile else {
+            self.dismiss(animated: true) {
+                self.uploadVC?.showErrorAlert()
             }
-            
-            LoadingIndicator.showLoading()
-
-            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                print("[uploadMedia] result: \(result) / response: \(response)")
-                if result {
-                    //get faces
-                    DispatchQueue.main.async {
-                        LoadingIndicator.hideLoading()
-                        self?.getFacesFromServer()
-                    }
-                    
-                } else {
-                    LoadingIndicator.hideLoading()
-                    DispatchQueue.main.async {
-                        self?.dismiss(animated: true, completion: {
-                            uploadVC.showErrorAlert()
-                        })
-                    }
-                }
-            })
-        } else {
-            print("uploadVC is nil")
+            return
         }
+        
+        LoadingIndicator.showLoading()
+
+        HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
+            print("[uploadMedia] result: \(result) / response: \(response)")
+            if result {
+                //get faces
+                DispatchQueue.main.async {
+                    LoadingIndicator.hideLoading()
+                    self?.getFacesFromServer()
+                }
+            } else {
+                LoadingIndicator.hideLoading()
+                DispatchQueue.main.async {
+                    self?.dismiss(animated: true, completion: {
+                        uploadVC.showErrorAlert()
+                    })
+                }
+            }
+        })
     }
     
     //MARK: - Methods
     private func getFacesFromServer() {
+        LoadingIndicator.showLoading()
         HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
             LoadingIndicator.hideLoading()
             print("[getFaces] result: \(result) / response: \(response)")
