@@ -35,6 +35,7 @@
 		9BEA5D7028337CD80050C7E0 /* MoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D6F28337CD80050C7E0 /* MoreData.swift */; };
 		9BEA5D7228337FB80050C7E0 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D7128337FB80050C7E0 /* MoreView.swift */; };
 		9BEA5D75283391830050C7E0 /* UplaodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D74283391830050C7E0 /* UplaodView.swift */; };
+		9BEA5D7A2833B9E40050C7E0 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D792833B9E40050C7E0 /* LaunchView.swift */; };
 		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
 		9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -77,6 +78,7 @@
 		9BEA5D6F28337CD80050C7E0 /* MoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreData.swift; sourceTree = "<group>"; };
 		9BEA5D7128337FB80050C7E0 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		9BEA5D74283391830050C7E0 /* UplaodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UplaodView.swift; sourceTree = "<group>"; };
+		9BEA5D792833B9E40050C7E0 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
 		9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceCell.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -103,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				9BF442DD27F34DA500537C60 /* BaseViewController.swift */,
-				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
 				9BF442DF27F3DF9400537C60 /* LoadingViewController.swift */,
 				9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */,
 				9B1A112427F8322600E2CE08 /* ConvertViewController.swift */,
@@ -142,6 +143,7 @@
 		9B4B8FA227E0B2390066C7E3 /* Chameleon */ = {
 			isa = PBXGroup;
 			children = (
+				9BEA5D782833B9D20050C7E0 /* LaunchScreen */,
 				9BEA5D73283391330050C7E0 /* UploadScreen */,
 				9B8587CF28337953008910E2 /* MoreScreen */,
 				9B8587CC283365B3008910E2 /* HomeScreen */,
@@ -246,6 +248,15 @@
 			path = UploadScreen;
 			sourceTree = "<group>";
 		};
+		9BEA5D782833B9D20050C7E0 /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
+				9BEA5D792833B9E40050C7E0 /* LaunchView.swift */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
 		9BF442CC27F2E01700537C60 /* LottieJsons */ = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B8587CE283365E2008910E2 /* HomeView.swift in Sources */,
+				9BEA5D7A2833B9E40050C7E0 /* LaunchView.swift in Sources */,
 				9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */,
 				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,
 				9BC9C083282B60F70038396E /* FaceImage.swift in Sources */,
