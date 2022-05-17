@@ -10,7 +10,7 @@ import UIKit
 class HomeViewController: BaseViewController {
     
     //MARK: - Views
-    var homeView: HomeView!
+    private var homeView: HomeView!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -42,15 +42,9 @@ class HomeViewController: BaseViewController {
     
     @objc func touchUpInsideButton(sender: HomeMenuButton) {
         sender.touchUp()
+        UploadData.shared.uploadType = (sender.name == "PHOTO") ? UploadType.Photo : UploadType.Video
         
         let uploadVC = UploadViewController()
-        
-        if sender == homeView.photoButton {
-            UploadData.shared.uploadType = .Photo
-        } else {
-            UploadData.shared.uploadType = .Video
-        }
-        
         uploadVC.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(uploadVC, animated: true)
     }

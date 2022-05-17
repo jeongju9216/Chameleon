@@ -16,17 +16,15 @@ class HomeView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         setup()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
         setup()
     }
     
-    func setup() {
+    private func setup() {
         self.backgroundColor = UIColor.backgroundColor
         
         setupButtonStack()
