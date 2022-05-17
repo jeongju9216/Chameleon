@@ -65,7 +65,7 @@ class LoadingViewController: BaseViewController {
     //MARK: - Methods
     private func getFacesFromServer() {
         LoadingIndicator.showLoading()
-        HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
+        HttpService.shared.getFaces(waitingTime: 5, completionHandler: { [weak self] (result, response) in
             LoadingIndicator.hideLoading()
             print("[getFaces] result: \(result) / response: \(response)")
 
@@ -127,7 +127,7 @@ class LoadingViewController: BaseViewController {
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
         guideLabel.text = guideString
-        guideLabel.font = UIFont.boldSystemFont(ofSize: 32)
+        guideLabel.font = UIFont.boldSystemFont(ofSize: 18)
         guideLabel.numberOfLines = 0
         
         animationLoadingTimer()

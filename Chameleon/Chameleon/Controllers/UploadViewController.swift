@@ -53,7 +53,7 @@ class UploadViewController: BaseViewController {
         loadingVC.modalPresentationStyle = .fullScreen
         loadingVC.modalTransitionStyle = .crossDissolve
         
-        loadingVC.guideString = "Loading"
+        loadingVC.guideString = "얼굴을 찾는 중"
         loadingVC.mediaFile = self.mediaFile
         
         self.present(loadingVC, animated: true)
