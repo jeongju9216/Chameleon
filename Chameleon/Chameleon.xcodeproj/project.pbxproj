@@ -24,6 +24,7 @@
 		9B4B8FB027E0B2390066C7E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */; };
 		9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4EF40627F56A730099CE05 /* HttpService.swift */; };
 		9B4EF40B27F5A1BA0099CE05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */; };
+		9B8587CE283365E2008910E2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8587CD283365E2008910E2 /* HomeView.swift */; };
 		9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C0782828E7840038396E /* LoadingIndicator.swift */; };
 		9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C07E282A29B70038396E /* InfoViewController.swift */; };
 		9BC9C083282B60F70038396E /* FaceImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C082282B60F70038396E /* FaceImage.swift */; };
@@ -61,6 +62,7 @@
 		9B4B8FB127E0B2390066C7E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B4EF40627F56A730099CE05 /* HttpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpService.swift; sourceTree = "<group>"; };
 		9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9B8587CD283365E2008910E2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9BC9C0782828E7840038396E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9BC9C07E282A29B70038396E /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		9BC9C082282B60F70038396E /* FaceImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceImage.swift; sourceTree = "<group>"; };
@@ -94,7 +96,6 @@
 			children = (
 				9BF442DD27F34DA500537C60 /* BaseViewController.swift */,
 				9BF442CF27F2E04600537C60 /* LaunchViewController.swift */,
-				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
 				9BF442DB27F3473300537C60 /* UploadViewController.swift */,
 				9BF442DF27F3DF9400537C60 /* LoadingViewController.swift */,
 				9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */,
@@ -112,7 +113,6 @@
 			children = (
 				9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */,
 				9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */,
-				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
 				9B0D412C27EACC5D00E2FA10 /* UIButton.swift */,
 				9B0D413027EC0EBD00E2FA10 /* UIColor.swift */,
 			);
@@ -138,6 +138,7 @@
 		9B4B8FA227E0B2390066C7E3 /* Chameleon */ = {
 			isa = PBXGroup;
 			children = (
+				9B8587CC283365B3008910E2 /* Home */,
 				9BF442CC27F2E01700537C60 /* LottieJsons */,
 				9BC9C084282B6D0E0038396E /* Utils */,
 				9B4EF40C27F5BD890099CE05 /* Models */,
@@ -180,6 +181,16 @@
 				9BC9C082282B60F70038396E /* FaceImage.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		9B8587CC283365B3008910E2 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
+				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
+				9B8587CD283365E2008910E2 /* HomeView.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		9BC9C084282B6D0E0038396E /* Utils */ = {
@@ -279,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B8587CE283365E2008910E2 /* HomeView.swift in Sources */,
 				9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */,
 				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,
 				9BC9C083282B60F70038396E /* FaceImage.swift in Sources */,

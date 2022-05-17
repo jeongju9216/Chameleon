@@ -74,13 +74,14 @@ class HttpService {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
             if let `self` = self {
                 self.requestGet(url: self.serverIP + "/faces", completionHandler: { (result, response) in
-                    if result || self.retryCount == 3 {
-                        self.retryCount = 0
-                        completionHandler(result, response)
-                    } else {
-                        self.retryCount += 1
-                        self.getFaces(waitingTime: 3, completionHandler: completionHandler)
-                    }
+                    completionHandler(result, response)
+//                    if result || self.retryCount == 3 {
+//                        self.retryCount = 0
+//                        completionHandler(result, response)
+//                    } else {
+//                        self.retryCount += 1
+//                        self.getFaces(waitingTime: 3, completionHandler: completionHandler)
+//                    }
                 })
             }
         }
