@@ -31,6 +31,9 @@
 		9BC9C086282B6D230038396E /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C085282B6D230038396E /* DateUtils.swift */; };
 		9BC9C088282BFABD0038396E /* BaseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C087282BFABD0038396E /* BaseData.swift */; };
 		9BC9C08D282CF9E10038396E /* GuideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C08C282CF9E10038396E /* GuideViewController.swift */; };
+		9BEA5D6C28337A890050C7E0 /* MoreDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D6B28337A890050C7E0 /* MoreDataSource.swift */; };
+		9BEA5D7028337CD80050C7E0 /* MoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D6F28337CD80050C7E0 /* MoreData.swift */; };
+		9BEA5D7228337FB80050C7E0 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEA5D7128337FB80050C7E0 /* MoreView.swift */; };
 		9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */; };
 		9BEE34C327F537EC003CA46C /* ChooseFaceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */; };
 		9BF442CB27F2DEA000537C60 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 9BF442CA27F2DEA000537C60 /* Lottie */; };
@@ -69,6 +72,9 @@
 		9BC9C085282B6D230038396E /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		9BC9C087282BFABD0038396E /* BaseData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseData.swift; sourceTree = "<group>"; };
 		9BC9C08C282CF9E10038396E /* GuideViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideViewController.swift; sourceTree = "<group>"; };
+		9BEA5D6B28337A890050C7E0 /* MoreDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreDataSource.swift; sourceTree = "<group>"; };
+		9BEA5D6F28337CD80050C7E0 /* MoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreData.swift; sourceTree = "<group>"; };
+		9BEA5D7128337FB80050C7E0 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceViewController.swift; sourceTree = "<group>"; };
 		9BEE34C227F537EC003CA46C /* ChooseFaceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseFaceCell.swift; sourceTree = "<group>"; };
 		9BF442CF27F2E04600537C60 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
@@ -101,9 +107,6 @@
 				9BEE34C027F527A2003CA46C /* ChooseFaceViewController.swift */,
 				9B1A112427F8322600E2CE08 /* ConvertViewController.swift */,
 				9B1A112827F85D1300E2CE08 /* ConversionResultViewController.swift */,
-				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
-				9BC9C07E282A29B70038396E /* InfoViewController.swift */,
-				9BC9C08C282CF9E10038396E /* GuideViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -138,7 +141,8 @@
 		9B4B8FA227E0B2390066C7E3 /* Chameleon */ = {
 			isa = PBXGroup;
 			children = (
-				9B8587CC283365B3008910E2 /* Home */,
+				9B8587CF28337953008910E2 /* MoreScreen */,
+				9B8587CC283365B3008910E2 /* HomeScreen */,
 				9BF442CC27F2E01700537C60 /* LottieJsons */,
 				9BC9C084282B6D0E0038396E /* Utils */,
 				9B4EF40C27F5BD890099CE05 /* Models */,
@@ -183,14 +187,43 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		9B8587CC283365B3008910E2 /* Home */ = {
+		9B8587CC283365B3008910E2 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
 				9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */,
 				9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */,
 				9B8587CD283365E2008910E2 /* HomeView.swift */,
 			);
-			path = Home;
+			path = HomeScreen;
+			sourceTree = "<group>";
+		};
+		9B8587CF28337953008910E2 /* MoreScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9B8587D12833797A008910E2 /* InfoScreen */,
+				9B8587D028337967008910E2 /* GuideScreen */,
+				9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */,
+				9BEA5D6B28337A890050C7E0 /* MoreDataSource.swift */,
+				9BEA5D6F28337CD80050C7E0 /* MoreData.swift */,
+				9BEA5D7128337FB80050C7E0 /* MoreView.swift */,
+			);
+			path = MoreScreen;
+			sourceTree = "<group>";
+		};
+		9B8587D028337967008910E2 /* GuideScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9BC9C08C282CF9E10038396E /* GuideViewController.swift */,
+			);
+			path = GuideScreen;
+			sourceTree = "<group>";
+		};
+		9B8587D12833797A008910E2 /* InfoScreen */ = {
+			isa = PBXGroup;
+			children = (
+				9BC9C07E282A29B70038396E /* InfoViewController.swift */,
+			);
+			path = InfoScreen;
 			sourceTree = "<group>";
 		};
 		9BC9C084282B6D0E0038396E /* Utils */ = {
@@ -299,6 +332,7 @@
 				9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */,
 				9B1A112927F85D1300E2CE08 /* ConversionResultViewController.swift in Sources */,
 				9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */,
+				9BEA5D6C28337A890050C7E0 /* MoreDataSource.swift in Sources */,
 				9BEE34C127F527A2003CA46C /* ChooseFaceViewController.swift in Sources */,
 				9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */,
 				9B1A112727F837F700E2CE08 /* UploadData.swift in Sources */,
@@ -306,7 +340,9 @@
 				9BC9C086282B6D230038396E /* DateUtils.swift in Sources */,
 				9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */,
 				9BC9C088282BFABD0038396E /* BaseData.swift in Sources */,
+				9BEA5D7028337CD80050C7E0 /* MoreData.swift in Sources */,
 				9BF442E027F3DF9400537C60 /* LoadingViewController.swift in Sources */,
+				9BEA5D7228337FB80050C7E0 /* MoreView.swift in Sources */,
 				9B197573282235F20051D3C6 /* MediaFile.swift in Sources */,
 				9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */,
 				9B0D412B27EAAE6100E2FA10 /* UnderLineTextField.swift in Sources */,

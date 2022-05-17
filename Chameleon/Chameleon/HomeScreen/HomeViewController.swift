@@ -16,8 +16,7 @@ class HomeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-        setupHomeUI()
+        setupNavigationBar(title: "")
         
         homeView.photoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
         homeView.photoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
@@ -51,10 +50,5 @@ class HomeViewController: BaseViewController {
     
     @objc func touchUpOutsideButton(sender: HomeMenuButton) {
         sender.touchUp()
-    }
-    
-    //MARK: - Setup
-    private func setupHomeUI() {
-        setupNavigationBar(title: "")
     }
 }
