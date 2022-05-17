@@ -373,9 +373,10 @@ extension HttpService {
                 
         body.append(boundaryPrefix)
         
+        let contentsType = (UploadData.shared.uploadType == .Photo) ? "image/\(media.extension)" : "video/\(media.extension)"
         if let imageData = media.data {
             body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(media.filename)\"\(lineBreak)".data(using: .utf8)!)
-            body.append("Content-Type: \(media.type)\(lineBreak + lineBreak)".data(using: .utf8)!)
+            body.append("Content-Type: \(contentsType)\(lineBreak + lineBreak)".data(using: .utf8)!)
             body.append(imageData)
             body.append(lineBreak.data(using: .utf8)!)
         }
