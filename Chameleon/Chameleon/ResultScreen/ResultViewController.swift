@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ConversionResultViewController: BaseViewController {
+class ResultViewController: BaseViewController {
     
     //MARK: - Views
     private var resultImageView: UIImageView!

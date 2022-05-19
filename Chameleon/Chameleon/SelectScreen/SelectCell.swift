@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseFaceCell: UICollectionViewCell {
+class SelectCell: UICollectionViewCell {
     var imageView: UIImageView!
     var image: UIImage?
     

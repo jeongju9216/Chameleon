@@ -20,7 +20,6 @@ class LaunchViewController: BaseViewController {
         super.viewDidLoad()
         
         HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
-            print("[loadVersion] result: \(result) / response: \(response)")
             if result {
                 self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")
                 self?.presentNextVC()

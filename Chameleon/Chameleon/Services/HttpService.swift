@@ -25,6 +25,7 @@ class HttpService {
     
     var retryCount = 0
     
+    private let okString = "ok"
     private let serverIP: String = "http://118.91.7.160"
     private let authorizationHeaderKey = "authorization"
     private var authorization: String {
@@ -46,7 +47,11 @@ class HttpService {
     
     //MARK: - GET
     func loadVersion(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/version", completionHandler: { (result, response) in
+        requestGet(url: serverIP + "/version", completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[loadVersion] result: \(result) / response: \(response)")
+
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -58,7 +63,11 @@ class HttpService {
     }
     
     func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/server-test", completionHandler: { (result, response) in
+        requestGet(url: serverIP + "/server-test", completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[checkConnectedServer] result: \(result) / response: \(response)")
+
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -70,25 +79,32 @@ class HttpService {
     }
     
     func getFaces(waitingTime: Int, completionHandler: @escaping (Bool, Any) -> Void) {
-        print("\(#fileID) \(#line)-line, \(#function)")
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
-            if let `self` = self {
-                self.requestGet(url: self.serverIP + "/faces", completionHandler: { (result, response) in
-                    completionHandler(result, response)
-//                    if result || self.retryCount == 3 {
-//                        self.retryCount = 0
-//                        completionHandler(result, response)
-//                    } else {
-//                        self.retryCount += 1
-//                        self.getFaces(waitingTime: 3, completionHandler: completionHandler)
-//                    }
+            print("\(#fileID) \(#line)-line, \(#function)")
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
+                guard let self = self else { return }
+                
+                self.requestGet(url: self.serverIP + "/faces", completionHandler: { [weak self] (result, response) in
+                    guard let self = self else { return }
+                    
+                    print("[getFaces] result: \(result) / response: \(response)")
+
+                    if result || self.retryCount == 3 {
+                        self.retryCount = 0
+                        completionHandler(result, response)
+                    } else {
+                        self.retryCount += 1
+                        self.getFaces(waitingTime: 3, completionHandler: completionHandler)
+                    }
                 })
             }
         }
-    }
     
     func downloadResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
+        requestGet(url: serverIP + "/file/download", completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[downloadResultFile] result: \(result) / response: \(response)")
+
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -101,7 +117,11 @@ class HttpService {
     
     //MARK: - Post
     func sendUnconvertedFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/faces", param: params, completionHandler: { (result, response) in
+        requestPost(url: serverIP + "/faces", param: params, completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[sendUnconvertedFaces] result: \(result) / response: \(response)")
+            
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -113,7 +133,11 @@ class HttpService {
     }
     
     func deleteFiles(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/delete", param: ["message": "delete"], completionHandler: { (result, response) in
+        requestPost(url: serverIP + "/file/delete", param: ["message": "delete"], completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[deleteFiles] result: \(result) / response: \(response)")
+
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -125,7 +149,11 @@ class HttpService {
     }
     
     func cancelFiles(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/cancel", param: ["message": "delete"], completionHandler: { (result, response) in
+        requestPost(url: serverIP + "/file/cancel", param: ["message": "delete"], completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[cancelFiles] result: \(result) / response: \(response)")
+
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
@@ -138,7 +166,11 @@ class HttpService {
     
     //MARK: - Multipart
     func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
+        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { [weak self] (result, response) in
+            guard let self = self else { return }
+
+            print("[uploadMedia] result: \(result) / response: \(response)")
+
             completionHandler(result, response)
         }
     }
@@ -146,6 +178,7 @@ class HttpService {
 
 extension HttpService {
     private func requestGet(url: String, completionHandler: @escaping (Bool, Any) -> Void) {
+        print("[GET] url: \(url)")
         guard let url = URL(string: url) else {
             print("Error: cannot create URL")
             completionHandler(false, "Error: cannot create URL")
@@ -154,7 +187,6 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
-        request.timeoutInterval = 3
         request.httpMethod = "GET"
         request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         
@@ -180,7 +212,7 @@ extension HttpService {
             }
 
             if let output = try? JSONDecoder().decode(Response.self, from: data) {
-                completionHandler(output.result == "ok", output)
+                completionHandler(output.result == self.okString, output)
             } else {
                 print("Error: JSON Data Parsing failed")
                 
@@ -191,12 +223,13 @@ extension HttpService {
                     return
                 }
                 
-                completionHandler(output.result == "ok", output)
+                completionHandler(output.result == self.okString, output)
             }
         }.resume()
     }
     
     private func requestPost(url: String, param: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+        print("[POST] url: \(url) / param: \(param)")
         let sendData = try! JSONSerialization.data(withJSONObject: param, options: [])
         
         guard let url = URL(string: url) else {
@@ -205,7 +238,6 @@ extension HttpService {
         }
         
         var request = URLRequest(url: url)
-        request.timeoutInterval = 3
         request.httpMethod = "POST"
         request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -240,7 +272,7 @@ extension HttpService {
                 return
             }
             
-            completionHandler(output.result == "ok", output)
+            completionHandler(output.result == self.okString, output)
         }.resume()
     }
 
@@ -289,7 +321,7 @@ extension HttpService {
                 return
             }
             
-            completionHandler(output.result == "ok", output)
+            completionHandler(output.result == self.okString, output)
         }.resume()
     }
 
@@ -339,7 +371,7 @@ extension HttpService {
                 return
             }
             
-            completionHandler(output.result == "ok", output)
+            completionHandler(output.result == self.okString, output)
         }.resume()
     }
 
@@ -374,6 +406,7 @@ extension HttpService {
         body.append(boundaryPrefix)
         
         let contentsType = (UploadData.shared.uploadType == .Photo) ? "image/\(media.extension)" : "video/\(media.extension)"
+        print("media: \(media.filename) / \(media.extension) / \(contentsType)")
         if let imageData = media.data {
             body.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(media.filename)\"\(lineBreak)".data(using: .utf8)!)
             body.append("Content-Type: \(contentsType)\(lineBreak + lineBreak)".data(using: .utf8)!)

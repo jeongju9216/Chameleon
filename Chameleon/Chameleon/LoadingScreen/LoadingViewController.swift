@@ -18,8 +18,6 @@ class LoadingViewController: BaseViewController {
     var bottomAnimationView: AnimationView!
     
     //MARK: - Properties
-    var uploadVC: UploadViewController?
-    var mediaFile: MediaFile?
     var guideString: String = ""
     var animationName = UITraitCollection.current.userInterfaceStyle == .light ? "bottomImage-Light" : "bottomImage-Dark"
     
@@ -30,82 +28,11 @@ class LoadingViewController: BaseViewController {
         setupLoadingUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        uploadVC = getUploadViewController()
-        guard let uploadVC = uploadVC, let mediaFile = self.mediaFile else {
-            self.dismiss(animated: true) {
-                self.uploadVC?.showErrorAlert()
-            }
-            return
-        }
-        
-        LoadingIndicator.showLoading()
-
-        HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-            print("[uploadMedia] result: \(result) / response: \(response)")
-            if result {
-                //get faces
-                DispatchQueue.main.async {
-                    LoadingIndicator.hideLoading()
-                    self?.getFacesFromServer()
-                }
-            } else {
-                LoadingIndicator.hideLoading()
-                DispatchQueue.main.async {
-                    self?.dismiss(animated: true, completion: {
-                        uploadVC.showErrorAlert()
-                    })
-                }
-            }
-        })
-    }
-    
-    //MARK: - Methods
-    private func getFacesFromServer() {
-        LoadingIndicator.showLoading()
-        HttpService.shared.getFaces(waitingTime: 5, completionHandler: { [weak self] (result, response) in
-            LoadingIndicator.hideLoading()
-            print("[getFaces] result: \(result) / response: \(response)")
-
-            if result {
-                let faceImages: [FaceImage] = response as? [FaceImage] ?? []
-                DispatchQueue.main.async {
-                    self?.moveToChooseFaceVC(faceImages: faceImages)
-                }
-            } else {
-                self?.showErrorAlert(action: { action in
-                    self?.dismiss(animated: true)
-                })
-            }
-        })
-    }
-    
-    private func moveToChooseFaceVC(faceImages: [FaceImage]) {
-        let chooseFaceVC = ChooseFaceViewController()
-        chooseFaceVC.faceImages = faceImages
-
-        chooseFaceVC.modalPresentationStyle = .fullScreen
-        chooseFaceVC.modalTransitionStyle = .crossDissolve
-
-        self.dismiss(animated: true, completion: { [weak self] in
-            self?.uploadVC?.navigationController?.pushViewController(chooseFaceVC, animated: true)
-        })
-    }
-    
-    private func getUploadViewController() -> UploadViewController? {
-        guard let tvc = self.presentingViewController as? UITabBarController,
-           let nvc = tvc.selectedViewController as? UINavigationController,
-           let uploadVC = nvc.topViewController as? UploadViewController else {
-            return nil
-        }
-        return uploadVC
-    }
-    
     private func animationLoadingTimer() {
         var count = 0
-        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            guard let self = self else { timer.invalidate(); return }
+            
             self.guideLabel.text = self.guideString + String(repeating: ".", count: count % 3)
             count += 1
         }

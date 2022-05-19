@@ -18,6 +18,7 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Properties
     var mediaFile: MediaFile?
+    var loadingVC: LoadingViewController!
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -50,17 +51,45 @@ class UploadViewController: BaseViewController {
     }
     
     @objc private func clickedUpload(sender: UIButton) {
-        let loadingVC = LoadingViewController()
+        guard let mediaFile = mediaFile else {
+            showErrorAlert(erorr: "잘못된 파일입니다. 다시 시도해 주세요.")
+            return
+        }
+
+        loadingVC = LoadingViewController()
         loadingVC.modalPresentationStyle = .fullScreen
         loadingVC.modalTransitionStyle = .crossDissolve
         
-        loadingVC.guideString = "얼굴을 찾는 중"
-        loadingVC.mediaFile = self.mediaFile
-        
+        loadingVC.guideString = "파일 업로드 중"
         self.present(loadingVC, animated: true)
+        
+        LoadingIndicator.showLoading()
+        HttpService.shared.deleteFiles(completionHandler: { [weak self] (result, response) in
+            guard let self = self else { return }
+            guard result else { self.errorResult(); return }
+            
+            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
+                guard let self = self else { return }
+                guard result else { self.errorResult(); return }
+                
+                self.loadingVC.guideString = "얼굴 찾는 중"
+                HttpService.shared.getFaces(waitingTime: 5, completionHandler: { [weak self] (result, response) in
+                    guard let self = self else { return }
+                    guard result, let faceResponse = response as? FaceResponse else {
+                        self.errorResult()
+                        return
+                    }
+                    
+                    LoadingIndicator.hideLoading()
+                    self.loadingVC.dismiss(animated: true)
+                    
+                    self.moveToSelectVC(faceImages: faceResponse.data ?? [])
+                })
+            })
+        })
     }
     
-    @objc private func clickedUploadView(sender: UIImageView) {        
+    @objc private func clickedUploadView(sender: UIImageView) {
         checkPermission() { isGranted in
             if isGranted {
                 self.present(self.imagePicker, animated: true)
@@ -71,6 +100,25 @@ class UploadViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    private func errorResult() {
+        DispatchQueue.main.async {
+            LoadingIndicator.hideLoading()
+            self.loadingVC.dismiss(animated: true) {
+                self.showErrorAlert()
+            }
+        }
+    }
+    
+    private func moveToSelectVC(faceImages: [FaceImage]) {
+        let selectVC = SelectViewController()
+        selectVC.faceImages = faceImages
+
+        selectVC.modalPresentationStyle = .fullScreen
+        selectVC.modalTransitionStyle = .crossDissolve
+
+        self.navigationController?.pushViewController(selectVC, animated: true)
+    }
+    
     private func moveToSetting() {
         let message = "사진 접근이 거부 되었습니다.\n설정에서 권한을 허용해 주세요."
         showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
@@ -85,6 +133,7 @@ class UploadViewController: BaseViewController {
     }
 }
 
+//MARK: - UIImagePickerControllerDelegate
 extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true) { [weak self] in
@@ -147,6 +196,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
     }
 }
 
+//MARK: - ImagePicker Permission
 extension UploadViewController {
     private func setupImagePicker() {
         imagePicker = UIImagePickerController()

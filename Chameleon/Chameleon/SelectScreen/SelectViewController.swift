@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseFaceViewController: BaseViewController {
+class SelectViewController: BaseViewController {
     
     //MARK: - Views
     private var faceCollectionView: UICollectionView!
@@ -25,7 +25,7 @@ class ChooseFaceViewController: BaseViewController {
         setupChooseFaceUI()
         
         if let faceCollectionView = faceCollectionView {
-            faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
+            faceCollectionView.register(SelectCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
             faceCollectionView.delegate = self
             faceCollectionView.dataSource = self
         }
@@ -107,7 +107,7 @@ class ChooseFaceViewController: BaseViewController {
     }
 }
 
-extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
+extension SelectViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let interval: CGFloat = 10
         let count = floor(UIScreen.main.bounds.width / 120)
@@ -124,14 +124,14 @@ extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SelectViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return faceImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
+        let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! SelectCell
         
         cell.setupImage(url: faceImages[indexPath.row].url)
         
@@ -139,7 +139,7 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+        if let cell = collectionView.cellForItem(at: indexPath) as? SelectCell {
             cell.setSelectedStyle()
             selectedIndex.append(indexPath.row)
             
@@ -148,7 +148,7 @@ extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
+        if let cell = collectionView.cellForItem(at: indexPath) as? SelectCell {
             cell.setDeselectedStyle()
             if let removeItem = selectedIndex.firstIndex(of: indexPath.row) {
                 selectedIndex.remove(at: removeItem)
