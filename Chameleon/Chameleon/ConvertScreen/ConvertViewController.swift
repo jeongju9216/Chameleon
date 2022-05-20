@@ -58,9 +58,22 @@ class ConvertViewController: BaseViewController {
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
         if isDone {
-            let resultVC = ResultViewController()
-            resultVC.modalPresentationStyle = .fullScreen
-            self.navigationController?.pushViewController(resultVC, animated: true)
+            LoadingIndicator.showLoading()
+            HttpService.shared.downloadResultFile() { [weak self] (result, response) in
+                LoadingIndicator.hideLoading()
+                
+                guard let self = self else { return }
+                guard result, let response = response as? Response else { self.showErrorAlert(); return }
+                guard let resultURL = response.data else { self.showErrorAlert(); return }
+                
+                DispatchQueue.main.async {
+                    let resultVC = ResultViewController()
+                    resultVC.modalPresentationStyle = .fullScreen
+                    resultVC.resultImageURL = resultURL
+                    
+                    self.navigationController?.pushViewController(resultVC, animated: true)
+                }
+            }
         } else {
             self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
                 LoadingIndicator.showLoading()

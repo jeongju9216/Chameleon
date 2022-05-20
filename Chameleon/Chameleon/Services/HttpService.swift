@@ -79,7 +79,6 @@ class HttpService {
     }
     
     func getFaces(waitingTime: Int, completionHandler: @escaping (Bool, Any) -> Void) {
-            print("\(#fileID) \(#line)-line, \(#function)")
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
                 guard let self = self else { return }
                 
@@ -88,12 +87,12 @@ class HttpService {
                     
                     print("[getFaces] result: \(result) / response: \(response)")
 
-                    if result || self.retryCount == 3 {
+                    if result || self.retryCount == 30 {
                         self.retryCount = 0
                         completionHandler(result, response)
                     } else {
                         self.retryCount += 1
-                        self.getFaces(waitingTime: 3, completionHandler: completionHandler)
+                        self.getFaces(waitingTime: 2, completionHandler: completionHandler)
                     }
                 })
             }
@@ -166,11 +165,8 @@ class HttpService {
     
     //MARK: - Multipart
     func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { [weak self] (result, response) in
-            guard let self = self else { return }
-
+        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
             print("[uploadMedia] result: \(result) / response: \(response)")
-
             completionHandler(result, response)
         }
     }

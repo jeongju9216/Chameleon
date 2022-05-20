@@ -28,9 +28,11 @@ class SelectViewController: BaseViewController {
             faceCollectionView.register(SelectCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
             faceCollectionView.delegate = self
             faceCollectionView.dataSource = self
+            
+            convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
+        } else {
+            convertButton.isHidden = true
         }
-        
-        convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
     }
         
     //MARK: - Actions

@@ -58,6 +58,7 @@
 		9B1A112427F8322600E2CE08 /* ConvertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertViewController.swift; sourceTree = "<group>"; };
 		9B1A112627F837F700E2CE08 /* UploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadData.swift; sourceTree = "<group>"; };
 		9B1A112827F85D1300E2CE08 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		9B38B84D28362AD4003D7BBE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B4B8FA027E0B2390066C7E3 /* Chameleon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chameleon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 				9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */,
 				9B4B8FAC27E0B2390066C7E3 /* Assets.xcassets */,
 				9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */,
+				9B38B84D28362AD4003D7BBE /* Info.plist */,
 			);
 			path = Chameleon;
 			sourceTree = "<group>";

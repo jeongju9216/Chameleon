@@ -21,7 +21,7 @@ class ResultViewController: BaseViewController {
     
     //MARK: - Properties
     private let buttonSize: Int = 24
-    var resultImageURL: URL?
+    var resultImageURL: String = ""
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -68,10 +68,9 @@ class ResultViewController: BaseViewController {
         
         showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
             LoadingIndicator.showLoading()
-            
             HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
                 LoadingIndicator.hideLoading()
-                if result || true {
+                if result {
                     self?.goBackHome()
                 } else {
                     self?.showErrorAlert()
@@ -122,7 +121,8 @@ class ResultViewController: BaseViewController {
     }
     
     private func loadResultImage() {
-        if let url = URL(string: "https://picsum.photos/800") {
+//      URL(string: "https://picsum.photos/800")
+        if let url = URL(string: resultImageURL) {
             DispatchQueue.global().async { [weak self] in
                 if let data = try? Data(contentsOf: url) {
                     let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")

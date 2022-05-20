@@ -73,17 +73,19 @@ class UploadViewController: BaseViewController {
                 guard result else { self.errorResult(); return }
                 
                 self.loadingVC.guideString = "얼굴 찾는 중"
-                HttpService.shared.getFaces(waitingTime: 5, completionHandler: { [weak self] (result, response) in
+                HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
                     guard let self = self else { return }
                     guard result, let faceResponse = response as? FaceResponse else {
                         self.errorResult()
                         return
                     }
                     
-                    LoadingIndicator.hideLoading()
-                    self.loadingVC.dismiss(animated: true)
-                    
-                    self.moveToSelectVC(faceImages: faceResponse.data ?? [])
+                    DispatchQueue.main.async {
+                        LoadingIndicator.hideLoading()
+                        self.loadingVC.dismiss(animated: true)
+                        
+                        self.moveToSelectVC(faceImages: faceResponse.data ?? [])
+                    }
                 })
             })
         })
