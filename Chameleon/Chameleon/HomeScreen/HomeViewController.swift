@@ -27,6 +27,12 @@ class HomeViewController: BaseViewController {
         homeView.videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("\(#fileID) \(#line)-line, \(#function)")
+    }
+    
     override func loadView() {
         super.loadView()
         

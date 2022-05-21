@@ -35,6 +35,12 @@ class ResultViewController: BaseViewController {
         shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("\(#fileID) \(#line)-line, \(#function)")
+        HttpService.shared.deleteFiles(completionHandler: { _,_  in })
+    }
+    
     //MARK: - Actions
     @objc private func clickedSaveButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")

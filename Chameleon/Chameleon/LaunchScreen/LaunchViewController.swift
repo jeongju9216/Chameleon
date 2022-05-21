@@ -19,16 +19,18 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
-            if result {
-                self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")
-                self?.presentNextVC()
-            } else {
-                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
-                    self?.presentNextVC()
-                })
-            }
-        })
+        self.presentNextVC()
+        
+//        HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
+//            if result {
+//                self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")
+//                self?.presentNextVC()
+//            } else {
+//                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
+//                    self?.presentNextVC()
+//                })
+//            }
+//        })
     }
     
     override func loadView() {
