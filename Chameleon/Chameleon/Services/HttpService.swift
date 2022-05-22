@@ -87,12 +87,12 @@ class HttpService {
                     
                     print("[getFaces] result: \(result) / response: \(response)")
 
-                    if result || self.retryCount == 30 {
+                    if result || self.retryCount == 10 {
                         self.retryCount = 0
                         completionHandler(result, response)
                     } else {
                         self.retryCount += 1
-                        self.getFaces(waitingTime: 2, completionHandler: completionHandler)
+                        self.getFaces(waitingTime: 1, completionHandler: completionHandler)
                     }
                 })
             }
