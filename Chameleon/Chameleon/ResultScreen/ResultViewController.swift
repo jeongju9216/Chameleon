@@ -61,6 +61,10 @@ class ResultViewController: BaseViewController {
         }
         
         let shareVC = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
+        //ipad
+        shareVC.popoverPresentationController?.sourceView = sender
+        shareVC.popoverPresentationController?.sourceRect = sender.frame
+        
         present(shareVC, animated: true)
     }
     
@@ -108,7 +112,7 @@ class ResultViewController: BaseViewController {
         resultImageView.translatesAutoresizingMaskIntoConstraints = false
         
         resultImageView.backgroundColor = UIColor.backgroundColor
-        
+        resultImageView.contentMode = .scaleAspectFill
         resultImageView.clipsToBounds = true
         resultImageView.layer.borderColor = UIColor.edgeColor.cgColor
         resultImageView.layer.borderWidth = 2

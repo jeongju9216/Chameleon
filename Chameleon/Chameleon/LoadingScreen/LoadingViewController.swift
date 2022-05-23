@@ -95,7 +95,7 @@ class LoadingViewController: BaseViewController {
         topAnimationView.play()
         
         view.addSubview(topAnimationView)
-        topAnimationView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        topAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         topAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
         topAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         topAnimationView.topAnchor.constraint(equalTo: view.topAnchor, constant: -20).isActive = true
@@ -112,7 +112,7 @@ class LoadingViewController: BaseViewController {
         bottomAnimationView.play()
         
         view.addSubview(bottomAnimationView)
-        bottomAnimationView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        bottomAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         bottomAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
         bottomAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         bottomAnimationView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20).isActive = true
