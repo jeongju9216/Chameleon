@@ -49,7 +49,7 @@ final class LaunchView: UIView {
         animationView = .init(name: animationName)
         animationView.translatesAutoresizingMaskIntoConstraints = false
         
-        animationView.contentMode = .scaleAspectFill
+        animationView.contentMode = .scaleToFill
         animationView.loopMode = .loop
         animationView.animationSpeed = 1.2
         animationView.play()

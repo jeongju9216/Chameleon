@@ -88,7 +88,7 @@ class LoadingViewController: BaseViewController {
         
         topAnimationView.transform = .init(rotationAngle: .pi)
         
-        topAnimationView.contentMode = .scaleAspectFill
+        topAnimationView.contentMode = .scaleToFill
         topAnimationView.loopMode = .loop
         topAnimationView.animationSpeed = 0.5
         topAnimationView.backgroundBehavior = .pauseAndRestore
@@ -96,7 +96,7 @@ class LoadingViewController: BaseViewController {
         
         view.addSubview(topAnimationView)
         topAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        topAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        topAnimationView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         topAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         topAnimationView.topAnchor.constraint(equalTo: view.topAnchor, constant: -20).isActive = true
     }
@@ -105,7 +105,7 @@ class LoadingViewController: BaseViewController {
         bottomAnimationView = .init(name: animationName)
         bottomAnimationView.translatesAutoresizingMaskIntoConstraints = false
         
-        bottomAnimationView.contentMode = .scaleAspectFill
+        bottomAnimationView.contentMode = .scaleToFill
         bottomAnimationView.loopMode = .loop
         bottomAnimationView.animationSpeed = 1.2
         bottomAnimationView.backgroundBehavior = .pauseAndRestore
@@ -113,7 +113,7 @@ class LoadingViewController: BaseViewController {
         
         view.addSubview(bottomAnimationView)
         bottomAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        bottomAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        bottomAnimationView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         bottomAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         bottomAnimationView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20).isActive = true
     }
