@@ -35,12 +35,6 @@ class ResultViewController: BaseViewController {
         shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("\(#fileID) \(#line)-line, \(#function)")
-        HttpService.shared.deleteFiles(completionHandler: { _,_  in })
-    }
-    
     //MARK: - Actions
     @objc private func clickedSaveButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")
@@ -61,12 +55,13 @@ class ResultViewController: BaseViewController {
 
     @objc private func clickedShareButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")
-        
-        if let resultImage = resultImage {
-            let vc = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
-            vc.excludedActivityTypes = [.saveToCameraRoll]
-            present(vc, animated: true)
+        guard let resultImage = resultImage else {
+            print("resultImage is nil")
+            return
         }
+        
+        let shareVC = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
+        present(shareVC, animated: true)
     }
     
     @objc private func clickedDoneButton(sender: UIButton) {
@@ -136,6 +131,10 @@ class ResultViewController: BaseViewController {
                         self?.resultImage = image
                         self?.resultImageView.image = self?.resultImage
                     }
+                    
+                    HttpService.shared.deleteFiles(completionHandler: { _, _ in
+                        print("\(#fileID) \(#line)-line, \(#function)")
+                    })
                 }
             }
         }

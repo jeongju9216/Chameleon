@@ -26,7 +26,7 @@ class HttpService {
     var retryCount = 0
     
     private let okString = "ok"
-    private let serverIP: String = "http://118.91.7.160"
+    private let serverIP: String = "https://chameleon161718.xyz"
     private let authorizationHeaderKey = "authorization"
     private var authorization: String {
         if let savekey: String = UserDefaults.standard.string(forKey: "authorization") {
@@ -121,13 +121,14 @@ class HttpService {
 
             print("[sendUnconvertedFaces] result: \(result) / response: \(response)")
             
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
-            }
+            completionHandler(result, response)
+//            if result || self.retryCount == 3 {
+//                self.retryCount = 0
+//                completionHandler(result, response)
+//            } else {
+//                self.retryCount += 1
+//                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
+//            }
         })
     }
     

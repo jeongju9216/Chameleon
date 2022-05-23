@@ -19,6 +19,7 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        HttpService.shared.deleteFiles(completionHandler: { _,_ in })
         HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
             if result {
                 self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")

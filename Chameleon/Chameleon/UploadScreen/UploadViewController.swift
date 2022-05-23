@@ -23,8 +23,6 @@ class UploadViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        HttpService.shared.deleteFiles(completionHandler: { _,_  in })
         
         setupNavigationBar(title: "\(UploadData.shared.uploadType)")
 
@@ -95,10 +93,12 @@ class UploadViewController: BaseViewController {
     
     @objc private func clickedUploadView(sender: UIImageView) {
         checkPermission() { isGranted in
-            if isGranted {
-                self.present(self.imagePicker, animated: true)
-            } else {
-                self.moveToSetting()
+            DispatchQueue.main.async {
+                if isGranted {
+                    self.present(self.imagePicker, animated: true)
+                } else {
+                    self.moveToSetting()
+                }
             }
         }
     }
@@ -157,7 +157,7 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
         if let image = info[.originalImage] as? UIImage,
            let assetPath = info[.imageURL] as? URL {
             self.mediaFile = MediaFile(url: assetPath)
-            
+
             let imageData = (self.mediaFile?.extension == "png") ? image.pngData() : image.jpegData(compressionQuality: 1.0)
             if let imageData = imageData {
                 self.mediaFile?.data = imageData

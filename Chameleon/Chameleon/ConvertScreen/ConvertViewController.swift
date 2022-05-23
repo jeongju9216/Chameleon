@@ -21,7 +21,7 @@ class ConvertViewController: BaseViewController {
     var doneButton: UIButton!
     
     //MARK: - Properties
-    var isDone: Bool { Int(time * 100) == 100 }
+    var isDone: Bool { Int(time * 100) >= 100 }
     var time: Float = 0.0
     var timer: Timer?
     
@@ -37,24 +37,6 @@ class ConvertViewController: BaseViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationItem.hidesBackButton = true
-        if let tabitems = self.tabBarController?.tabBar.items {
-            tabitems[0].isEnabled = false
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.navigationItem.hidesBackButton = false
-        if let tabitems = self.tabBarController?.tabBar.items {
-            tabitems[0].isEnabled = true
-        }
-    }
-    
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
         if isDone {
@@ -63,8 +45,11 @@ class ConvertViewController: BaseViewController {
                 LoadingIndicator.hideLoading()
                 
                 guard let self = self else { return }
-                guard result, let response = response as? Response else { self.showErrorAlert(); return }
-                guard let resultURL = response.data else { self.showErrorAlert(); return }
+                guard result, let response = response as? Response,
+                      let resultURL = response.data else {
+                    self.errorEvent()
+                    return
+                }
                 
                 DispatchQueue.main.async {
                     let resultVC = ResultViewController()
@@ -91,15 +76,29 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Methods
     @objc private func progressConvert(sender: UIProgressView) {
-        time += 0.1
-
+        if time <= 0.2 {
+            time += (0.1 / 0.5)
+        } else if time <= 0.3 {
+            time += (0.1 / 1.5)
+        } else if time <= 0.5 {
+            time += (0.1 / 10)
+        } else if time <= 0.5 {
+            time += (0.1 / 5)
+        } else {
+            time += (0.1 / 0.5)
+        }
+        
         progressView.setProgress(time, animated: true)
-        progressLabel.text = "\(Int(time * 100))%"
+        progressLabel.text = "\(min(Int(time * 100), 100))%"
 
         if time >= 1.0 {
             timer?.invalidate()
             completeConvert()
         }
+    }
+    
+    private func errorEvent() {
+        self.showErrorAlert()
     }
     
     private func completeConvert() {

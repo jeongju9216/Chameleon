@@ -51,6 +51,7 @@ class HomeViewController: BaseViewController {
         
         let uploadVC = UploadViewController()
         uploadVC.modalPresentationStyle = .fullScreen
+        uploadVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     

@@ -15,6 +15,12 @@ class SelectCell: UICollectionViewCell {
     var checkImage: UIImage?
     var noneCheckImage: UIImage?
     
+    override var isSelected: Bool {
+        didSet {
+            setSelected(isSelected)
+        }
+    }
+    
     private let size = 28
     
     required init?(coder: NSCoder) {
@@ -30,6 +36,14 @@ class SelectCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
+    func setSelected(_ selected: Bool) {
+        if selected {
+            setSelectedStyle()
+        } else {
+            setDeselectedStyle()
+        }
+    }
+    
     func setSelectedStyle() {
         checkImageView.image = checkImage
         
@@ -61,7 +75,7 @@ class SelectCell: UICollectionViewCell {
         setupImages()
         setupCheckImageView()
         
-        setDeselectedStyle()
+        setSelectedStyle()
     }
 
     private func setupImages() {

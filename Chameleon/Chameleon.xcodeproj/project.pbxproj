@@ -534,6 +534,7 @@
 				DEVELOPMENT_TEAM = 5VPZU4RB4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "카멜레온";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -564,6 +565,7 @@
 				DEVELOPMENT_TEAM = 5VPZU4RB4D;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "카멜레온";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

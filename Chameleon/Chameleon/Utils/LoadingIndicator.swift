@@ -23,7 +23,7 @@ final class LoadingIndicator {
             let loadingIndicatorView: UIActivityIndicatorView
             loadingIndicatorView = UIActivityIndicatorView(style: .large)
             loadingIndicatorView.frame = presentedVC.view.frame //다른 UI가 눌리지 않도록
-            loadingIndicatorView.color = .white
+            loadingIndicatorView.color = .label
             presentedVC.view.addSubview(loadingIndicatorView)
 
             loadingIndicatorView.startAnimating()
