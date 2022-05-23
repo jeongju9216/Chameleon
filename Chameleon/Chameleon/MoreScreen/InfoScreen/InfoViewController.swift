@@ -110,8 +110,9 @@ class InfoViewController: BaseViewController {
             updateButton.isEnabled = false
         }
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(updateButton)
-        updateButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        updateButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         updateButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         updateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

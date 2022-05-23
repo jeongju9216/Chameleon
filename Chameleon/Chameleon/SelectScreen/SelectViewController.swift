@@ -117,8 +117,9 @@ class SelectViewController: BaseViewController {
         
         convertButton.applyMainButtonStyle(title: "변환하기")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(convertButton)
-        convertButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        convertButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         convertButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         convertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         convertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

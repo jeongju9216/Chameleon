@@ -76,14 +76,14 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Methods
     @objc private func progressConvert(sender: UIProgressView) {
-        if time <= 0.2 {
+        if time <= 0.1 {
             time += (0.1 / 0.5)
         } else if time <= 0.3 {
-            time += (0.1 / 1.5)
-        } else if time <= 0.5 {
-            time += (0.1 / 10)
-        } else if time <= 0.5 {
-            time += (0.1 / 5)
+            time += (0.1 / 1)
+        } else if time <= 0.6 {
+            time += (0.1 / 3)
+        } else if time <= 0.9 {
+            time += (0.1 / 1)
         } else {
             time += (0.1 / 0.5)
         }
@@ -192,8 +192,9 @@ class ConvertViewController: BaseViewController {
         progressView.progressTintColor = .mainColor
         progressView.progress = 0
         
+        let width = min(view.frame.width * 0.8, 500)
         progressStack.addArrangedSubview(progressView)
-        progressView.widthAnchor.constraint(equalTo: progressView.superview!.widthAnchor).isActive = true
+        progressView.widthAnchor.constraint(equalToConstant: width).isActive = true
         progressView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
@@ -203,8 +204,9 @@ class ConvertViewController: BaseViewController {
         
         doneButton.applyMainButtonStyle(title: "변환 중단")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(doneButton)
-        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

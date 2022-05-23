@@ -121,14 +121,13 @@ class HttpService {
 
             print("[sendUnconvertedFaces] result: \(result) / response: \(response)")
             
-            completionHandler(result, response)
-//            if result || self.retryCount == 3 {
-//                self.retryCount = 0
-//                completionHandler(result, response)
-//            } else {
-//                self.retryCount += 1
-//                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
-//            }
+            if result || self.retryCount == 3 {
+                self.retryCount = 0
+                completionHandler(result, response)
+            } else {
+                self.retryCount += 1
+                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
+            }
         })
     }
     

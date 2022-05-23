@@ -198,8 +198,9 @@ class ResultViewController: BaseViewController {
         
         doneButton.applyMainButtonStyle(title: "종료하기")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(doneButton)
-        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

@@ -144,8 +144,9 @@ final class UploadView: UIView {
         
         uploadButton.applyMainButtonStyle(title: "업로드")
         
+        let width = min(self.frame.width - 80, 800)
         self.addSubview(uploadButton)
-        uploadButton.widthAnchor.constraint(equalTo: self.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        uploadButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         uploadButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         uploadButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         uploadButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
