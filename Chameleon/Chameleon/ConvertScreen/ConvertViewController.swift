@@ -83,7 +83,7 @@ class ConvertViewController: BaseViewController {
     @objc private func progressConvert(sender: UIProgressView) {
         inTimer += 1
         if let _ = resultURL {
-            time += 10
+            time += Int.random(in: 10...20)
             
             if time > 100 {
                 timer?.invalidate()

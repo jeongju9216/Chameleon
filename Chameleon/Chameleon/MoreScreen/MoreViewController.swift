@@ -48,6 +48,10 @@ extension MoreViewController: UITableViewDelegate {
         case "도움말":
             let guideViewController = GuideViewController()
             self.present(guideViewController, animated: true)
+        case "개인정보처리방침":
+            if let url = URL(string: "https://raw.githubusercontent.com/fitness-houston/PersonalInformation/main/README.md")  {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
         default: break
         }
         

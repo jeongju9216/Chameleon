@@ -9,5 +9,6 @@ import Foundation
 
 class MoreData: NSObject {
     let menu: [(name: String, icon: String)] = [("애플리케이션 정보", "info.circle"),
-                                                 ("도움말", "questionmark.circle")]
+                                                 ("도움말", "questionmark.circle"),
+                                                ("개인정보처리방침", "link.circle")]
 }

@@ -16,12 +16,12 @@ class GuideViewController: BaseViewController {
     private var guideLabel: UILabel!
     
     //MARK: - Properties
-    private let titleText: String = "사진 속 얼굴을 세상에 존재하지 않는\n페이크 얼굴로 바꿔 보세요"
+    private let titleText: String = "카멜레온의 페이크 얼굴로\n타인의 초상권을 지켜주세요"
     private let guideText: String = "원하는 사진을 선택하세요.\n|\n" +
                                     "업로드 버튼을 누르세요.\n|\n" +
-                                    "변환할 얼굴을 선택하세요.\n|\n" +
+                                    "바꾸고 싶은 얼굴을 선택하세요.\n|\n" +
                                     "변환이 완료되면\n결과 보기 버튼을 눌러\n결과를 확인하세요.\n|\n" +
-                                    "사진을 저장하고\n다른 사람에게 공유하세요."
+                                    "결과를 저장하고\n다른 사람에게 공유하세요."
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -115,7 +115,7 @@ class GuideViewController: BaseViewController {
         style.alignment = .center
 
         let attributedString = NSMutableAttributedString(string: string, attributes: [.paragraphStyle: style])
-        let accentText: [String] = ["페이크 얼굴", "업로드", "결과 보기"]
+        let accentText: [String] = ["카멜레온", "페이크 얼굴", "업로드", "결과 보기"]
         for text in accentText {
             let range = (string as NSString).range(of: text)
             attributedString.addAttribute(.foregroundColor, value: UIColor.mainColor, range: range)

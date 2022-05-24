@@ -24,6 +24,7 @@ class UploadViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UploadData.shared.clearData()
         setupNavigationBar(title: "\(UploadData.shared.uploadType)")
 
         setupImagePicker()
