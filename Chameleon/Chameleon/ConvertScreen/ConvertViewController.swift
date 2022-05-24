@@ -21,8 +21,10 @@ class ConvertViewController: BaseViewController {
     var doneButton: UIButton!
     
     //MARK: - Properties
-    var isDone: Bool { Int(time * 100) >= 100 }
-    var time: Float = 0.0
+    var resultURL: String?
+    var isDone: Bool { time >= 100 }
+    var time: Int = 0
+    var inTimer: Int = 0
     var timer: Timer?
     
     //MARK: - Life Cycles
@@ -37,37 +39,28 @@ class ConvertViewController: BaseViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        timer?.invalidate()
+    }
+    
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
-        if isDone {
-            LoadingIndicator.showLoading()
-            HttpService.shared.downloadResultFile() { [weak self] (result, response) in
-                LoadingIndicator.hideLoading()
-                
-                guard let self = self else { return }
-                guard result, let response = response as? Response,
-                      let resultURL = response.data else {
-                    self.errorEvent()
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    let resultVC = ResultViewController()
-                    resultVC.modalPresentationStyle = .fullScreen
-                    resultVC.resultImageURL = resultURL
-                    
-                    self.navigationController?.pushViewController(resultVC, animated: true)
-                }
-            }
+        if let resultURL = resultURL {
+            let resultVC = ResultViewController()
+            resultVC.modalPresentationStyle = .fullScreen
+            resultVC.resultImageURL = resultURL
+            
+            self.navigationController?.pushViewController(resultVC, animated: true)
         } else {
-            self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
+            self.showTwoButtonAlert(message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
                 LoadingIndicator.showLoading()
                 HttpService.shared.cancelFiles(completionHandler: { [weak self] result, response in
                     LoadingIndicator.hideLoading()
-                    if result {
+                    
+                    DispatchQueue.main.async {
                         self?.navigationController?.popViewController(animated: true)
-                    } else {
-                        self?.showErrorAlert()
                     }
                 })
             })
@@ -75,26 +68,44 @@ class ConvertViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    private func downloadResult() {
+        HttpService.shared.downloadResultFile() { [weak self] (result, response) in
+            guard let self = self else { return }
+            guard result, let response = response as? Response,
+                  let resultURL = response.data else {
+                return
+            }
+            
+            self.resultURL = resultURL
+        }
+    }
+    
     @objc private func progressConvert(sender: UIProgressView) {
-        if time <= 0.1 {
-            time += (0.1 / 0.5)
-        } else if time <= 0.3 {
-            time += (0.1 / 1)
-        } else if time <= 0.6 {
-            time += (0.1 / 3)
-        } else if time <= 0.9 {
-            time += (0.1 / 1)
+        inTimer += 1
+        if let _ = resultURL {
+            time += 10
+            
+            if time > 100 {
+                timer?.invalidate()
+                completeConvert()
+            }
         } else {
-            time += (0.1 / 0.5)
+            if time < 10 {
+                time += Int.random(in: 1...3)
+            } else {
+                let timeStand = (time < 80 ? 2 : 5) * 10
+                
+                if inTimer % timeStand == 0 { //5초
+                    inTimer = 0
+                    time += Int.random(in: 1...5)
+                    time = min(time, 99)
+                    downloadResult()
+                }
+            }
         }
         
-        progressView.setProgress(time, animated: true)
-        progressLabel.text = "\(min(Int(time * 100), 100))%"
-
-        if time >= 1.0 {
-            timer?.invalidate()
-            completeConvert()
-        }
+        progressView.setProgress(Float(Double(time) / 100.0), animated: true)
+        progressLabel.text = "\(min(time, 100))%"
     }
     
     private func errorEvent() {

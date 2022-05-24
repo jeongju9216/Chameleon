@@ -19,7 +19,7 @@ class GuideViewController: BaseViewController {
     private let titleText: String = "사진 속 얼굴을 세상에 존재하지 않는\n페이크 얼굴로 바꿔 보세요"
     private let guideText: String = "원하는 사진을 선택하세요.\n|\n" +
                                     "업로드 버튼을 누르세요.\n|\n" +
-                                    "변환하지 않을 얼굴을 선택하세요.\n|\n" +
+                                    "변환할 얼굴을 선택하세요.\n|\n" +
                                     "변환이 완료되면\n결과 보기 버튼을 눌러\n결과를 확인하세요.\n|\n" +
                                     "사진을 저장하고\n다른 사람에게 공유하세요."
     

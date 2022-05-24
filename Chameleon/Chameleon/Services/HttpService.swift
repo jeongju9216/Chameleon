@@ -87,7 +87,7 @@ class HttpService {
                     
                     print("[getFaces] result: \(result) / response: \(response)")
 
-                    if result || self.retryCount == 10 {
+                    if result || self.retryCount == 15 {
                         self.retryCount = 0
                         completionHandler(result, response)
                     } else {
@@ -99,18 +99,9 @@ class HttpService {
         }
     
     func downloadResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/file/download", completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
+        requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
             print("[downloadResultFile] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.downloadResultFile(completionHandler: completionHandler)
-            }
+            completionHandler(result, response)
         })
     }
     
