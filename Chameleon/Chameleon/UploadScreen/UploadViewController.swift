@@ -73,7 +73,7 @@ class UploadViewController: BaseViewController {
                 guard result else { self.errorResult(); return }
                 
                 self.loadingVC.guideString = "얼굴 찾는 중"
-                HttpService.shared.getFaces(waitingTime: 1, completionHandler: { [weak self] (result, response) in
+                HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
                     guard let self = self else { return }
                     guard result, let faceResponse = response as? FaceResponse else {
                         self.errorResult()

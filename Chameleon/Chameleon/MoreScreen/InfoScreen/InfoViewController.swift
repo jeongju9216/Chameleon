@@ -23,6 +23,7 @@ class InfoViewController: BaseViewController {
         setupInfoView()
         
         closeButton.addTarget(self, action: #selector(clickedCloseButton(sender:)), for: .touchUpInside)
+        updateButton.addTarget(self, action: #selector(clickedUpdateButton(sender:)), for: .touchUpInside)
     }
     
     //MARK: - Actions
@@ -30,7 +31,21 @@ class InfoViewController: BaseViewController {
         self.dismiss(animated: true)
     }
     
+    @objc private func clickedUpdateButton(sender: UIButton) {
+        openAppStore()
+    }
+    
     //MARK: - Methods
+    private func openAppStore() {
+        let appStoreOpenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(BaseData.shared.appleID)"
+        guard let url = URL(string: appStoreOpenUrlString) else {
+            print("invalid app store url")
+            return
+        }
+        
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
     private func setupInfoView() {
         view.backgroundColor = .backgroundColor
         
