@@ -55,14 +55,7 @@ class ConvertViewController: BaseViewController {
             self.navigationController?.pushViewController(resultVC, animated: true)
         } else {
             self.showTwoButtonAlert(message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
-                LoadingIndicator.showLoading()
-                HttpService.shared.cancelFiles(completionHandler: { [weak self] result, response in
-                    LoadingIndicator.hideLoading()
-                    
-                    DispatchQueue.main.async {
-                        self?.navigationController?.popViewController(animated: true)
-                    }
-                })
+                self.navigationController?.popViewController(animated: true)
             })
         }
     }
