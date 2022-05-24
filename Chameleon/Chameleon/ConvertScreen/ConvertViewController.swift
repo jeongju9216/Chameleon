@@ -164,8 +164,9 @@ class ConvertViewController: BaseViewController {
         progressStack.alignment = .center
         progressStack.distribution = .fill
         
+        let width = min(view.frame.width * 0.6, 500)
         view.addSubview(progressStack)
-        progressStack.widthAnchor.constraint(equalToConstant: view.frame.width * 0.6).isActive = true
+        progressStack.widthAnchor.constraint(equalToConstant: width).isActive = true
         progressStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 20).isActive = true
     }
@@ -192,9 +193,8 @@ class ConvertViewController: BaseViewController {
         progressView.progressTintColor = .mainColor
         progressView.progress = 0
         
-        let width = min(view.frame.width * 0.8, 500)
         progressStack.addArrangedSubview(progressView)
-        progressView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        progressView.widthAnchor.constraint(equalTo: progressStack.widthAnchor).isActive = true
         progressView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
