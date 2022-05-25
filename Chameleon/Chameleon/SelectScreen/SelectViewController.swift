@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseFaceViewController: BaseViewController {
+class SelectViewController: BaseViewController {
     
     //MARK: - Views
     private var faceCollectionView: UICollectionView!
@@ -16,26 +16,44 @@ class ChooseFaceViewController: BaseViewController {
     private var convertButton: UIButton!
     
     //MARK: - Properties
-    var faceImages: [FaceImage] = []
-    var selectedIndex: [Int] = []
+    var faceImages: [UIImage?] = []
+    var selectedIndex: [Bool] = []
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupChooseFaceUI()
         
+        print("faceImages count: \(faceImages.count)")
+        
         if let faceCollectionView = faceCollectionView {
-            faceCollectionView.register(ChooseFaceCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
+            faceCollectionView.register(SelectCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
             faceCollectionView.delegate = self
             faceCollectionView.dataSource = self
+            
+            selectedIndex = Array(repeating: true, count: faceImages.count)
+            print("selectedIndex count: \(selectedIndex.count)")
+            for (i, _) in selectedIndex.enumerated() {
+                faceCollectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: .init())
+            }
+            
+            convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
+        } else {
+            convertButton.isHidden = true
         }
-        
-        convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
     }
         
     //MARK: - Actions
     @objc private func clickedCovertButton(sender: UIButton) {
-        let jsonData = ["faces": selectedIndex.sorted(), "mode": UploadData.shared.convertType] as [String : Any]
+        var indexArray: [String] = []
+        for (i, isSelected) in selectedIndex.enumerated() {
+            if isSelected {
+                indexArray.append(String(format: "%03d", i))
+            }
+        }
+        
+        print("indexArray: \(indexArray) / count: \(indexArray.count)")
+        let jsonData = ["faces": indexArray, "mode": UploadData.shared.convertType] as [String : Any]
         print("sendFaces jsonData: \(jsonData)")
         
         LoadingIndicator.showLoading()
@@ -56,7 +74,7 @@ class ChooseFaceViewController: BaseViewController {
     //MARK: - Setup
     private func setupChooseFaceUI() {
         view.backgroundColor = UIColor.backgroundColor
-        setupNavigationBar(title: "바꾸지 않을 얼굴 선택")
+        setupNavigationBar(title: "바꿀 얼굴 선택")
         
         if faceImages.isEmpty {
             setupEmptyGuideLabel()
@@ -99,15 +117,16 @@ class ChooseFaceViewController: BaseViewController {
         
         convertButton.applyMainButtonStyle(title: "변환하기")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(convertButton)
-        convertButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        convertButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         convertButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         convertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         convertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
     }
 }
 
-extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
+extension SelectViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let interval: CGFloat = 10
         let count = floor(UIScreen.main.bounds.width / 120)
@@ -124,37 +143,27 @@ extension ChooseFaceViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension ChooseFaceViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SelectViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return faceImages.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! ChooseFaceCell
+        let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! SelectCell
         
-        cell.setupImage(url: faceImages[indexPath.row].url)
+        cell.setupImage(faceImages[indexPath.row])
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
-            cell.setSelectedStyle()
-            selectedIndex.append(indexPath.row)
-            
-            print("select: \(indexPath.row) / selectedIndex: \(selectedIndex)")
-        }
+        selectedIndex[indexPath.row].toggle()
+        print("select: \(indexPath.row)")
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ChooseFaceCell {
-            cell.setDeselectedStyle()
-            if let removeItem = selectedIndex.firstIndex(of: indexPath.row) {
-                selectedIndex.remove(at: removeItem)
-            }
-            
-            print("deselect: \(indexPath.row) / selectedIndex: \(selectedIndex)")
-        }
+        selectedIndex[indexPath.row].toggle()
+        print("select: \(indexPath.row)")
     }
 }

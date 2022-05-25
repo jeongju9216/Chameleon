@@ -7,13 +7,19 @@
 
 import UIKit
 
-class ChooseFaceCell: UICollectionViewCell {
+class SelectCell: UICollectionViewCell {
     var imageView: UIImageView!
     var image: UIImage?
     
     var checkImageView: UIImageView!
     var checkImage: UIImage?
     var noneCheckImage: UIImage?
+    
+    override var isSelected: Bool {
+        didSet {
+            setSelected(isSelected)
+        }
+    }
     
     private let size = 28
     
@@ -30,6 +36,14 @@ class ChooseFaceCell: UICollectionViewCell {
     }
     
     //MARK: - Methods
+    func setSelected(_ selected: Bool) {
+        if selected {
+            setSelectedStyle()
+        } else {
+            setDeselectedStyle()
+        }
+    }
+    
     func setSelectedStyle() {
         checkImageView.image = checkImage
         
@@ -61,7 +75,7 @@ class ChooseFaceCell: UICollectionViewCell {
         setupImages()
         setupCheckImageView()
         
-        setDeselectedStyle()
+        setSelectedStyle()
     }
 
     private func setupImages() {
@@ -100,22 +114,7 @@ class ChooseFaceCell: UICollectionViewCell {
         imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
     }
     
-    func setupImage(url: String) {
-        if let url = URL(string: url) {
-            DispatchQueue.global().async { [weak self] in
-                if let data = try? Data(contentsOf: url) {
-                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
-                    DispatchQueue.main.async {
-                        self?.imageView.image = image
-                    }
-                }
-            }
-        } else {
-            imageView.image = UIImage(named: "ChameleonImage")
-        }
-    }
-    
-    func setupImage(image: UIImage) {
+    func setupImage(_ image: UIImage?) {
         imageView.image = image
     }
 }

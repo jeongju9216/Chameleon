@@ -9,7 +9,7 @@ import Foundation
 
 struct FaceImage: Codable {
     let url: String
-    let name: String
-    let gender: String
-    let percent: Int
+    let name: String?
+    let gender: String?
+    let percent: Int?
 }

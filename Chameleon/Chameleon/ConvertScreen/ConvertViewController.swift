@@ -21,8 +21,10 @@ class ConvertViewController: BaseViewController {
     var doneButton: UIButton!
     
     //MARK: - Properties
-    var isDone: Bool { Int(time * 100) == 100 }
-    var time: Float = 0.0
+    var resultURL: String?
+    var isDone: Bool { time >= 100 }
+    var time: Int = 0, firstStandTime: Int = 0
+    var inTimer: Int = 0
     var timer: Timer?
     
     //MARK: - Life Cycles
@@ -33,60 +35,76 @@ class ConvertViewController: BaseViewController {
         
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         
+        firstStandTime = Int.random(in: 20...40)
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         
-        self.navigationItem.hidesBackButton = true
-        if let tabitems = self.tabBarController?.tabBar.items {
-            tabitems[0].isEnabled = false
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.navigationItem.hidesBackButton = false
-        if let tabitems = self.tabBarController?.tabBar.items {
-            tabitems[0].isEnabled = true
-        }
+        timer?.invalidate()
     }
     
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
-        if isDone {
-            let conversionResultVC = ConversionResultViewController()
-            conversionResultVC.modalPresentationStyle = .fullScreen
-            self.navigationController?.pushViewController(conversionResultVC, animated: true)
+        if let resultURL = resultURL {
+            let resultVC = ResultViewController()
+            resultVC.modalPresentationStyle = .fullScreen
+            resultVC.resultImageURL = resultURL
+            
+            self.navigationController?.pushViewController(resultVC, animated: true)
         } else {
-            self.showTwoButtonAlert(title: "경고", message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
-                LoadingIndicator.showLoading()
-                HttpService.shared.cancelFiles(completionHandler: { [weak self] result, response in
-                    LoadingIndicator.hideLoading()
-                    if result {
-                        self?.navigationController?.popViewController(animated: true)
-                    } else {
-                        self?.showErrorAlert()
-                    }
-                })
+            self.showTwoButtonAlert(message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
+                self.navigationController?.popViewController(animated: true)
             })
         }
     }
     
     //MARK: - Methods
-    @objc private func progressConvert(sender: UIProgressView) {
-        time += 0.1
-
-        progressView.setProgress(time, animated: true)
-        progressLabel.text = "\(Int(time * 100))%"
-
-        if time >= 1.0 {
-            timer?.invalidate()
-            completeConvert()
+    private func downloadResult() {
+        HttpService.shared.downloadResultFile() { [weak self] (result, response) in
+            guard let self = self else { return }
+            guard result, let response = response as? Response,
+                  let resultURL = response.data else {
+                return
+            }
+            
+            self.resultURL = resultURL
         }
+    }
+    
+    @objc private func progressConvert(sender: UIProgressView) {
+        inTimer += 1
+        if let _ = resultURL {
+            time += Int.random(in: 10...20)
+            
+            if time > 100 {
+                timer?.invalidate()
+                completeConvert()
+            }
+        } else {
+            if time < firstStandTime {
+                time += Int.random(in: 5...10)
+            } else {
+                if inTimer % 10 == 0 { //5초
+                    time += Int.random(in: 1...3)
+                    time = min(time, 99)
+                }
+                
+                if inTimer % 50 == 0 {
+                    inTimer = 0
+                    downloadResult()
+                }
+            }
+        }
+        
+        progressView.setProgress(Float(Double(time) / 100.0), animated: true)
+        progressLabel.text = "\(min(time, 100))%"
+    }
+    
+    private func errorEvent() {
+        self.showErrorAlert()
     }
     
     private func completeConvert() {
@@ -152,8 +170,9 @@ class ConvertViewController: BaseViewController {
         progressStack.alignment = .center
         progressStack.distribution = .fill
         
+        let width = min(view.frame.width * 0.6, 500)
         view.addSubview(progressStack)
-        progressStack.widthAnchor.constraint(equalToConstant: view.frame.width * 0.6).isActive = true
+        progressStack.widthAnchor.constraint(equalToConstant: width).isActive = true
         progressStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 20).isActive = true
     }
@@ -181,7 +200,7 @@ class ConvertViewController: BaseViewController {
         progressView.progress = 0
         
         progressStack.addArrangedSubview(progressView)
-        progressView.widthAnchor.constraint(equalTo: progressView.superview!.widthAnchor).isActive = true
+        progressView.widthAnchor.constraint(equalTo: progressStack.widthAnchor).isActive = true
         progressView.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
@@ -191,8 +210,9 @@ class ConvertViewController: BaseViewController {
         
         doneButton.applyMainButtonStyle(title: "변환 중단")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(doneButton)
-        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

@@ -23,6 +23,7 @@ class InfoViewController: BaseViewController {
         setupInfoView()
         
         closeButton.addTarget(self, action: #selector(clickedCloseButton(sender:)), for: .touchUpInside)
+        updateButton.addTarget(self, action: #selector(clickedUpdateButton(sender:)), for: .touchUpInside)
     }
     
     //MARK: - Actions
@@ -30,7 +31,21 @@ class InfoViewController: BaseViewController {
         self.dismiss(animated: true)
     }
     
+    @objc private func clickedUpdateButton(sender: UIButton) {
+        openAppStore()
+    }
+    
     //MARK: - Methods
+    private func openAppStore() {
+        let appStoreOpenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(BaseData.shared.appleID)"
+        guard let url = URL(string: appStoreOpenUrlString) else {
+            print("invalid app store url")
+            return
+        }
+        
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
     private func setupInfoView() {
         view.backgroundColor = .backgroundColor
         
@@ -110,8 +125,9 @@ class InfoViewController: BaseViewController {
             updateButton.isEnabled = false
         }
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(updateButton)
-        updateButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        updateButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         updateButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         updateButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         updateButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

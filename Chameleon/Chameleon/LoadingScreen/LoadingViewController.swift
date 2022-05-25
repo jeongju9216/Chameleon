@@ -18,11 +18,9 @@ class LoadingViewController: BaseViewController {
     var bottomAnimationView: AnimationView!
     
     //MARK: - Properties
-    var uploadVC: UploadViewController?
-    var mediaFile: MediaFile?
     var guideString: String = ""
     var animationName = UITraitCollection.current.userInterfaceStyle == .light ? "bottomImage-Light" : "bottomImage-Dark"
-        
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,86 +28,11 @@ class LoadingViewController: BaseViewController {
         setupLoadingUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        uploadVC = getUploadViewController()
-        if let uploadVC = uploadVC {
-            guard let mediaFile = self.mediaFile else {
-                self.dismiss(animated: true) {
-                    uploadVC.showErrorAlert()
-                }
-                return
-            }
-            
-            LoadingIndicator.showLoading()
-
-            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                print("[uploadMedia] result: \(result) / response: \(response)")
-                if result {
-                    //get faces
-                    DispatchQueue.main.async {
-                        LoadingIndicator.hideLoading()
-                        self?.getFacesFromServer()
-                    }
-                    
-                } else {
-                    LoadingIndicator.hideLoading()
-                    DispatchQueue.main.async {
-                        self?.dismiss(animated: true, completion: {
-                            uploadVC.showErrorAlert()
-                        })
-                    }
-                }
-            })
-        } else {
-            print("uploadVC is nil")
-        }
-    }
-    
-    //MARK: - Methods
-    private func getFacesFromServer() {
-        HttpService.shared.getFaces(completionHandler: { [weak self] (result, response) in
-            LoadingIndicator.hideLoading()
-            print("[getFaces] result: \(result) / response: \(response)")
-
-            if result {
-                let faceImages: [FaceImage] = response as? [FaceImage] ?? []
-                DispatchQueue.main.async {
-                    self?.moveToChooseFaceVC(faceImages: faceImages)
-                }
-            } else {
-                self?.showErrorAlert(action: { action in
-                    self?.dismiss(animated: true)
-                })
-            }
-        })
-    }
-    
-    private func moveToChooseFaceVC(faceImages: [FaceImage]) {
-        let chooseFaceVC = ChooseFaceViewController()
-        chooseFaceVC.faceImages = faceImages
-
-        chooseFaceVC.modalPresentationStyle = .fullScreen
-        chooseFaceVC.modalTransitionStyle = .crossDissolve
-
-        self.dismiss(animated: true, completion: { [weak self] in
-            self?.uploadVC?.navigationController?.pushViewController(chooseFaceVC, animated: true)
-        })
-    }
-    
-    private func getUploadViewController() -> UploadViewController? {
-        guard let tvc = self.presentingViewController as? UITabBarController,
-           let nvc = tvc.selectedViewController as? UINavigationController,
-           let uploadVC = nvc.topViewController as? UploadViewController else {
-            return nil
-        }
-        return uploadVC
-    }
-    
     private func animationLoadingTimer() {
         var count = 0
-        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+            guard let self = self else { timer.invalidate(); return }
+            
             self.guideLabel.text = self.guideString + String(repeating: ".", count: count % 3)
             count += 1
         }
@@ -131,7 +54,7 @@ class LoadingViewController: BaseViewController {
         guideLabel.translatesAutoresizingMaskIntoConstraints = false
         
         guideLabel.text = guideString
-        guideLabel.font = UIFont.boldSystemFont(ofSize: 32)
+        guideLabel.font = UIFont.boldSystemFont(ofSize: 18)
         guideLabel.numberOfLines = 0
         
         animationLoadingTimer()
@@ -165,15 +88,15 @@ class LoadingViewController: BaseViewController {
         
         topAnimationView.transform = .init(rotationAngle: .pi)
         
-        topAnimationView.contentMode = .scaleAspectFill
+        topAnimationView.contentMode = .scaleToFill
         topAnimationView.loopMode = .loop
         topAnimationView.animationSpeed = 0.5
         topAnimationView.backgroundBehavior = .pauseAndRestore
         topAnimationView.play()
         
         view.addSubview(topAnimationView)
-        topAnimationView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        topAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        topAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        topAnimationView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         topAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         topAnimationView.topAnchor.constraint(equalTo: view.topAnchor, constant: -20).isActive = true
     }
@@ -182,15 +105,15 @@ class LoadingViewController: BaseViewController {
         bottomAnimationView = .init(name: animationName)
         bottomAnimationView.translatesAutoresizingMaskIntoConstraints = false
         
-        bottomAnimationView.contentMode = .scaleAspectFill
+        bottomAnimationView.contentMode = .scaleToFill
         bottomAnimationView.loopMode = .loop
         bottomAnimationView.animationSpeed = 1.2
         bottomAnimationView.backgroundBehavior = .pauseAndRestore
         bottomAnimationView.play()
         
         view.addSubview(bottomAnimationView)
-        bottomAnimationView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        bottomAnimationView.heightAnchor.constraint(equalToConstant: 130).isActive = true
+        bottomAnimationView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        bottomAnimationView.heightAnchor.constraint(equalToConstant: 150).isActive = true
         bottomAnimationView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         bottomAnimationView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20).isActive = true
     }

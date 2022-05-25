@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ConversionResultViewController: BaseViewController {
+class ResultViewController: BaseViewController {
     
     //MARK: - Views
     private var resultImageView: UIImageView!
@@ -21,7 +21,7 @@ class ConversionResultViewController: BaseViewController {
     
     //MARK: - Properties
     private let buttonSize: Int = 24
-    var resultImageURL: URL?
+    var resultImageURL: String = ""
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -55,23 +55,25 @@ class ConversionResultViewController: BaseViewController {
 
     @objc private func clickedShareButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")
-        
-        if let resultImage = resultImage {
-            let vc = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
-            vc.excludedActivityTypes = [.saveToCameraRoll]
-            present(vc, animated: true)
+        guard let resultImage = resultImage else {
+            print("resultImage is nil")
+            return
         }
+        
+        let shareVC = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
+        //ipad
+        shareVC.popoverPresentationController?.sourceView = sender
+        shareVC.popoverPresentationController?.sourceRect = sender.frame
+        
+        present(shareVC, animated: true)
     }
     
     @objc private func clickedDoneButton(sender: UIButton) {
         let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
         
         showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
-            LoadingIndicator.showLoading()
-            
             HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
-                LoadingIndicator.hideLoading()
-                if result || true {
+                if result {
                     self?.goBackHome()
                 } else {
                     self?.showErrorAlert()
@@ -108,7 +110,7 @@ class ConversionResultViewController: BaseViewController {
         resultImageView.translatesAutoresizingMaskIntoConstraints = false
         
         resultImageView.backgroundColor = UIColor.backgroundColor
-        
+        resultImageView.contentMode = .scaleAspectFill
         resultImageView.clipsToBounds = true
         resultImageView.layer.borderColor = UIColor.edgeColor.cgColor
         resultImageView.layer.borderWidth = 2
@@ -122,7 +124,8 @@ class ConversionResultViewController: BaseViewController {
     }
     
     private func loadResultImage() {
-        if let url = URL(string: "https://picsum.photos/800") {
+//      URL(string: "https://picsum.photos/800")
+        if let url = URL(string: resultImageURL) {
             DispatchQueue.global().async { [weak self] in
                 if let data = try? Data(contentsOf: url) {
                     let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
@@ -130,6 +133,10 @@ class ConversionResultViewController: BaseViewController {
                         self?.resultImage = image
                         self?.resultImageView.image = self?.resultImage
                     }
+                    
+                    HttpService.shared.deleteFiles(completionHandler: { _, _ in
+                        print("\(#fileID) \(#line)-line, \(#function)")
+                    })
                 }
             }
         }
@@ -189,8 +196,9 @@ class ConversionResultViewController: BaseViewController {
         
         doneButton.applyMainButtonStyle(title: "종료하기")
         
+        let width = min(view.frame.width - 80, 800)
         view.addSubview(doneButton)
-        doneButton.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -80).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: width).isActive = true
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true

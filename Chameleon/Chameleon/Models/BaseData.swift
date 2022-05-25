@@ -10,7 +10,7 @@ import Foundation
 final class BaseData {
     static var shared = BaseData()
     
-    let appleID = ""
+    let appleID = "1625706929"
     let bundleID = "com.jeong9216.Chameleon"
     
     var currentVersion = "0.0.1"

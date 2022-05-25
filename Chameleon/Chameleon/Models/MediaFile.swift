@@ -9,13 +9,23 @@ import Foundation
 import UIKit
 
 struct MediaFile {
-    let filename: String
-    let data: Data?
-    let type: String
+    let url: URL
+    var data: Data?
     
-    init(filename: String, data: Data, type: String) {
-        self.filename = filename
+    var urlString: String {
+        url.absoluteString.lowercased()
+    }
+    
+    var filename: String {
+        urlString.components(separatedBy: "/").last ?? "unknown"
+    }
+    
+    var `extension`: String {
+        urlString.components(separatedBy: ".").last ?? "unknown"
+    }
+    
+    init(url: URL, data: Data? = nil) {
+        self.url = url
         self.data = data
-        self.type = type
     }
 }
