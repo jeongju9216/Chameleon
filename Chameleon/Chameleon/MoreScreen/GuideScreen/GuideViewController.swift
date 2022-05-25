@@ -83,10 +83,8 @@ class GuideViewController: BaseViewController {
         titleLabel.numberOfLines = 0
         
         view.addSubview(titleLabel)
-        titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 0).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
     }
     
     private func setupGuideLabel() {
@@ -100,10 +98,9 @@ class GuideViewController: BaseViewController {
         guideLabel.lineBreakMode = .byCharWrapping
         
         view.addSubview(guideLabel)
-        guideLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         guideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 20).isActive = true
-        guideLabel.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -20).isActive = true
+        guideLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        
     }
     
     private func createAttributedString(string: String, fontSize: CGFloat, lineheight: Double) -> NSMutableAttributedString {
