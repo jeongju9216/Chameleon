@@ -72,9 +72,7 @@ class ResultViewController: BaseViewController {
         let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
         
         showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
-            LoadingIndicator.showLoading()
             HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
-                LoadingIndicator.hideLoading()
                 if result {
                     self?.goBackHome()
                 } else {

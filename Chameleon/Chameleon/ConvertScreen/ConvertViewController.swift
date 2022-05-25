@@ -83,12 +83,10 @@ class ConvertViewController: BaseViewController {
                 completeConvert()
             }
         } else {
-            if time < 10 {
-                time += Int.random(in: 1...3)
+            if time < 40 {
+                time += Int.random(in: 5...10)
             } else {
-                let timeStand = (time < 80 ? 2 : 5) * 10
-                
-                if inTimer % timeStand == 0 { //5초
+                if inTimer % 5 == 0 { //5초
                     inTimer = 0
                     time += Int.random(in: 1...5)
                     time = min(time, 99)
