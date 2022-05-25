@@ -23,7 +23,7 @@ class ConvertViewController: BaseViewController {
     //MARK: - Properties
     var resultURL: String?
     var isDone: Bool { time >= 100 }
-    var time: Int = 0
+    var time: Int = 0, firstStandTime: Int = 0
     var inTimer: Int = 0
     var timer: Timer?
     
@@ -35,6 +35,7 @@ class ConvertViewController: BaseViewController {
         
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         
+        firstStandTime = Int.random(in: 20...40)
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
@@ -83,13 +84,16 @@ class ConvertViewController: BaseViewController {
                 completeConvert()
             }
         } else {
-            if time < 40 {
+            if time < firstStandTime {
                 time += Int.random(in: 5...10)
             } else {
-                if inTimer % 5 == 0 { //5초
-                    inTimer = 0
-                    time += Int.random(in: 1...5)
+                if inTimer % 10 == 0 { //5초
+                    time += Int.random(in: 1...3)
                     time = min(time, 99)
+                }
+                
+                if inTimer % 50 == 0 {
+                    inTimer = 0
                     downloadResult()
                 }
             }

@@ -16,7 +16,7 @@ class SelectViewController: BaseViewController {
     private var convertButton: UIButton!
     
     //MARK: - Properties
-    var faceImages: [FaceImage] = []
+    var faceImages: [UIImage?] = []
     var selectedIndex: [Bool] = []
     
     //MARK: - Life Cycles
@@ -152,7 +152,7 @@ extension SelectViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! SelectCell
         
-        cell.setupImage(url: faceImages[indexPath.row].url)
+        cell.setupImage(faceImages[indexPath.row])
         
         return cell
     }

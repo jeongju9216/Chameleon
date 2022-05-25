@@ -81,11 +81,26 @@ class UploadViewController: BaseViewController {
                         return
                     }
                     
+                    let faceImages: [FaceImage] = faceResponse.data ?? []
+                    var faceImageList: [UIImage?] = []
+                    
+                    print("faceImages count: \(faceImages.count)")
+                    for faceImage in faceImages {
+                        if let url = URL(string: faceImage.url) {
+                            if let data = try? Data(contentsOf: url) {
+                                faceImageList.append(UIImage(data: data))
+                            }
+                        } else {
+                            faceImageList.append(nil)
+                        }
+                    }
+                    print("faceImageList count: \(faceImageList.count)")
+                    
                     DispatchQueue.main.async {
                         LoadingIndicator.hideLoading()
                         self.loadingVC.dismiss(animated: true)
                         
-                        self.moveToSelectVC(faceImages: faceResponse.data ?? [])
+                        self.moveToSelectVC(faceImages: faceImageList)
                     }
                 })
             })
@@ -116,7 +131,7 @@ class UploadViewController: BaseViewController {
         }
     }
     
-    private func moveToSelectVC(faceImages: [FaceImage]) {
+    private func moveToSelectVC(faceImages: [UIImage?]) {
         let selectVC = SelectViewController()
         selectVC.faceImages = faceImages
 
