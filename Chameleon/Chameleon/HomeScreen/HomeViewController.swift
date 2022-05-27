@@ -38,7 +38,7 @@ class HomeViewController: BaseViewController {
         super.viewDidAppear(animated)
 //        print("\(#fileID) \(#line)-line, \(#function)")
         
-        UIView.animate(withDuration: 0.5) { [weak self] in
+        UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else { return }
             (self.tabBarController as! CustomTabBarController).borderView.alpha = 0.5
         }
