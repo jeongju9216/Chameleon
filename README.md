@@ -12,10 +12,10 @@
 
 ## 스크린샷 📷
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/89075274/170611236-e5b34d9a-6080-4913-a3bf-9c4c969da2a5.png" width="220" />
-  <img src="https://user-images.githubusercontent.com/89075274/170611302-43abb61b-b4d0-4e45-aef7-cf7f9b851fb3.png" width="220" /> 
-  <img src="https://user-images.githubusercontent.com/89075274/170611354-59079c7c-72f9-4628-aaca-f0d9a4ef2b01.png" width="220" />
-  <img src="https://user-images.githubusercontent.com/89075274/170611377-e012d969-9b89-49c0-9a58-50300ecaad87.png" width="220" /> 
+  <img src="https://user-images.githubusercontent.com/89075274/170611236-e5b34d9a-6080-4913-a3bf-9c4c969da2a5.png" width="180" />
+  <img src="https://user-images.githubusercontent.com/89075274/170611302-43abb61b-b4d0-4e45-aef7-cf7f9b851fb3.png" width="180" /> 
+  <img src="https://user-images.githubusercontent.com/89075274/170611354-59079c7c-72f9-4628-aaca-f0d9a4ef2b01.png" width="180" />
+  <img src="https://user-images.githubusercontent.com/89075274/170611377-e012d969-9b89-49c0-9a58-50300ecaad87.png" width="180" /> 
 </p>
 
 ## 사용 기술 🚀
