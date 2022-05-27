@@ -535,8 +535,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "카멜레온";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범에서 선택한 사진을 이용해 얼굴을 변환할 수 있습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범에서 선택한 사진을 이용해 얼굴을 변환할 수 있습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -566,8 +566,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Chameleon/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "카멜레온";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범 사진 선택을 위한 권한 요청";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범 사진 선택을 위한 권한 요청";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앨범에서 선택한 사진을 이용해 얼굴을 변환할 수 있습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앨범에서 선택한 사진을 이용해 얼굴을 변환할 수 있습니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
