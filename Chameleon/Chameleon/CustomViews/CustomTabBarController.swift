@@ -17,6 +17,15 @@ class CustomTabBarController: UITabBarController {
         setupTabBar()
     }
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        object_setClass(self.tabBar, CustomTabBar.self)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     //MARK: - Methods
     private func initViewControllers() {
         let mainVC = UINavigationController(rootViewController: HomeViewController())
@@ -31,33 +40,62 @@ class CustomTabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        self.tabBar.clipsToBounds = true
+        tabBar.clipsToBounds = true
         
-        self.tabBar.tintColor = UIColor.mainColor
-        self.tabBar.backgroundColor = UIColor(named:"TabBarColor")
+        tabBar.tintColor = UIColor.mainColor
+        tabBar.backgroundColor = UIColor(named:"TabBarColor")
+
+        let tabBarHeight = tabBar.frame.height
+        tabBar.layer.cornerRadius = tabBarHeight * 0.41
+        tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        self.tabBar.layer.borderWidth = 3
-        self.tabBar.layer.borderColor = UIColor(named: "TabBarBorderColor")?.cgColor
+        let borderView = UIView()
+        borderView.translatesAutoresizingMaskIntoConstraints = false
         
-        self.tabBar.layer.cornerRadius = 20
-        self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        borderView.backgroundColor = UIColor(named: "TabBarBorderColor")
+        borderView.layer.cornerRadius = tabBarHeight * 0.41
+        borderView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+
+        view.addSubview(borderView)
+        borderView.widthAnchor.constraint(equalToConstant: tabBar.frame.width + 3).isActive = true
+        borderView.heightAnchor.constraint(equalToConstant: tabBarHeight).isActive = true
+        borderView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        borderView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13).isActive = true
+        
+        view.bringSubviewToFront(tabBar)
     }
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        object_setClass(self.tabBar, CustomTabBar.self)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     
     class CustomTabBar: UITabBar {
         override func sizeThatFits(_ size: CGSize) -> CGSize {
             var sizeThatFits = super.sizeThatFits(size)
             sizeThatFits.height = sizeThatFits.height + 10
             return sizeThatFits
+        }
+    }
+}
+
+extension CALayer {
+    func addBorder(_ edges: [UIRectEdge], color: UIColor, width: CGFloat) {
+        for edge in edges {
+            let border = CALayer()
+            switch edge {
+            case UIRectEdge.top:
+                border.frame = CGRect.init(x: 0, y: 0, width: frame.width, height: width)
+                break
+            case UIRectEdge.bottom:
+                border.frame = CGRect.init(x: 0, y: frame.height, width: frame.width, height: width)
+                break
+            case UIRectEdge.left:
+                border.frame = CGRect.init(x: 0, y: 0, width: width, height: frame.height + 10)
+                break
+            case UIRectEdge.right:
+                border.frame = CGRect.init(x: frame.width - width, y: 0, width: width, height: frame.height + 10)
+                break
+            default: break
+            }
+            
+            border.backgroundColor = color.cgColor;
+            self.addSublayer(border)
         }
     }
 }
