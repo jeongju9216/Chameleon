@@ -9,6 +9,9 @@ import UIKit
 
 class CustomTabBarController: UITabBarController {
     
+    //MARK: - Views
+    var borderView: UIView!
+    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,10 +52,11 @@ class CustomTabBarController: UITabBarController {
         tabBar.layer.cornerRadius = tabBarHeight * 0.41
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        let borderView = UIView()
+        borderView = UIView(frame: .zero)
         borderView.translatesAutoresizingMaskIntoConstraints = false
-        
+
         borderView.backgroundColor = UIColor(named: "TabBarBorderColor")
+        borderView.alpha = 0.5
         borderView.layer.cornerRadius = tabBarHeight * 0.41
         borderView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
@@ -70,32 +74,6 @@ class CustomTabBarController: UITabBarController {
             var sizeThatFits = super.sizeThatFits(size)
             sizeThatFits.height = sizeThatFits.height + 10
             return sizeThatFits
-        }
-    }
-}
-
-extension CALayer {
-    func addBorder(_ edges: [UIRectEdge], color: UIColor, width: CGFloat) {
-        for edge in edges {
-            let border = CALayer()
-            switch edge {
-            case UIRectEdge.top:
-                border.frame = CGRect.init(x: 0, y: 0, width: frame.width, height: width)
-                break
-            case UIRectEdge.bottom:
-                border.frame = CGRect.init(x: 0, y: frame.height, width: frame.width, height: width)
-                break
-            case UIRectEdge.left:
-                border.frame = CGRect.init(x: 0, y: 0, width: width, height: frame.height + 10)
-                break
-            case UIRectEdge.right:
-                border.frame = CGRect.init(x: frame.width - width, y: 0, width: width, height: frame.height + 10)
-                break
-            default: break
-            }
-            
-            border.backgroundColor = color.cgColor;
-            self.addSublayer(border)
         }
     }
 }

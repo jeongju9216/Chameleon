@@ -27,17 +27,21 @@ class HomeViewController: BaseViewController {
         homeView.videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        print("\(#fileID) \(#line)-line, \(#function)")
-    }
-    
     override func loadView() {
         super.loadView()
         
         homeView = HomeView(frame: self.view.frame)
         self.view = homeView
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        print("\(#fileID) \(#line)-line, \(#function)")
+        
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            guard let self = self else { return }
+            (self.tabBarController as! CustomTabBarController).borderView.alpha = 0.5
+        }
     }
     
     //MARK: - Actions
@@ -52,6 +56,7 @@ class HomeViewController: BaseViewController {
         let uploadVC = UploadViewController()
         uploadVC.modalPresentationStyle = .fullScreen
         uploadVC.hidesBottomBarWhenPushed = true
+        (tabBarController as! CustomTabBarController).borderView.alpha = 0
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     
