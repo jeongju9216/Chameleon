@@ -11,7 +11,6 @@ class ResultViewController: BaseViewController {
     
     //MARK: - Views
     private var resultImageView: UIImageView!
-    private var resultImage: UIImage?
     
     private var buttonStack: UIStackView!
     private var saveButton: UIButton!
@@ -21,6 +20,7 @@ class ResultViewController: BaseViewController {
     
     //MARK: - Properties
     private let buttonSize: Int = 24
+    var resultImage: UIImage?
     var resultImageURL: String = ""
     
     //MARK: - Life Cycles
@@ -117,29 +117,19 @@ class ResultViewController: BaseViewController {
         resultImageView.layer.cornerRadius = 20
         
         view.addSubview(resultImageView)
-        resultImageView.widthAnchor.constraint(equalToConstant: min(view.frame.width * 0.8, 600)).isActive = true
+        let width = min(view.frame.width * 0.8, 600)
+        resultImageView.widthAnchor.constraint(equalToConstant: width).isActive = true
         resultImageView.heightAnchor.constraint(equalTo: resultImageView.widthAnchor).isActive = true
         resultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        resultImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        if width < 600 {
+            resultImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
+        } else {
+            resultImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -120).isActive = true
+        }
     }
     
     private func loadResultImage() {
-//      URL(string: "https://picsum.photos/800")
-        if let url = URL(string: resultImageURL) {
-            DispatchQueue.global().async { [weak self] in
-                if let data = try? Data(contentsOf: url) {
-                    let image = UIImage(data: data) ?? UIImage(named: "ChameleonImage")
-                    DispatchQueue.main.async {
-                        self?.resultImage = image
-                        self?.resultImageView.image = self?.resultImage
-                    }
-                    
-                    HttpService.shared.deleteFiles(completionHandler: { _, _ in
-                        print("\(#fileID) \(#line)-line, \(#function)")
-                    })
-                }
-            }
-        }
+        self.resultImageView.image = self.resultImage
     }
     
     private func setupButtonStackView() {
