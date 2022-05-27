@@ -17,7 +17,6 @@
   <img src="https://user-images.githubusercontent.com/89075274/170611354-59079c7c-72f9-4628-aaca-f0d9a4ef2b01.png" width="220" />
   <img src="https://user-images.githubusercontent.com/89075274/170611377-e012d969-9b89-49c0-9a58-50300ecaad87.png" width="220" /> 
 </p>
-<br></br>
 
 ## 사용 기술 🚀
 - UIKit / Swift 5  
