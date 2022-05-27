@@ -22,6 +22,7 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Properties
     var resultURL: String?
+    var resultImage: UIImage?
     var isDone: Bool { time >= 100 }
     var time: Int = 0, firstStandTime: Int = 0
     var inTimer: Int = 0
@@ -35,7 +36,7 @@ class ConvertViewController: BaseViewController {
         
         doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
         
-        firstStandTime = Int.random(in: 20...40)
+        firstStandTime = Int.random(in: 10...20)
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(progressConvert(sender:)), userInfo: nil, repeats: true)
     }
@@ -48,10 +49,13 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
-        if let resultURL = resultURL {
+        if let resultURL = resultURL, let resultImage = resultImage {
+            HttpService.shared.deleteFiles(completionHandler: { _, _ in })
+            
             let resultVC = ResultViewController()
             resultVC.modalPresentationStyle = .fullScreen
             resultVC.resultImageURL = resultURL
+            resultVC.resultImage = resultImage
             
             self.navigationController?.pushViewController(resultVC, animated: true)
         } else {
@@ -66,17 +70,24 @@ class ConvertViewController: BaseViewController {
         HttpService.shared.downloadResultFile() { [weak self] (result, response) in
             guard let self = self else { return }
             guard result, let response = response as? Response,
-                  let resultURL = response.data else {
+                  let resultURL = response.data,
+                  let url = URL(string: resultURL) else {
+                return
+            }
+            
+            guard let data = try? Data(contentsOf: url),
+                  let resultImage = UIImage(data: data) else {
                 return
             }
             
             self.resultURL = resultURL
+            self.resultImage = resultImage
         }
     }
     
     @objc private func progressConvert(sender: UIProgressView) {
         inTimer += 1
-        if let _ = resultURL {
+        if let _ = resultURL, let _ = resultImage {
             time += Int.random(in: 10...20)
             
             if time > 100 {
@@ -85,7 +96,7 @@ class ConvertViewController: BaseViewController {
             }
         } else {
             if time < firstStandTime {
-                time += Int.random(in: 5...10)
+                time += Int.random(in: 3...5)
             } else {
                 if inTimer % 10 == 0 { //5초
                     time += Int.random(in: 1...3)
