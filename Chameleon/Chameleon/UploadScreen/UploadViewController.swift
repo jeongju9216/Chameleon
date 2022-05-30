@@ -174,7 +174,9 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
            let assetPath = info[.imageURL] as? URL {
             self.mediaFile = MediaFile(url: assetPath)
 
-            let imageData = (self.mediaFile?.extension == "png") ? image.pngData() : image.jpegData(compressionQuality: 1.0)
+            print("orientation: \(image.imageOrientation.rawValue)")
+            let newImage = image.upOrientationImage()
+            let imageData = (self.mediaFile?.extension == "png") ? newImage?.pngData() : newImage?.jpegData(compressionQuality: 1.0)
             if let imageData = imageData {
                 self.mediaFile?.data = imageData
                 self.uploadView.showThumbnail(image)
@@ -253,6 +255,21 @@ extension UploadViewController {
             completionHandler(true)
         default:
             completionHandler(false)
+        }
+    }
+}
+
+extension UIImage {
+    func upOrientationImage() -> UIImage? {
+        switch imageOrientation {
+        case .up:
+            return self
+        default:
+            UIGraphicsBeginImageContextWithOptions(size, false, scale)
+            draw(in: CGRect(origin: .zero, size: size))
+            let result = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return result
         }
     }
 }
