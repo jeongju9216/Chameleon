@@ -19,10 +19,11 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //버전을 서버에서 가져옴. 최신 버전, 강제 업데이트 버전
         HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
             if result {
                 self?.setupAppInfo(response: (response as! Response))
-                self?.presentNextVC()
+                self?.presentNextVC() //버전 세팅 후 홈으로 이동
             } else {
                 self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
                     self?.presentNextVC()
@@ -48,6 +49,7 @@ class LaunchViewController: BaseViewController {
     }
     
     private func presentNextVC() {
+        //디비 관리를 위해 접속하면 디비 이미지 폴더 삭제
         HttpService.shared.deleteFiles(completionHandler: { _,_ in })
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.LoadingTime) {

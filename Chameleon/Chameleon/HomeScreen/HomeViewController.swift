@@ -18,9 +18,10 @@ class HomeViewController: BaseViewController {
         
         setupNavigationBar(title: "")
         
-        if BaseData.shared.isNeedForcedUpdate {
+        if BaseData.shared.isNeedForcedUpdate { //강제 업데이트가 필요하면 Alert
             showForcedUpdateAlert()
         } else {
+            //홈 메뉴를 누르면 색이 변경되는 이벤트 등록
             homeView.photoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
             homeView.photoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
             homeView.photoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
@@ -40,8 +41,8 @@ class HomeViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        print("\(#fileID) \(#line)-line, \(#function)")
         
+        //홈탭 테두리 애니메이션
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else { return }
             (self.tabBarController as! CustomTabBarController).borderView.alpha = 0.5
@@ -57,10 +58,11 @@ class HomeViewController: BaseViewController {
         sender.touchUp()
         UploadData.shared.uploadType = (sender.name == "PHOTO") ? UploadType.Photo : UploadType.Video
         
+        //사진 업로드 화면으로 이동
         let uploadVC = UploadViewController()
         uploadVC.modalPresentationStyle = .fullScreen
-        uploadVC.hidesBottomBarWhenPushed = true
-        (tabBarController as! CustomTabBarController).borderView.alpha = 0
+        uploadVC.hidesBottomBarWhenPushed = true //탭바 숨기기
+        (tabBarController as! CustomTabBarController).borderView.alpha = 0 //탭바 테두리 안 보이기
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     

@@ -24,9 +24,11 @@ class UploadViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UploadData.shared.clearData()
+        UploadData.shared.clearData() //화면 처음 진입하면 공유 데이터 초기화
         setupNavigationBar(title: "\(UploadData.shared.uploadType)")
 
+        //ImagePicker 설정 -> PHPicker는 비디오 썸네일을 얻는 작업이 안 되서 ImagePicker로 작업함
+        //todo: 비디오 변환 기획 드랍 시 PHPicker로 리팩토링
         setupImagePicker()
         
         uploadView.uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
@@ -57,6 +59,7 @@ class UploadViewController: BaseViewController {
             return
         }
 
+        //로딩 View 보이기
         loadingVC = LoadingViewController()
         loadingVC.modalPresentationStyle = .fullScreen
         loadingVC.modalTransitionStyle = .crossDissolve
@@ -64,16 +67,21 @@ class UploadViewController: BaseViewController {
         loadingVC.guideString = "파일 업로드 중"
         self.present(loadingVC, animated: true)
         
+        //터치 방지
         LoadingIndicator.showLoading()
+        //디비에서 이미지 삭제를 한 후 업로드 진행
         HttpService.shared.deleteFiles(completionHandler: { [weak self] (result, response) in
             guard let self = self else { return }
             guard result else { self.errorResult(); return }
             
+            //이미지 파일 업로드
             HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
                 guard let self = self else { return }
                 guard result else { self.errorResult(); return }
                 
+                //업로드가 완료되면 classifier 실행
                 self.loadingVC.guideString = "얼굴 찾는 중"
+                //3초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
                 HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
                     guard let self = self else { return }
                     guard result, let faceResponse = response as? FaceResponse else {
@@ -81,10 +89,12 @@ class UploadViewController: BaseViewController {
                         return
                     }
                     
+                    //서버에서 얻은 얼굴 데이터
                     let faceImages: [FaceImage] = faceResponse.data ?? []
-                    var faceImageList: [UIImage?] = []
-                    
                     print("faceImages count: \(faceImages.count)")
+                    
+                    //얼굴 데이터를 UIImage로 변경하고 다음 화면으로 이동함
+                    var faceImageList: [UIImage?] = []
                     for faceImage in faceImages {
                         if let url = URL(string: faceImage.url) {
                             if let data = try? Data(contentsOf: url) {
@@ -96,6 +106,7 @@ class UploadViewController: BaseViewController {
                     }
                     print("faceImageList count: \(faceImageList.count)")
                     
+                    //얼굴 이미지를 로딩 완료했다면 Select VC로 이동
                     DispatchQueue.main.async {
                         LoadingIndicator.hideLoading()
                         self.loadingVC.dismiss(animated: true)
@@ -121,6 +132,7 @@ class UploadViewController: BaseViewController {
     
     //MARK: - Methods
     private func errorResult() {
+        //업로드 후 에러가 발생하면 업로드한 파일 수정
         HttpService.shared.deleteFiles(completionHandler: { _,_  in })
         
         DispatchQueue.main.async {
@@ -133,7 +145,7 @@ class UploadViewController: BaseViewController {
     
     private func moveToSelectVC(faceImages: [UIImage?]) {
         let selectVC = SelectViewController()
-        selectVC.faceImages = faceImages
+        selectVC.faceImages = faceImages //얼굴 이미지를 넘김
 
         selectVC.modalPresentationStyle = .fullScreen
         selectVC.modalTransitionStyle = .crossDissolve
