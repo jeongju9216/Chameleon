@@ -49,15 +49,31 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Actions
     @objc private func clickedDoneButton(sender: UIButton) {
-        if let resultURL = resultURL, let resultImage = resultImage {
-            HttpService.shared.deleteFiles(completionHandler: { _, _ in })
+        if let resultURL = resultURL {
+            LoadingIndicator.showLoading()
             
-            let resultVC = ResultViewController()
-            resultVC.modalPresentationStyle = .fullScreen
-            resultVC.resultImageURL = resultURL
-            resultVC.resultImage = resultImage
-            
-            self.navigationController?.pushViewController(resultVC, animated: true)
+            DispatchQueue.global().async {
+                guard let url = URL(string: resultURL),
+                      let data = try? Data(contentsOf: url),
+                      let resultImage = UIImage(data: data) else {
+                    LoadingIndicator.hideLoading()
+                    self.showErrorAlert()
+                    return
+                }
+                
+                HttpService.shared.deleteFiles(completionHandler: { _, _ in })
+
+                DispatchQueue.main.async {
+                    LoadingIndicator.hideLoading()
+                    
+                    let resultVC = ResultViewController()
+                    resultVC.modalPresentationStyle = .fullScreen
+                    resultVC.resultImageURL = resultURL
+                    resultVC.resultImage = resultImage
+                    
+                    self.navigationController?.pushViewController(resultVC, animated: true)
+                }
+            }
         } else {
             self.showTwoButtonAlert(message: "얼굴 변환을 중단하시겠습니까?", defaultButtonTitle: "중단하기", cancelButtonTitle: "이어하기", defaultAction: { _ in
                 self.navigationController?.popViewController(animated: true)
@@ -70,24 +86,17 @@ class ConvertViewController: BaseViewController {
         HttpService.shared.downloadResultFile() { [weak self] (result, response) in
             guard let self = self else { return }
             guard result, let response = response as? Response,
-                  let resultURL = response.data,
-                  let url = URL(string: resultURL) else {
-                return
-            }
-            
-            guard let data = try? Data(contentsOf: url),
-                  let resultImage = UIImage(data: data) else {
+                  let resultURL = response.data else {
                 return
             }
             
             self.resultURL = resultURL
-            self.resultImage = resultImage
         }
     }
     
     @objc private func progressConvert(sender: UIProgressView) {
         inTimer += 1
-        if let _ = resultURL, let _ = resultImage {
+        if let _ = resultURL {
             time += Int.random(in: 10...20)
             
             if time > 100 {
