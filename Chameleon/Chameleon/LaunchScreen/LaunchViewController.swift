@@ -19,10 +19,9 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        HttpService.shared.deleteFiles(completionHandler: { _,_ in })
         HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
             if result {
-                self?.setupAppInfo(lastetVersion: (response as! Response).message ?? "0.0.0")
+                self?.setupAppInfo(response: (response as! Response))
                 self?.presentNextVC()
             } else {
                 self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
@@ -40,14 +39,17 @@ class LaunchViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setupAppInfo(lastetVersion: String) {
+    private func setupAppInfo(response: Response) {
         BaseData.shared.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-        BaseData.shared.lastetVersion = lastetVersion
+        BaseData.shared.lastetVersion = response.message ?? "0.0.0"
+        BaseData.shared.forcedUpdateVersion = response.data ?? "0.0.0"
 
-        print("currentVersion: \(BaseData.shared.currentVersion) / lastetVersion: \(BaseData.shared.lastetVersion)")
+        print("currentVersion: \(BaseData.shared.currentVersion) / lastetVersion: \(BaseData.shared.lastetVersion) / forcedUpdateVersion: \(BaseData.shared.forcedUpdateVersion)")
     }
     
     private func presentNextVC() {
+        HttpService.shared.deleteFiles(completionHandler: { _,_ in })
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.LoadingTime) {
             let vc: UIViewController = CustomTabBarController()
             vc.modalPresentationStyle = .fullScreen

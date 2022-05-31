@@ -15,16 +15,27 @@ final class BaseData {
     
     var currentVersion = "0.0.1"
     var lastetVersion = "0.0.1"
+    var forcedUpdateVersion = "0.0.1"
     
     var isNeedUpdate: Bool {
         get {
-            let compareResult = currentVersion.compare(lastetVersion, options: .numeric)
-            switch compareResult {
-            case .orderedAscending:
-                return true
-            case .orderedDescending, .orderedSame:
-                return false
-            }
+            compareVersion(crruent: currentVersion, compare: lastetVersion)
+        }
+    }
+    
+    var isNeedForcedUpdate: Bool {
+        get {
+            compareVersion(crruent: currentVersion, compare: forcedUpdateVersion)
+        }
+    }
+    
+    private func compareVersion(crruent: String, compare: String) -> Bool {
+        let compareResult = crruent.compare(compare, options: .numeric)
+        switch compareResult {
+        case .orderedAscending:
+            return true
+        case .orderedDescending, .orderedSame:
+            return false
         }
     }
 }
