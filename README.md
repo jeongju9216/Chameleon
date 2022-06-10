@@ -11,7 +11,11 @@
 <br></br>
 
 ## 개발 일지 ✏️
-작성 예정
+0. 출시 기념 앱 소개  
+https://jeong9216.tistory.com/420  
+
+1. 개발 중 집중한 점  
+https://jeong9216.tistory.com/421
 <br></br>
 
 ## 스크린샷 📷
