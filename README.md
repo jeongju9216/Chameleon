@@ -15,6 +15,9 @@ https://jeong9216.tistory.com/420
 
 1. 개발 중 집중한 점  
 https://jeong9216.tistory.com/421
+
+2. UI/UX 디자인과 UI 개발  
+https://jeong9216.tistory.com/424
 <br></br>
 
 ## 스크린샷 📷
