@@ -6,11 +6,15 @@
 <img width="500" alt="스크린샷 2022-05-27 오전 11 08 18" src="https://user-images.githubusercontent.com/89075274/170614481-879f7f10-6a02-45e2-bee5-e9e16f0c12c9.png">
 
 ["카멜레온: 페이크 얼굴로 초상권을 보호하세요" 앱 스토어로 이동하기](https://apps.apple.com/kr/app/%EC%B9%B4%EB%A9%9C%EB%A0%88%EC%98%A8-%ED%8E%98%EC%9D%B4%ED%81%AC-%EC%96%BC%EA%B5%B4%EB%A1%9C-%EC%B4%88%EC%83%81%EA%B6%8C%EC%9D%84-%EB%B3%B4%ED%98%B8%ED%95%98%EC%84%B8%EC%9A%94/id1625706929)  
-앱스토어에 "카멜레온 페이크"를 검색!
+앱스토어에 "카멜레온 페이크"를 검색!  
 <br></br>
 
 ## 개발 일지 ✏️
-작성 예정
+0. 출시 기념 앱 소개  
+https://jeong9216.tistory.com/420  
+
+1. 개발 중 집중한 점  
+https://jeong9216.tistory.com/421
 <br></br>
 
 ## 스크린샷 📷
