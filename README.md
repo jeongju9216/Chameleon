@@ -18,6 +18,9 @@ https://jeong9216.tistory.com/421
 
 2. UI/UX 디자인과 UI 개발  
 https://jeong9216.tistory.com/424
+
+3. UICollectionView와 UICollectionViewCell  
+https://jeong9216.tistory.com/428
 <br></br>
 
 ## 스크린샷 📷
