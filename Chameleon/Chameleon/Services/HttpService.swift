@@ -44,7 +44,6 @@ class HttpService {
         return UUID().uuidString + "-" + DateUtils.getCurrentDateTime()
     }
     
-    
     //MARK: - GET
     func getVersion(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/version", completionHandler: { [weak self] (result, response) in
@@ -295,78 +294,9 @@ extension HttpService {
             completionHandler(output.result == self.okString, output)
         }.resume()
     }
-
-    func requestMultipartForm(url: String, params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        print("[requestMultipartForm 2] url: \(url)")
-        guard let url = URL(string: url) else {
-            print("Error: cannot create URL")
-            completionHandler(false, "Error: JSON Data Parsing failed")
-            
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
-        request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
-        
-        let data = createBody(params: params)
-        
-        print("request: \(request)")
-        URLSession.shared.uploadTask(with: request, from: data) { (data, response, error) in
-            guard error == nil else {
-                print("Error: error calling Post -> \(error!)")
-                completionHandler(false, "Error: error calling Post -> \(error!)")
-                
-                return
-            }
-            
-            guard let data = data else {
-                print("Error: Did not receive data")
-                completionHandler(false, "Error: Did not receive data")
-                
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                print("Error: HTTP request failed")
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-                
-                return
-            }
-
-            guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
-                print("Error: JSON Data Parsing failed")
-                completionHandler(false, "Error: JSON Data Parsing failed")
-                
-                return
-            }
-            
-            completionHandler(output.result == self.okString, output)
-        }.resume()
-    }
-
 }
 
 extension HttpService {
-    private func createBody(params: [String: Any]) -> Data {
-        let boundaryPrefix = "--\(authorization)\r\n".data(using: .utf8)!
-        let endBoundary = "--\(authorization)--\r\n".data(using: .utf8)!
-        let lineBreak = "\r\n"
-        
-        var body = Data()
-        
-        for (key, value) in params {
-            body.append(boundaryPrefix)
-            body.append("Content-Disposition: form-data; name=\"\(key)\"\(lineBreak + lineBreak)".data(using: .utf8)!)
-            body.append("\(value)\r\n".data(using: .utf8)!)
-        }
-        
-        body.append(endBoundary)
-
-        return body
-    }
-    
     private func createUploadBody(params: [String: Any], media: MediaFile) -> Data {
         let lineBreak = "\r\n"
         let boundaryPrefix = "--\(authorization)\(lineBreak)".data(using: .utf8)!
