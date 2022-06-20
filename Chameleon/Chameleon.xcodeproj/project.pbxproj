@@ -24,6 +24,7 @@
 		9B4B8FB027E0B2390066C7E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B4B8FAE27E0B2390066C7E3 /* LaunchScreen.storyboard */; };
 		9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4EF40627F56A730099CE05 /* HttpService.swift */; };
 		9B4EF40B27F5A1BA0099CE05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */; };
+		9B69AA1828588F94005DB825 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B69AA1728588F94005DB825 /* InfoView.swift */; };
 		9B8587CE283365E2008910E2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8587CD283365E2008910E2 /* HomeView.swift */; };
 		9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C0782828E7840038396E /* LoadingIndicator.swift */; };
 		9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C07E282A29B70038396E /* InfoViewController.swift */; };
@@ -67,6 +68,7 @@
 		9B4B8FAF27E0B2390066C7E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B4EF40627F56A730099CE05 /* HttpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpService.swift; sourceTree = "<group>"; };
 		9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9B69AA1728588F94005DB825 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		9B8587CD283365E2008910E2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9BC9C0782828E7840038396E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9BC9C07E282A29B70038396E /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				9BC9C07E282A29B70038396E /* InfoViewController.swift */,
+				9B69AA1728588F94005DB825 /* InfoView.swift */,
 			);
 			path = InfoScreen;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B8587CE283365E2008910E2 /* HomeView.swift in Sources */,
+				9B69AA1828588F94005DB825 /* InfoView.swift in Sources */,
 				9BEA5D7A2833B9E40050C7E0 /* LaunchView.swift in Sources */,
 				9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */,
 				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,

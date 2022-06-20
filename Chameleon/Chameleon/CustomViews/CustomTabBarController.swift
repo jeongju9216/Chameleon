@@ -48,25 +48,28 @@ class CustomTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.mainColor
         tabBar.backgroundColor = UIColor(named:"TabBarColor")
 
-        let tabBarHeight = tabBar.frame.height
-        tabBar.layer.cornerRadius = tabBarHeight * 0.41
+        tabBar.layer.cornerRadius = tabBar.frame.height * 0.41
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
+        setupBorderView()
+        
+        view.bringSubviewToFront(tabBar)
+    }
+    
+    private func setupBorderView() {
         borderView = UIView(frame: .zero)
         borderView.translatesAutoresizingMaskIntoConstraints = false
 
         borderView.backgroundColor = UIColor(named: "TabBarBorderColor")
         borderView.alpha = 0.5
-        borderView.layer.cornerRadius = tabBarHeight * 0.41
+        borderView.layer.cornerRadius = tabBar.frame.height * 0.41
         borderView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         view.addSubview(borderView)
         borderView.widthAnchor.constraint(equalToConstant: tabBar.frame.width + 3).isActive = true
-        borderView.heightAnchor.constraint(equalToConstant: tabBarHeight).isActive = true
+        borderView.heightAnchor.constraint(equalToConstant: tabBar.frame.height).isActive = true
         borderView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         borderView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -13).isActive = true
-        
-        view.bringSubviewToFront(tabBar)
     }
     
     class CustomTabBar: UITabBar {

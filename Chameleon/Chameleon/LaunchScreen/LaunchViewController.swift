@@ -20,7 +20,7 @@ class LaunchViewController: BaseViewController {
         super.viewDidLoad()
         
         //버전을 서버에서 가져옴. 최신 버전, 강제 업데이트 버전
-        HttpService.shared.loadVersion(completionHandler: { [weak self] (result, response) in
+        HttpService.shared.getVersion(completionHandler: { [weak self] (result, response) in
             if result {
                 self?.setupAppInfo(response: (response as! Response))
                 self?.presentNextVC() //버전 세팅 후 홈으로 이동

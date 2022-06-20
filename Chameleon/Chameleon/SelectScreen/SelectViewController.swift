@@ -57,7 +57,7 @@ class SelectViewController: BaseViewController {
         print("sendFaces jsonData: \(jsonData)")
         
         LoadingIndicator.showLoading()
-        HttpService.shared.sendUnconvertedFaces(params: jsonData) { [weak self] (result, response) in
+        HttpService.shared.sendCheckedFaces(params: jsonData) { [weak self] (result, response) in
             LoadingIndicator.hideLoading()
             if result {
                 DispatchQueue.main.async {
