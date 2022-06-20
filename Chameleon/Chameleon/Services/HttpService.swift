@@ -46,34 +46,18 @@ class HttpService {
     
     
     //MARK: - GET
-    func loadVersion(completionHandler: @escaping (Bool, Any) -> Void) {
+    func getVersion(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/version", completionHandler: { [weak self] (result, response) in
             guard let self = self else { return }
 
-            print("[loadVersion] result: \(result) / response: \(response)")
+            print("[getVersion] result: \(result) / response: \(response)")
 
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
                 self.retryCount += 1
-                self.loadVersion(completionHandler: completionHandler)
-            }
-        })
-    }
-    
-    func checkConnectedServer(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/server-test", completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[checkConnectedServer] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.checkConnectedServer(completionHandler: completionHandler)
+                self.getVersion(completionHandler: completionHandler)
             }
         })
     }
@@ -98,26 +82,26 @@ class HttpService {
             }
         }
     
-    func downloadResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
+    func getResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
-            print("[downloadResultFile] result: \(result) / response: \(response)")
+            print("[getResultFile] result: \(result) / response: \(response)")
             completionHandler(result, response)
         })
     }
     
     //MARK: - Post
-    func sendUnconvertedFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+    func sendCheckedFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
         requestPost(url: serverIP + "/faces", param: params, completionHandler: { [weak self] (result, response) in
             guard let self = self else { return }
 
-            print("[sendUnconvertedFaces] result: \(result) / response: \(response)")
+            print("[sendCheckedFaces] result: \(result) / response: \(response)")
             
             if result || self.retryCount == 3 {
                 self.retryCount = 0
                 completionHandler(result, response)
             } else {
                 self.retryCount += 1
-                self.sendUnconvertedFaces(params: params, completionHandler: completionHandler)
+                self.sendCheckedFaces(params: params, completionHandler: completionHandler)
             }
         })
     }

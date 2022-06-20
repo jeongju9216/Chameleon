@@ -83,7 +83,7 @@ class ConvertViewController: BaseViewController {
     
     //MARK: - Methods
     private func downloadResult() {
-        HttpService.shared.downloadResultFile() { [weak self] (result, response) in
+        HttpService.shared.getResultFile() { [weak self] (result, response) in
             guard let self = self else { return }
             guard result, let response = response as? Response,
                   let resultURL = response.data else {
