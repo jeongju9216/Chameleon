@@ -10,29 +10,30 @@ import UIKit
 class ResultViewController: BaseViewController {
     
     //MARK: - Views
-    private var resultImageView: UIImageView!
-    
-    private var buttonStack: UIStackView!
-    private var saveButton: UIButton!
-    private var shareButton: UIButton!
-    
-    private var doneButton: UIButton!
+    private var resultView: ResultView!
     
     //MARK: - Properties
-    private let buttonSize: Int = 24
     var resultImage: UIImage?
     var resultImageURL: String = ""
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupConversionResultUI()
+        setupNavigationBar(title: "\(UploadData.shared.uploadTypeString) 변환 결과")
+        navigationItem.hidesBackButton = true
+
         loadResultImage()
 
-        doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(clickedSaveButton(sender:)), for: .touchUpInside)
-        shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
+        resultView.doneButton.addTarget(self, action: #selector(clickedDoneButton(sender:)), for: .touchUpInside)
+        resultView.saveButton.addTarget(self, action: #selector(clickedSaveButton(sender:)), for: .touchUpInside)
+        resultView.shareButton.addTarget(self, action: #selector(clickedShareButton(sender:)), for: .touchUpInside)
+    }
+    
+    override func loadView() {
+        super.loadView()
+        
+        resultView = ResultView(frame: self.view.frame)
+        self.view = resultView
     }
     
     //MARK: - Actions
@@ -89,108 +90,7 @@ class ResultViewController: BaseViewController {
         }
     }
     
-    //MARK: - Setup
-    private func setupConversionResultUI() {
-        setupNavigationBar(title: "\(UploadData.shared.uploadTypeString) 변환 결과")
-        navigationItem.hidesBackButton = true
-        
-        view.backgroundColor = .backgroundColor
-        
-        setupResultView()
-        
-        setupButtonStackView()
-        setupSaveButton()
-        setupShareButton()
-        
-        setupDoneButton()
-    }
-    
-    private func setupResultView() {
-        resultImageView = UIImageView()
-        resultImageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        resultImageView.backgroundColor = UIColor.backgroundColor
-        resultImageView.contentMode = .scaleAspectFill
-        resultImageView.clipsToBounds = true
-        resultImageView.layer.borderColor = UIColor.edgeColor.cgColor
-        resultImageView.layer.borderWidth = 2
-        resultImageView.layer.cornerRadius = 20
-        
-        view.addSubview(resultImageView)
-        let width = min(view.frame.width * 0.8, 600)
-        resultImageView.widthAnchor.constraint(equalToConstant: width).isActive = true
-        resultImageView.heightAnchor.constraint(equalTo: resultImageView.widthAnchor).isActive = true
-        resultImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        if width < 600 {
-            resultImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
-        } else {
-            resultImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -120).isActive = true
-        }
-    }
-    
     private func loadResultImage() {
-        self.resultImageView.image = self.resultImage
-    }
-    
-    private func setupButtonStackView() {
-        buttonStack = UIStackView()
-        buttonStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        buttonStack.axis = .horizontal
-        buttonStack.spacing = 20
-        buttonStack.distribution = .fillEqually
-        buttonStack.alignment = .center
-        
-        view.addSubview(buttonStack)
-        buttonStack.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        buttonStack.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        buttonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        buttonStack.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 20).isActive = true
-    }
-    
-    private func setupSaveButton() {
-        saveButton = UIButton(type: .custom)
-        saveButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        saveButton.setTitle("저장하기", for: .normal)
-        saveButton.setTitleColor(.label, for: .normal)
-        saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: CGFloat(buttonSize))
-        saveButton.setImage(UIImage(systemName: "arrow.down.to.line", withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        saveButton.tintColor = .mainColor
-        saveButton.alignTextBelow()
-        
-        buttonStack.addArrangedSubview(saveButton)
-    }
-    
-    private func setupShareButton() {
-        shareButton = UIButton(type: .custom)
-        shareButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        shareButton.setTitle("공유하기", for: .normal)
-        shareButton.setTitleColor(.label, for: .normal)
-        shareButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: CGFloat(buttonSize))
-        shareButton.setImage(UIImage(systemName: "paperplane.fill", withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        shareButton.tintColor = .mainColor
-        shareButton.alignTextBelow()
-        
-        buttonStack.addArrangedSubview(shareButton)
-    }
-    
-    private func setupDoneButton() {
-        doneButton = UIButton()
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        doneButton.applyMainButtonStyle(title: "종료하기")
-        
-        let width = min(view.frame.width - 80, 800)
-        view.addSubview(doneButton)
-        doneButton.widthAnchor.constraint(equalToConstant: width).isActive = true
-        doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        doneButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        doneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        resultView.resultImageView.image = self.resultImage
     }
 }
