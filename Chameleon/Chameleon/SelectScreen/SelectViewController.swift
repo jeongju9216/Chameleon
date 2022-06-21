@@ -10,10 +10,7 @@ import UIKit
 class SelectViewController: BaseViewController {
     
     //MARK: - Views
-    private var faceCollectionView: UICollectionView!
-    private var emptyGuideLabel: UILabel!
-    
-    private var convertButton: UIButton!
+    private var selectView: SelectView!
     
     //MARK: - Properties
     var faceImages: [UIImage?] = []
@@ -22,11 +19,11 @@ class SelectViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupChooseFaceUI()
-        
+        setupNavigationBar(title: "바꿀 얼굴 선택")
+
         print("faceImages count: \(faceImages.count)")
         
-        if let faceCollectionView = faceCollectionView {
+        if let faceCollectionView = selectView.faceCollectionView {
             faceCollectionView.register(SelectCell.classForCoder(), forCellWithReuseIdentifier: "faceCellIdentifier")
             faceCollectionView.delegate = self
             faceCollectionView.dataSource = self
@@ -37,10 +34,18 @@ class SelectViewController: BaseViewController {
                 faceCollectionView.selectItem(at: IndexPath(row: i, section: 0), animated: false, scrollPosition: .init())
             }
             
-            convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
+            selectView.convertButton.addTarget(self, action: #selector(clickedCovertButton(sender:)), for: .touchUpInside)
         } else {
-            convertButton.isHidden = true
+            selectView.convertButton.isHidden = true
         }
+    }
+    
+    override func loadView() {
+        super.loadView()
+        
+        selectView = SelectView(frame: self.view.frame, isFacesEmpty: faceImages.isEmpty)
+        
+        self.view = selectView
     }
         
     //MARK: - Actions
@@ -70,60 +75,6 @@ class SelectViewController: BaseViewController {
             }
         }
     }
-    
-    //MARK: - Setup
-    private func setupChooseFaceUI() {
-        view.backgroundColor = UIColor.backgroundColor
-        setupNavigationBar(title: "바꿀 얼굴 선택")
-        
-        if faceImages.isEmpty {
-            setupEmptyGuideLabel()
-        } else {
-            setupFaceCollectionView()
-        }
-        
-        setupConvertButton()
-    }
-    
-    private func setupEmptyGuideLabel() {
-        emptyGuideLabel = UILabel()
-        emptyGuideLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        emptyGuideLabel.text = "얼굴을 찾을 수 없습니다."
-        emptyGuideLabel.numberOfLines = 0
-        
-        view.addSubview(emptyGuideLabel)
-        emptyGuideLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emptyGuideLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
-    }
-    
-    private func setupFaceCollectionView() {
-        faceCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout.init())
-        faceCollectionView.translatesAutoresizingMaskIntoConstraints = false
-        
-        faceCollectionView.backgroundColor = .backgroundColor
-        faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 80, right: 10)
-        faceCollectionView.showsVerticalScrollIndicator = false
-        faceCollectionView.allowsMultipleSelection = true
-        
-        view.addSubview(faceCollectionView)
-        faceCollectionView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        faceCollectionView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-    }
-    
-    private func setupConvertButton() {
-        convertButton = UIButton()
-        convertButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        convertButton.applyMainButtonStyle(title: "변환하기")
-        
-        let width = min(view.frame.width - 80, 800)
-        view.addSubview(convertButton)
-        convertButton.widthAnchor.constraint(equalToConstant: width).isActive = true
-        convertButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        convertButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        convertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-    }
 }
 
 extension SelectViewController: UICollectionViewDelegateFlowLayout {
@@ -150,7 +101,7 @@ extension SelectViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! SelectCell
+        let cell = selectView.faceCollectionView.dequeueReusableCell(withReuseIdentifier: "faceCellIdentifier", for: indexPath) as! SelectCell
         
         cell.setupImage(faceImages[indexPath.row])
         
