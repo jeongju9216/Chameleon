@@ -27,6 +27,7 @@
 		9B69AA1828588F94005DB825 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B69AA1728588F94005DB825 /* InfoView.swift */; };
 		9B7D67B52861F5D20094C304 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B42861F5D20094C304 /* SelectView.swift */; };
 		9B7D67B72861FEAB0094C304 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B62861FEAB0094C304 /* ResultView.swift */; };
+		9B7D67B9286203D10094C304 /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B8286203D10094C304 /* ConvertView.swift */; };
 		9B8587CE283365E2008910E2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8587CD283365E2008910E2 /* HomeView.swift */; };
 		9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C0782828E7840038396E /* LoadingIndicator.swift */; };
 		9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C07E282A29B70038396E /* InfoViewController.swift */; };
@@ -73,6 +74,7 @@
 		9B69AA1728588F94005DB825 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		9B7D67B42861F5D20094C304 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
 		9B7D67B62861FEAB0094C304 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		9B7D67B8286203D10094C304 /* ConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertView.swift; sourceTree = "<group>"; };
 		9B8587CD283365E2008910E2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9BC9C0782828E7840038396E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9BC9C07E282A29B70038396E /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 			isa = PBXGroup;
 			children = (
 				9B1A112427F8322600E2CE08 /* ConvertViewController.swift */,
+				9B7D67B8286203D10094C304 /* ConvertView.swift */,
 			);
 			path = ConvertScreen;
 			sourceTree = "<group>";
@@ -402,6 +405,7 @@
 				9BF442D027F2E04700537C60 /* LaunchViewController.swift in Sources */,
 				9B1A112527F8322600E2CE08 /* ConvertViewController.swift in Sources */,
 				9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */,
+				9B7D67B9286203D10094C304 /* ConvertView.swift in Sources */,
 				9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */,
 				9BEE34C327F537EC003CA46C /* SelectCell.swift in Sources */,
 				9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */,
