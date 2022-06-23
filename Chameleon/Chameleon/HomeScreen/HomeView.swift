@@ -39,11 +39,11 @@ final class HomeView: UIView {
     private func setup() {
         self.backgroundColor = UIColor.backgroundColor
         
-        setupTabbarBorder()
         setupButtonStack()
         setupPhotoButton()
         setupVideoButton()
-        
+        setupTabbarBorder()
+
         videoButton.isHidden = true //영상 속도 개선하면 show
     }
     
