@@ -35,18 +35,10 @@ class HomeViewController: BaseViewController {
     override func loadView() {
         super.loadView()
         
-        homeView = HomeView(frame: self.view.frame)
+        homeView = HomeView(frame: self.view.frame,
+                            tabbarHeight: self.tabBarController!.tabBar.frame.size.height,
+                            tabbarPadding: self.tabBarController!.tabBar.safeAreaInsets.bottom)
         self.view = homeView
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        //홈탭 테두리 애니메이션
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            (self.tabBarController as! CustomTabBarController).borderView.alpha = 0.5
-        }
     }
     
     //MARK: - Actions
@@ -62,7 +54,6 @@ class HomeViewController: BaseViewController {
         let uploadVC = UploadViewController()
         uploadVC.modalPresentationStyle = .fullScreen
         uploadVC.hidesBottomBarWhenPushed = true //탭바 숨기기
-        (tabBarController as! CustomTabBarController).borderView.alpha = 0 //탭바 테두리 안 보이기
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     
