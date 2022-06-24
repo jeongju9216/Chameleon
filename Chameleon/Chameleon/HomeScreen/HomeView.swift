@@ -42,7 +42,7 @@ final class HomeView: UIView {
         setupButtonStack()
         setupPhotoButton()
         setupVideoButton()
-//        setupTabbarBorder()
+        setupTabbarBorder()
 
         videoButton.isHidden = true //영상 속도 개선하면 show
     }
@@ -53,14 +53,14 @@ final class HomeView: UIView {
 
         tabbarBorderView.backgroundColor = UIColor(named: "TabBarBorderColor")
         tabbarBorderView.alpha = 0.5
-        tabbarBorderView.layer.cornerRadius = (tabbarHeight - tabbarPadding - 10) * 0.41
+        tabbarBorderView.layer.cornerRadius = (tabbarHeight - tabbarPadding) * 0.30
         tabbarBorderView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         self.addSubview(tabbarBorderView)
         tabbarBorderView.widthAnchor.constraint(equalToConstant: self.frame.width + 3).isActive = true
-        tabbarBorderView.heightAnchor.constraint(equalToConstant: tabbarHeight - 10).isActive = true
+        tabbarBorderView.heightAnchor.constraint(equalToConstant: tabbarHeight).isActive = true
         tabbarBorderView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        tabbarBorderView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -13).isActive = true
+        tabbarBorderView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -3).isActive = true
     }
     
     private func setupButtonStack() {

@@ -46,7 +46,7 @@ class CustomTabBarController: UITabBarController {
         tabBar.tintColor = UIColor.mainColor
         tabBar.backgroundColor = UIColor(named:"TabBarColor")
 
-        tabBar.layer.cornerRadius = tabBar.frame.height * 0.41
+        tabBar.layer.cornerRadius = (tabBar.frame.height + 10) * 0.30
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
