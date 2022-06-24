@@ -42,7 +42,7 @@ final class HomeView: UIView {
         setupButtonStack()
         setupPhotoButton()
         setupVideoButton()
-        setupTabbarBorder()
+//        setupTabbarBorder()
 
         videoButton.isHidden = true //영상 속도 개선하면 show
     }

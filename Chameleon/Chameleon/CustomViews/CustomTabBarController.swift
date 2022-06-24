@@ -26,7 +26,7 @@ class CustomTabBarController: UITabBarController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
     
     //MARK: - Methods
@@ -42,18 +42,12 @@ class CustomTabBarController: UITabBarController {
         self.viewControllers = [mainVC, moreVC]
     }
     
-    private func setupTabBar() {
-        tabBar.clipsToBounds = true
-        
+    private func setupTabBar() {        
         tabBar.tintColor = UIColor.mainColor
         tabBar.backgroundColor = UIColor(named:"TabBarColor")
 
         tabBar.layer.cornerRadius = tabBar.frame.height * 0.41
-        print("tabBar.frame.height: \(tabBar.frame.height)")
-
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                
-        view.bringSubviewToFront(tabBar)
     }
     
     class CustomTabBar: UITabBar {
