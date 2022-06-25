@@ -30,7 +30,11 @@ class BaseViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
     }
     
-    //1개 버튼 Alert
+    /*
+     1개 버튼 Alert.
+     doneButton은 doneAction 이름의 UIAlertAction을 인자로 전달 받아 동작한다.
+     doneAction이 nil인 경우 Alert가 dismiss 된다.
+    */
     func showOneButtonAlert(title: String = "알림", message: String, buttonTitle: String = "확인",
                             action: ((UIAlertAction) -> Void)? = nil) {
         DispatchQueue.main.async {
@@ -43,7 +47,13 @@ class BaseViewController: UIViewController {
         }
     }
     
-    //2개 버튼 Alert
+    /*
+     2개 버튼 Alert.
+     doneButton은 defaultAction 이름의 UIAlertAction을 인자로 전달 받아 동작한다.
+     defaultAction이 nil인 경우 Alert가 dismiss 된다.
+     cancelButton은 cancelAction을 인자로 전달 받아 동작한다.
+     cancelAction이 nil인 경우 Alert가 dismiss 된다.
+    */
     func showTwoButtonAlert(title: String = "알림", message: String,
                             defaultButtonTitle: String = "확인", cancelButtonTitle: String = "취소",
                             defaultAction: ((UIAlertAction) -> Void)? = nil, cancelAction: ((UIAlertAction) -> Void)? = nil) {
@@ -60,7 +70,12 @@ class BaseViewController: UIViewController {
         }
     }
     
-    //error Alert
+    /*
+     error 발생시 Alert.
+     에러가 발생했다는 기본 메시지를 가진 one button Alert이다.
+     doneButton은 action 이름의 UIAlertAction을 인자로 전달 받아 동작한다.
+     action이 nil인 경우 Alert가 dismiss 된다.
+    */
     func showErrorAlert(erorr: String = "에러가 발생했습니다.\n다시 시도해 주세요.",
                         action: ((UIAlertAction) -> Void)? = nil) {
         DispatchQueue.main.async {
