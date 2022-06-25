@@ -13,7 +13,7 @@ class LaunchViewController: BaseViewController {
     var launchView: LaunchView!
 
     //MARK: - Properties
-    private var LoadingTime: Double = 2
+    private var loadingTime: Double = 2 //런치 스크린 보여주는 시간
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -36,14 +36,15 @@ class LaunchViewController: BaseViewController {
         super.loadView()
         
         launchView = LaunchView(frame: self.view.frame)
+
         self.view = launchView
     }
     
     //MARK: - Methods
     private func setupAppInfo(response: Response) {
         BaseData.shared.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-        BaseData.shared.lastetVersion = response.message ?? "0.0.0"
-        BaseData.shared.forcedUpdateVersion = response.data ?? "0.0.0"
+        BaseData.shared.lastetVersion = response.message ?? "0.0.1"
+        BaseData.shared.forcedUpdateVersion = response.data ?? "0.0.1"
 
         print("currentVersion: \(BaseData.shared.currentVersion) / lastetVersion: \(BaseData.shared.lastetVersion) / forcedUpdateVersion: \(BaseData.shared.forcedUpdateVersion)")
     }
@@ -52,9 +53,11 @@ class LaunchViewController: BaseViewController {
         //디비 관리를 위해 접속하면 디비 이미지 폴더 삭제
         HttpService.shared.deleteFiles(completionHandler: { _,_ in })
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.LoadingTime) {
+        //loadingTime 뒤에 화면 이동
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.loadingTime) {
             let vc: UIViewController = CustomTabBarController()
             vc.modalPresentationStyle = .fullScreen
+            
             self.present(vc, animated: false, completion: nil)
         }
     }

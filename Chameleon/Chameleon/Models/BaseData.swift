@@ -13,17 +13,17 @@ final class BaseData {
     let appleID = "1625706929"
     let bundleID = "com.jeong9216.Chameleon"
     
-    var currentVersion = "0.0.1"
-    var lastetVersion = "0.0.1"
-    var forcedUpdateVersion = "0.0.1"
+    var currentVersion = "0.0.1" //현재버전
+    var lastetVersion = "0.0.1" //최신버전
+    var forcedUpdateVersion = "0.0.1" //강제 업데이트 버전
     
-    var isNeedUpdate: Bool {
+    var isNeedUpdate: Bool { //업데이트가 필요한가?
         get {
             compareVersion(curruent: currentVersion, compare: lastetVersion)
         }
     }
     
-    var isNeedForcedUpdate: Bool {
+    var isNeedForcedUpdate: Bool { //강제 업데이트가 필요한가?
         get {
             compareVersion(curruent: currentVersion, compare: forcedUpdateVersion)
         }

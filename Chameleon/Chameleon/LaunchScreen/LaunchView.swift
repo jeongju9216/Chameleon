@@ -11,8 +11,8 @@ import Lottie
 final class LaunchView: UIView {
     
     //MARK: - Views
-    var logoImage: UIImageView!
-    var animationView: AnimationView!
+    var logoImage: UIImageView! //카멜레온 로고 이미지
+    var animationView: AnimationView! //하단 애니메이션 뷰
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,9 +49,9 @@ final class LaunchView: UIView {
         animationView = .init(name: animationName)
         animationView.translatesAutoresizingMaskIntoConstraints = false
         
-        animationView.contentMode = .scaleToFill
-        animationView.loopMode = .loop
-        animationView.animationSpeed = 1.2
+        animationView.contentMode = .scaleToFill //레이아웃에 꽉 차게
+        animationView.loopMode = .loop //무한 반복
+        animationView.animationSpeed = 1.2 //1.2배속으로 진행
         animationView.play()
         
         self.addSubview(animationView)
