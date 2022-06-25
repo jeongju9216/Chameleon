@@ -19,11 +19,11 @@ class CustomTabBarController: UITabBarController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
-        object_setClass(self.tabBar, CustomTabBar.self)
+        object_setClass(self.tabBar, CustomTabBar.self) //높이 변경한 탭바 적용
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
     
     //MARK: - Methods
@@ -40,18 +40,18 @@ class CustomTabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        tabBar.tintColor = UIColor.mainColor
-        tabBar.backgroundColor = UIColor(named:"TabBarColor")
+        tabBar.tintColor = UIColor.mainColor //아이콘 색상
+        tabBar.backgroundColor = UIColor(named:"TabBarColor") //탭바 색상
 
-        tabBar.layer.cornerRadius = (tabBar.frame.height + 10) * 0.3
-        tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        tabBar.layer.cornerRadius = (tabBar.frame.height + 10) * 0.3 //10 더한 높이로 cornerRadius 계산
+        tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner] //상단 모서리만 rounded 적용
     }
-    
-    class CustomTabBar: UITabBar {
-        override func sizeThatFits(_ size: CGSize) -> CGSize {
-            var sizeThatFits = super.sizeThatFits(size)
-            sizeThatFits.height = sizeThatFits.height + 10
-            return sizeThatFits
-        }
+}
+
+class CustomTabBar: UITabBar {
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var sizeThatFits = super.sizeThatFits(size)
+        sizeThatFits.height = sizeThatFits.height + 10 //정해진 탭바 높이에 +10을 함.
+        return sizeThatFits
     }
 }
