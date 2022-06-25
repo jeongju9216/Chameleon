@@ -19,18 +19,18 @@ final class BaseData {
     
     var isNeedUpdate: Bool {
         get {
-            compareVersion(crruent: currentVersion, compare: lastetVersion)
+            compareVersion(curruent: currentVersion, compare: lastetVersion)
         }
     }
     
     var isNeedForcedUpdate: Bool {
         get {
-            compareVersion(crruent: currentVersion, compare: forcedUpdateVersion)
+            compareVersion(curruent: currentVersion, compare: forcedUpdateVersion)
         }
     }
     
-    private func compareVersion(crruent: String, compare: String) -> Bool {
-        let compareResult = crruent.compare(compare, options: .numeric)
+    private func compareVersion(curruent: String, compare: String) -> Bool {
+        let compareResult = curruent.compare(compare, options: .numeric)
         switch compareResult {
         case .orderedAscending:
             return true

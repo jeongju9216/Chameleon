@@ -9,9 +9,6 @@ import UIKit
 
 class CustomTabBarController: UITabBarController {
     
-    //MARK: - Views
-    var borderView: UIView!
-    
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +23,7 @@ class CustomTabBarController: UITabBarController {
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - Methods
@@ -42,11 +39,11 @@ class CustomTabBarController: UITabBarController {
         self.viewControllers = [mainVC, moreVC]
     }
     
-    private func setupTabBar() {        
+    private func setupTabBar() {
         tabBar.tintColor = UIColor.mainColor
         tabBar.backgroundColor = UIColor(named:"TabBarColor")
 
-        tabBar.layer.cornerRadius = (tabBar.frame.height + 10) * 0.30
+        tabBar.layer.cornerRadius = (tabBar.frame.height + 10) * 0.3
         tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
     
