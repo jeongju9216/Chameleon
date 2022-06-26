@@ -14,9 +14,9 @@ final class HomeView: UIView {
     var photoButton: HomeMenuButton!
     var videoButton: HomeMenuButton!
     
-    private var tabbarBorderView: UIView!
-    private var tabbarHeight: CGFloat = 0
-    private var tabbarPadding: CGFloat = 0
+    private var tabbarBorderView: UIView! //탭바 테두리 View
+    private var tabbarHeight: CGFloat = 0 //탭바 높이
+    private var tabbarPadding: CGFloat = 0 //safeArea bottom padding
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,14 +36,15 @@ final class HomeView: UIView {
         setup()
     }
     
+    //MARK: - Setup
     private func setup() {
         self.backgroundColor = UIColor.backgroundColor
+        setupTabbarBorder()
         
         setupButtonStack()
         setupPhotoButton()
         setupVideoButton()
-        setupTabbarBorder()
-
+    
         videoButton.isHidden = true //영상 속도 개선하면 show
     }
     
@@ -53,7 +54,7 @@ final class HomeView: UIView {
 
         tabbarBorderView.backgroundColor = UIColor(named: "TabBarBorderColor")
         tabbarBorderView.alpha = 0.5
-        tabbarBorderView.layer.cornerRadius = (tabbarHeight - tabbarPadding) * 0.30
+        tabbarBorderView.layer.cornerRadius = (tabbarHeight - tabbarPadding) * 0.30 //홈키 유무에 따라 padding값 고려
         tabbarBorderView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
         self.addSubview(tabbarBorderView)
@@ -67,10 +68,10 @@ final class HomeView: UIView {
         buttonStack = UIStackView()
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         
-        buttonStack.axis = .horizontal
+        buttonStack.axis = .horizontal //가로로 버튼 배치
         buttonStack.spacing = 20
         buttonStack.alignment = .center
-        buttonStack.distribution = .fillEqually
+        buttonStack.distribution = .fillEqually //같은 너비로 아이템 배치
         
         self.addSubview(buttonStack)
         let width: CGFloat = self.frame.width * 0.8

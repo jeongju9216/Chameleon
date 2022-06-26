@@ -25,16 +25,13 @@ class HomeViewController: BaseViewController {
             homeView.photoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
             homeView.photoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
             homeView.photoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
-            
-            homeView.videoButton.addTarget(self, action: #selector(touchDownButton(sender:)), for: .touchDown)
-            homeView.videoButton.addTarget(self, action: #selector(touchUpInsideButton(sender:)), for: .touchUpInside)
-            homeView.videoButton.addTarget(self, action: #selector(touchUpOutsideButton(sender:)), for: .touchUpOutside)
         }
     }
     
     override func loadView() {
         super.loadView()
         
+        //borderView를 위해 탭바 height, padding 전달
         homeView = HomeView(frame: self.view.frame,
                             tabbarHeight: self.tabBarController!.tabBar.frame.size.height,
                             tabbarPadding: self.tabBarController!.tabBar.safeAreaInsets.bottom)
@@ -48,12 +45,13 @@ class HomeViewController: BaseViewController {
     
     @objc func touchUpInsideButton(sender: HomeMenuButton) {
         sender.touchUp()
-        UploadData.shared.uploadType = (sender.name == "PHOTO") ? UploadType.Photo : UploadType.Video
+        UploadData.shared.uploadType = (sender.name == "PHOTO") ? UploadType.Photo : UploadType.Video //업로드 타입 설정
         
         //사진 업로드 화면으로 이동
         let uploadVC = UploadViewController()
         uploadVC.modalPresentationStyle = .fullScreen
         uploadVC.hidesBottomBarWhenPushed = true //탭바 숨기기
+        
         navigationController?.pushViewController(uploadVC, animated: true)
     }
     
@@ -62,13 +60,13 @@ class HomeViewController: BaseViewController {
     }
     
     //MARK: - Methods
+    //강제 업데이트 Alert
     private func showForcedUpdateAlert() {
-        showOneButtonAlert(title: "업데이트 필요", message: "새로운 버전으로 업데이트가 필요합니다.\n확인을 누르면 앱스토어로 이동합니다.", buttonTitle: "확인", action: { _ in
-            let appStoreOpenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(BaseData.shared.appleID)"
-            guard let url = URL(string: appStoreOpenUrlString) else {
-                print("invalid app store url")
-                return
-            }
+        showOneButtonAlert(title: "업데이트 필요", message: "새로운 버전으로 업데이트가 필요합니다.\n확인을 누르면 앱스토어로 이동합니다.",
+                           buttonTitle: "확인",
+                           action: { _ in
+            //확인을 누르면 앱스토어로 이동
+            guard let url = URL(string: BaseData.shared.appStoreOpenUrlString) else { return }
             
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         })

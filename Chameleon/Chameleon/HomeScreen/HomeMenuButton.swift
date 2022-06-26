@@ -10,13 +10,17 @@ import UIKit
 class HomeMenuButton: UIButton {
     
     //MARK: - Views
-    var menuStackView: UIStackView!
-    var menuImage: UIImageView!
-    var menuLabel: UILabel!
+    private var menuStackView: UIStackView! //버튼 내부 StackView
+    private var menuImage: UIImageView! //버튼 아이콘 이미지, StackView 아이템1
+    private var menuLabel: UILabel! //버튼 이름 label, StackView 아이템2
     
     //MARK: - Properties
-    var image: UIImage?
-    var name: String = ""
+    private var image: UIImage? //버튼 아이콘 이미지
+    var name: String = "" //버튼 이름
+    
+    init() {
+        super.init(frame: CGRect.zero)
+    }
     
     convenience init(imageName: String, name: String) {
         self.init()
@@ -27,15 +31,25 @@ class HomeMenuButton: UIButton {
         setupUI()
     }
     
-    init() {
-        super.init(frame: CGRect.zero)
-    }
-    
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
     }
     
     //MARK: - Methods
+//    아이콘의 색상도 변경되어야 하기 때문에 touchDown, touchUp을 직접 구현
+    func touchDown() {
+        self.backgroundColor = UIColor.buttonClickColor
+        menuImage.tintColor = .lightGray
+        menuLabel.textColor = .lightGray
+    }
+    
+    func touchUp() {
+        self.backgroundColor = UIColor.buttonColor
+        menuImage.tintColor = .white
+        menuLabel.textColor = .white
+    }
+    
+    //MARK: - Setup
     private func setupUI() {
         self.clipsToBounds = true
         self.backgroundColor = UIColor.buttonColor
@@ -59,12 +73,12 @@ class HomeMenuButton: UIButton {
         menuStackView = UIStackView()
         menuStackView.translatesAutoresizingMaskIntoConstraints = false
         
-        menuStackView.isUserInteractionEnabled = false
+        menuStackView.isUserInteractionEnabled = false //이벤트 무시
         
-        menuStackView.axis = .vertical
-        menuStackView.spacing = 10
-        menuStackView.distribution = .fill
-        menuStackView.alignment = .center
+        menuStackView.axis = .vertical //vertical stack
+        menuStackView.spacing = 10 //아이템 간격 10
+        menuStackView.distribution = .fill //공간 꽉 채우기
+        menuStackView.alignment = .center //아이템 가운데 정렬
         
         self.addSubview(menuStackView)
         menuStackView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -72,7 +86,7 @@ class HomeMenuButton: UIButton {
     }
     
     private func setupMenuImageView() {
-        menuImage = UIImageView(image: image?.withRenderingMode(.alwaysTemplate))
+        menuImage = UIImageView(image: image?.withRenderingMode(.alwaysTemplate)) //아이콘 색상 변경을 위해 alwaysTemplate로 Rendering
         menuImage.translatesAutoresizingMaskIntoConstraints = false
         
         menuImage.tintColor = .white
@@ -93,17 +107,5 @@ class HomeMenuButton: UIButton {
         
         menuStackView.addArrangedSubview(menuLabel)
         menuLabel.centerXAnchor.constraint(equalTo: menuStackView.centerXAnchor).isActive = true
-    }
-    
-    func touchDown() {
-        self.backgroundColor = UIColor.buttonClickColor
-        menuImage.tintColor = .lightGray
-        menuLabel.textColor = .lightGray
-    }
-    
-    func touchUp() {
-        self.backgroundColor = UIColor.buttonColor
-        menuImage.tintColor = .white
-        menuLabel.textColor = .white
     }
 }

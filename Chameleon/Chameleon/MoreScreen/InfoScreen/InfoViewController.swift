@@ -38,11 +38,7 @@ class InfoViewController: BaseViewController {
     
     //MARK: - Methods
     private func openAppStore() {
-        let appStoreOpenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(BaseData.shared.appleID)"
-        guard let url = URL(string: appStoreOpenUrlString) else {
-            print("invalid app store url")
-            return
-        }
+        guard let url = URL(string: BaseData.shared.appStoreOpenUrlString) else { return }
         
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }

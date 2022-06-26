@@ -36,7 +36,6 @@ class LaunchViewController: BaseViewController {
         super.loadView()
         
         launchView = LaunchView(frame: self.view.frame)
-
         self.view = launchView
     }
     

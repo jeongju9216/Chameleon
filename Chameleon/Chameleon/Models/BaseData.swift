@@ -12,6 +12,7 @@ final class BaseData {
     
     let appleID = "1625706929"
     let bundleID = "com.jeong9216.Chameleon"
+    let appStoreOpenUrlString = "itms-apps://itunes.apple.com/app/apple-store/\(appleID)"
     
     var currentVersion = "0.0.1" //현재버전
     var lastetVersion = "0.0.1" //최신버전
