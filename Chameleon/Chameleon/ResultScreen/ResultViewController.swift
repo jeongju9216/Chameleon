@@ -13,13 +13,13 @@ class ResultViewController: BaseViewController {
     private var resultView: ResultView!
     
     //MARK: - Properties
-    var resultImage: UIImage?
+    var resultImage: UIImage? //결과 이미지
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar(title: "\(UploadData.shared.uploadTypeString) 변환 결과")
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = true //뒤로가기 차단
 
         loadResultImage()
 
@@ -37,48 +37,42 @@ class ResultViewController: BaseViewController {
     
     //MARK: - Actions
     @objc private func clickedSaveButton(sender: UIButton) {
-        print("\(#fileID) \(#line)-line, \(#function)")
+        guard let resultImage = resultImage else { return }
         
-        if let resultImage = resultImage {
-            UIImageWriteToSavedPhotosAlbum(resultImage, self, #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
-        }
+        //앨범에 저장하기
+        UIImageWriteToSavedPhotosAlbum(resultImage, self,
+                                       #selector(saveImage(_:didFinishSavingWithError:contextInfo:)), nil)
     }
     
     @objc func saveImage(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-       if let error = error {
+       if let error = error { //에러 방생시 error Alert
            print("saveImage error: \(error)")
            showErrorAlert()
-       } else {
+       } else { //저장 완료 시 Alert
            showOneButtonAlert(message: "앨범에 저장 되었습니다.")
        }
     }
 
     @objc private func clickedShareButton(sender: UIButton) {
         print("\(#fileID) \(#line)-line, \(#function)")
-        guard let resultImage = resultImage else {
-            print("resultImage is nil")
-            return
-        }
+        guard let resultImage = resultImage else { return }
         
         let shareVC = UIActivityViewController(activityItems: [resultImage], applicationActivities: nil)
-        //ipad
+        //ipad 대응
         shareVC.popoverPresentationController?.sourceView = sender
         shareVC.popoverPresentationController?.sourceRect = sender.frame
         
         present(shareVC, animated: true)
     }
     
+    //종료하기 버튼
     @objc private func clickedDoneButton(sender: UIButton) {
         let message = "변환된 \(UploadData.shared.uploadTypeString)은 종료 후 즉시 삭제됩니다.\n종료하시겠습니까?"
         
-        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { action in
-            HttpService.shared.deleteFiles(completionHandler: { [weak self] result, response in
-                if result {
-                    self?.goBackHome()
-                } else {
-                    self?.showErrorAlert()
-                }
-            })
+        //종료하기 Alert
+        showTwoButtonAlert(message: message, defaultButtonTitle: "종료하기", defaultAction: { [weak self] _ in
+            //확인 누를 시 홈으로 이동
+            self?.goBackHome()
         })
     }
     

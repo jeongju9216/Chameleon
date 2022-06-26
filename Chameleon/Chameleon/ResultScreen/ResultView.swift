@@ -10,14 +10,15 @@ import UIKit
 final class ResultView: UIView {
     
     //MARK: - Views
-    var resultImageView: UIImageView!
+    var resultImageView: UIImageView! //결과 이미지가 들어가는 imageView
     
-    var buttonStack: UIStackView!
-    var saveButton: UIButton!
-    var shareButton: UIButton!
+    private var buttonStack: UIStackView! //저장하기, 공유하기 버튼 stack
+    var saveButton: UIButton! //저장하기 버튼
+    var shareButton: UIButton! //공유하기 버튼
     
-    var doneButton: UIButton!
+    var doneButton: UIButton! //종료하기 버튼
     
+    //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -80,14 +81,32 @@ final class ResultView: UIView {
         buttonStack.topAnchor.constraint(equalTo: resultImageView.bottomAnchor, constant: 20).isActive = true
     }
     
+    //저장하기 버튼
     private func setupSaveButton() {
         saveButton = createToolButton(title: "저장하기", systemName: "arrow.down.to.line")
         buttonStack.addArrangedSubview(saveButton)
     }
     
+    //공유하기 버튼
     private func setupShareButton() {
         shareButton = createToolButton(title: "공유하기", systemName: "paperplane.fill")
         buttonStack.addArrangedSubview(shareButton)
+    }
+    
+    private func createToolButton(title: String, systemName: String) -> UIButton {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(.label, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: CGFloat(24))
+        button.setImage(UIImage(systemName: systemName, withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = .mainColor //아이콘 색 설정
+        button.alignTextBelow()
+        
+        return button
     }
     
     private func setupDoneButton() {
@@ -102,21 +121,5 @@ final class ResultView: UIView {
         doneButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         doneButton.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         doneButton.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
-    }
-    
-    private func createToolButton(title: String, systemName: String) -> UIButton {
-        let button = UIButton(type: .custom)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.label, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: CGFloat(24))
-        button.setImage(UIImage(systemName: systemName, withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = .mainColor
-        button.alignTextBelow()
-        
-        return button
     }
 }
