@@ -7,17 +7,15 @@
 
 import UIKit
 import PhotosUI
-import AVKit
-import AVFoundation
 
 class UploadViewController: BaseViewController {
     
     //MARK: - Views
     private var uploadView: UploadView!
-    private var imagePicker: UIImagePickerController!
+    private var imagePicker: UIImagePickerController! //todo: PHPicker로 변경
     
     //MARK: - Properties
-    var mediaFile: MediaFile?
+    var mediaFile: MediaFile? //업로드할 파일
     var loadingVC: LoadingViewController!
     
     //MARK: - Life Cycles
@@ -27,13 +25,12 @@ class UploadViewController: BaseViewController {
         UploadData.shared.clearData() //화면 처음 진입하면 공유 데이터 초기화
         setupNavigationBar(title: "\(UploadData.shared.uploadType)")
 
-        //ImagePicker 설정 -> PHPicker는 비디오 썸네일을 얻는 작업이 안 되서 ImagePicker로 작업함
-        //todo: 비디오 변환 기획 드랍 시 PHPicker로 리팩토링
         setupImagePicker()
         
         uploadView.uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
         uploadView.segmentedControl.addTarget(self, action: #selector(changedSegmentedControl(sender:)), for: .valueChanged)
         
+        //imageView에 tapGesture 추가
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(clickedUploadView(sender:)))
         uploadView.uploadImageView.addGestureRecognizer(tapGesture)
     }
@@ -53,8 +50,9 @@ class UploadViewController: BaseViewController {
         uploadView.segmentedControlLabel.text = UploadData.shared.convertTypeString
     }
     
+    //완료 버튼 click
     @objc private func clickedUpload(sender: UIButton) {
-        guard let mediaFile = mediaFile else {
+        guard let mediaFile = mediaFile else { //mediaFile이 없는 경우
             showErrorAlert(erorr: "잘못된 파일입니다. 다시 시도해 주세요.")
             return
         }
@@ -72,19 +70,20 @@ class UploadViewController: BaseViewController {
         //디비에서 이미지 삭제를 한 후 업로드 진행
         HttpService.shared.deleteFiles(completionHandler: { [weak self] (result, response) in
             guard let self = self else { return }
-            guard result else { self.errorResult(); return }
+            guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
             
             //이미지 파일 업로드
             HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
                 guard let self = self else { return }
-                guard result else { self.errorResult(); return }
+                guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
                 
                 //업로드가 완료되면 classifier 실행
                 self.loadingVC.guideString = "얼굴 찾는 중"
                 //3초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
                 HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
                     guard let self = self else { return }
-                    guard result, let faceResponse = response as? FaceResponse else {
+                    guard result,
+                            let faceResponse = response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
                         self.errorResult()
                         return
                     }
@@ -93,16 +92,12 @@ class UploadViewController: BaseViewController {
                     let faceImages: [FaceImage] = faceResponse.data ?? []
                     print("faceImages count: \(faceImages.count)")
                     
-                    //얼굴 데이터를 UIImage로 변경하고 다음 화면으로 이동함
-                    var faceImageList: [UIImage?] = []
-                    for faceImage in faceImages {
-                        if let url = URL(string: faceImage.url) {
-                            if let data = try? Data(contentsOf: url) {
-                                faceImageList.append(UIImage(data: data))
-                            }
-                        } else {
-                            faceImageList.append(nil)
-                        }
+                    //얼굴 이미지 url을 모두 load하여 UIImage로 변경하고 다음 화면으로 이동함
+                    let faceImageList: [UIImage?] = faceImages.map { faceImage in
+                        guard let url = URL(string: faceImage.url),
+                              let data = try? Data(contentsOf: url) else { return nil }
+                        
+                        return UIImage(data: data)
                     }
                     print("faceImageList count: \(faceImageList.count)")
                     
@@ -118,13 +113,14 @@ class UploadViewController: BaseViewController {
         })
     }
     
+    //사진을 선택할 때 권한 체크
     @objc private func clickedUploadView(sender: UIImageView) {
         checkPermission() { isGranted in
             DispatchQueue.main.async {
-                if isGranted {
+                if isGranted { //권한 OK
                     self.present(self.imagePicker, animated: true)
-                } else {
-                    self.moveToSetting()
+                } else { //권한 X
+                    self.moveToSetting() //설정으로 이동하여 권한 설정하도록
                 }
             }
         }
@@ -155,7 +151,9 @@ class UploadViewController: BaseViewController {
     
     private func moveToSetting() {
         let message = "사진 접근이 거부 되었습니다.\n설정에서 권한을 허용해 주세요."
-        showTwoButtonAlert(title: "권한 거부됨", message: message, defaultButtonTitle: "설정으로 이동하기", cancelButtonTitle: "취소", defaultAction: { action in
+        showTwoButtonAlert(title: "권한 거부됨", message: message,
+                           defaultButtonTitle: "설정으로 이동하기", cancelButtonTitle: "취소",
+                           defaultAction: { action in
             guard let settingURL = URL(string: UIApplication.openSettingsURLString) else { return }
             
             if UIApplication.shared.canOpenURL(settingURL) {
@@ -234,10 +232,13 @@ extension UploadViewController: UIImagePickerControllerDelegate, UINavigationCon
 
 //MARK: - ImagePicker Permission
 extension UploadViewController {
+    //비디오 Thumbnail 추출이 안 되어 UIImagePickerController 사용
+    //원인 파악 후 PHPicker로 변경
     private func setupImagePicker() {
         imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = false
+        
+        imagePicker.sourceType = .photoLibrary //앨범 사용
+        imagePicker.allowsEditing = false //편집 미사용
         if UploadData.shared.uploadType == .Photo {
             imagePicker.mediaTypes = ["public.image"]
         } else {
@@ -247,10 +248,11 @@ extension UploadViewController {
         imagePicker.delegate = self
     }
     
+    //앨범 권한 체크
     private func checkPermission(completionHandler: @escaping (Bool) -> Void) {
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {
-        case .notDetermined: //아무것도 설정 X
+        case .notDetermined: //최초 실행. 아무것도 설정 X
             PHPhotoLibrary.requestAuthorization(for: .readWrite, handler: { status in
                 switch status {
                 case .authorized, .limited:
@@ -272,6 +274,7 @@ extension UploadViewController {
 }
 
 extension UIImage {
+    //메타데이터 exif의 orientaion을 체크하여 up 방향으로 이미지 회전시키기
     func upOrientationImage() -> UIImage? {
         switch imageOrientation {
         case .up:

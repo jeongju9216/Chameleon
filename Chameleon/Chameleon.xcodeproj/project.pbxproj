@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		9B0D411D27E856ED00E2FA10 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */; };
 		9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */; };
-		9B0D412B27EAAE6100E2FA10 /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */; };
 		9B0D412D27EACC5D00E2FA10 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412C27EACC5D00E2FA10 /* UIButton.swift */; };
 		9B0D412F27EB113E00E2FA10 /* HomeMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */; };
 		9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B0D413027EC0EBD00E2FA10 /* UIColor.swift */; };
@@ -25,6 +24,9 @@
 		9B4EF40727F56A730099CE05 /* HttpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4EF40627F56A730099CE05 /* HttpService.swift */; };
 		9B4EF40B27F5A1BA0099CE05 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */; };
 		9B69AA1828588F94005DB825 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B69AA1728588F94005DB825 /* InfoView.swift */; };
+		9B7D67B52861F5D20094C304 /* SelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B42861F5D20094C304 /* SelectView.swift */; };
+		9B7D67B72861FEAB0094C304 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B62861FEAB0094C304 /* ResultView.swift */; };
+		9B7D67B9286203D10094C304 /* ConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7D67B8286203D10094C304 /* ConvertView.swift */; };
 		9B8587CE283365E2008910E2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8587CD283365E2008910E2 /* HomeView.swift */; };
 		9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C0782828E7840038396E /* LoadingIndicator.swift */; };
 		9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BC9C07E282A29B70038396E /* InfoViewController.swift */; };
@@ -51,7 +53,6 @@
 /* Begin PBXFileReference section */
 		9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		9B0D411E27E8B92800E2FA10 /* MoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
-		9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		9B0D412C27EACC5D00E2FA10 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		9B0D412E27EB113E00E2FA10 /* HomeMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMenuButton.swift; sourceTree = "<group>"; };
 		9B0D413027EC0EBD00E2FA10 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -69,6 +70,9 @@
 		9B4EF40627F56A730099CE05 /* HttpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpService.swift; sourceTree = "<group>"; };
 		9B4EF40A27F5A1BA0099CE05 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9B69AA1728588F94005DB825 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
+		9B7D67B42861F5D20094C304 /* SelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectView.swift; sourceTree = "<group>"; };
+		9B7D67B62861FEAB0094C304 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		9B7D67B8286203D10094C304 /* ConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertView.swift; sourceTree = "<group>"; };
 		9B8587CD283365E2008910E2 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9BC9C0782828E7840038396E /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		9BC9C07E282A29B70038396E /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -107,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				9B0D411C27E856ED00E2FA10 /* CustomTabBarController.swift */,
-				9B0D412A27EAAE6100E2FA10 /* UnderLineTextField.swift */,
 				9B0D412C27EACC5D00E2FA10 /* UIButton.swift */,
 				9B0D413027EC0EBD00E2FA10 /* UIColor.swift */,
 			);
@@ -136,10 +139,10 @@
 				9BEA5D782833B9D20050C7E0 /* LaunchScreen */,
 				9B8587CC283365B3008910E2 /* HomeScreen */,
 				9BEA5D73283391330050C7E0 /* UploadScreen */,
-				9BEA5D7E2833BBEC0050C7E0 /* ResultScreen */,
-				9BEA5D7D2833BBAE0050C7E0 /* ConvertScreen */,
-				9BEA5D7C2833BBA30050C7E0 /* LoadingScreen */,
 				9BEA5D7B2833BB6F0050C7E0 /* SelectScreen */,
+				9BEA5D7D2833BBAE0050C7E0 /* ConvertScreen */,
+				9BEA5D7E2833BBEC0050C7E0 /* ResultScreen */,
+				9BEA5D7C2833BBA30050C7E0 /* LoadingScreen */,
 				9B8587CF28337953008910E2 /* MoreScreen */,
 				9B0D412927EAAE4500E2FA10 /* CustomViews */,
 				9B4EF40C27F5BD890099CE05 /* Models */,
@@ -248,6 +251,7 @@
 			children = (
 				9BEE34C227F537EC003CA46C /* SelectCell.swift */,
 				9BEE34C027F527A2003CA46C /* SelectViewController.swift */,
+				9B7D67B42861F5D20094C304 /* SelectView.swift */,
 			);
 			path = SelectScreen;
 			sourceTree = "<group>";
@@ -264,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				9B1A112427F8322600E2CE08 /* ConvertViewController.swift */,
+				9B7D67B8286203D10094C304 /* ConvertView.swift */,
 			);
 			path = ConvertScreen;
 			sourceTree = "<group>";
@@ -272,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				9B1A112827F85D1300E2CE08 /* ResultViewController.swift */,
+				9B7D67B62861FEAB0094C304 /* ResultView.swift */,
 			);
 			path = ResultScreen;
 			sourceTree = "<group>";
@@ -368,6 +374,7 @@
 				9B69AA1828588F94005DB825 /* InfoView.swift in Sources */,
 				9BEA5D7A2833B9E40050C7E0 /* LaunchView.swift in Sources */,
 				9BC9C0792828E7840038396E /* LoadingIndicator.swift in Sources */,
+				9B7D67B52861F5D20094C304 /* SelectView.swift in Sources */,
 				9BF442DE27F34DA500537C60 /* BaseViewController.swift in Sources */,
 				9BC9C083282B60F70038396E /* FaceImage.swift in Sources */,
 				9B0D412F27EB113E00E2FA10 /* HomeMenuButton.swift in Sources */,
@@ -375,6 +382,7 @@
 				9BF442DC27F3473300537C60 /* UploadViewController.swift in Sources */,
 				9B0D411F27E8B92800E2FA10 /* MoreViewController.swift in Sources */,
 				9B1A112927F85D1300E2CE08 /* ResultViewController.swift in Sources */,
+				9B7D67B72861FEAB0094C304 /* ResultView.swift in Sources */,
 				9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */,
 				9BEA5D6C28337A890050C7E0 /* MoreDataSource.swift in Sources */,
 				9BEE34C127F527A2003CA46C /* SelectViewController.swift in Sources */,
@@ -389,11 +397,11 @@
 				9BEA5D7228337FB80050C7E0 /* MoreView.swift in Sources */,
 				9B197573282235F20051D3C6 /* MediaFile.swift in Sources */,
 				9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */,
-				9B0D412B27EAAE6100E2FA10 /* UnderLineTextField.swift in Sources */,
 				9B0D411D27E856ED00E2FA10 /* CustomTabBarController.swift in Sources */,
 				9BF442D027F2E04700537C60 /* LaunchViewController.swift in Sources */,
 				9B1A112527F8322600E2CE08 /* ConvertViewController.swift in Sources */,
 				9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */,
+				9B7D67B9286203D10094C304 /* ConvertView.swift in Sources */,
 				9B0D413127EC0EBD00E2FA10 /* UIColor.swift in Sources */,
 				9BEE34C327F537EC003CA46C /* SelectCell.swift in Sources */,
 				9BC9C07F282A29B70038396E /* InfoViewController.swift in Sources */,
@@ -550,7 +558,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jeong9216.Chameleon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -581,7 +589,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jeong9216.Chameleon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

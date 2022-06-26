@@ -34,7 +34,10 @@ class MoreViewController: BaseViewController {
     override func loadView() {
         super.loadView()
         
-        moreView = MoreView(frame: self.view.frame)
+        print("Here")
+        moreView = MoreView(frame: self.view.frame,
+                            tabbarHeight: self.tabBarController!.tabBar.frame.size.height,
+                            tabbarPadding: self.tabBarController!.tabBar.safeAreaInsets.bottom)
         self.view = moreView
     }
 }

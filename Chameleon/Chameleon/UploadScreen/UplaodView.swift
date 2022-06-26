@@ -10,12 +10,12 @@ import UIKit
 final class UploadView: UIView {
 
     //MARK: - Views
-    var uploadImageView: UIImageView!
-    var uploadIcon: UIImageView!
-    var uploadLabel: UILabel!
-    var segmentedControl: UISegmentedControl!
-    var segmentedControlLabel: UILabel!
-    var uploadButton: UIButton!
+    var uploadImageView: UIImageView! //선택한 이미지 들어가는 View
+    var uploadIcon: UIImageView! //uploadImageView 내부 아이콘
+    var uploadLabel: UILabel! //uploadImageView 내부 label
+    var segmentedControl: UISegmentedControl! //변환 모드 선택하는 segmentedControl
+    var segmentedControlLabel: UILabel! //segmentedControl 설명 label
+    var uploadButton: UIButton! //완료 버튼
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,7 +52,7 @@ final class UploadView: UIView {
         uploadImageView.translatesAutoresizingMaskIntoConstraints = false
         uploadImageView.isUserInteractionEnabled = true
         
-        uploadImageView.contentMode = .scaleAspectFill
+        uploadImageView.contentMode = .scaleAspectFill //비율 맞춰서 정사각형으로 채우기
         uploadImageView.backgroundColor = UIColor.backgroundColor
         
         uploadImageView.clipsToBounds = true
@@ -62,7 +62,7 @@ final class UploadView: UIView {
         
         self.addSubview(uploadImageView)
         
-        let width = min(self.frame.width * 0.8, 600)
+        let width = min(self.frame.width * 0.8, 600) //최대 width는 600으로 => 아이패드 대응
         uploadImageView.widthAnchor.constraint(equalToConstant: width).isActive = true
         uploadImageView.heightAnchor.constraint(equalTo: uploadImageView.widthAnchor).isActive = true
         uploadImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -113,6 +113,7 @@ final class UploadView: UIView {
         
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.selectedSegmentTintColor = .mainColor
+        //segmentedControl 아이템 글자 속성
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray], for: .normal)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white, .font: UIFont.boldSystemFont(ofSize: 14)], for: .selected)
         
@@ -123,6 +124,7 @@ final class UploadView: UIView {
         segmentedControl.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 20).isActive = true
     }
     
+    //segmentedControl 설명 label
     private func setupSegmentedControlLabel() {
         segmentedControlLabel = UILabel()
         segmentedControlLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -140,7 +142,7 @@ final class UploadView: UIView {
     private func setupUploadButton() {
         uploadButton = UIButton(type: .custom)
         uploadButton.translatesAutoresizingMaskIntoConstraints = false
-        uploadButton.isEnabled = false
+        uploadButton.isEnabled = false //사진 선택한 후에 활성화
         
         uploadButton.applyMainButtonStyle(title: "업로드")
         
