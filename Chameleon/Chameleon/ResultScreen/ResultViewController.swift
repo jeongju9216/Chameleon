@@ -14,7 +14,6 @@ class ResultViewController: BaseViewController {
     
     //MARK: - Properties
     var resultImage: UIImage?
-    var resultImageURL: String = ""
     
     //MARK: - Life Cycles
     override func viewDidLoad() {

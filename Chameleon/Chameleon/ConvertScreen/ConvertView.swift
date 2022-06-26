@@ -10,16 +10,17 @@ import UIKit
 final class ConvertView: UIView {
     
     //MARK: - Views
-    var guideLabel: UILabel!
+    private var guideLabel: UILabel! //안내 문구 label
+    private var chameleonImageView: UIImageView! //카멜레온 imageView
     
-    var uploadImageView: UIImageView!
+    //progress바
+    private var progressStack: UIStackView!
+    private var progressLabel: UILabel!
+    private var progressView: UIProgressView!
     
-    var progressStack: UIStackView!
-    var progressLabel: UILabel!
-    var progressView: UIProgressView!
+    var doneButton: UIButton! //완료 버튼
     
-    var doneButton: UIButton!
-    
+    //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -36,6 +37,7 @@ final class ConvertView: UIView {
         guideLabel.text = "얼굴 변환이 완료되었습니다.\n결과를 확인하세요."
     }
     
+    //정수형으로 진행률 표시
     func setProgressTime(time: Int) {
         progressView.setProgress(Float(Double(time) / 100.0), animated: true)
         progressLabel.text = "\(min(time, 100))%"
@@ -45,7 +47,7 @@ final class ConvertView: UIView {
     private func setup() {
         self.backgroundColor = .backgroundColor
         
-        setupUploadView()
+        setupChameleonImageView()
         setupGuideLabel()
 
         setupProgressStack()
@@ -66,24 +68,19 @@ final class ConvertView: UIView {
         
         self.addSubview(guideLabel)
         guideLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        guideLabel.bottomAnchor.constraint(equalTo: uploadImageView.topAnchor, constant: -40).isActive = true
+        guideLabel.bottomAnchor.constraint(equalTo: chameleonImageView.topAnchor, constant: -40).isActive = true
     }
     
-    private func setupUploadView() {
-        uploadImageView = UIImageView()
-        uploadImageView.image = UIImage(named: "ChameleonImage")
-        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+    private func setupChameleonImageView() {
+        chameleonImageView = UIImageView()
+        chameleonImageView.image = UIImage(named: "ChameleonImage")
+        chameleonImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        uploadImageView.backgroundColor = UIColor.backgroundColor
-        
-        uploadImageView.clipsToBounds = true
-        uploadImageView.layer.cornerRadius = 20
-        
-        self.addSubview(uploadImageView)
-        uploadImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        uploadImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        uploadImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        uploadImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -40).isActive = true
+        self.addSubview(chameleonImageView)
+        chameleonImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        chameleonImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        chameleonImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        chameleonImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -40).isActive = true
     }
     
     private func setupProgressStack() {
@@ -95,11 +92,11 @@ final class ConvertView: UIView {
         progressStack.alignment = .center
         progressStack.distribution = .fill
         
-        let width = min(self.frame.width * 0.6, 500)
+        let width = min(self.frame.width * 0.6, 500) //아이패드에서 progressView 너무 길지 않도록 처리
         self.addSubview(progressStack)
         progressStack.widthAnchor.constraint(equalToConstant: width).isActive = true
         progressStack.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        progressStack.topAnchor.constraint(equalTo: uploadImageView.bottomAnchor, constant: 20).isActive = true
+        progressStack.topAnchor.constraint(equalTo: chameleonImageView.bottomAnchor, constant: 20).isActive = true
     }
     
     private func setupProgressLabel() {
@@ -120,8 +117,8 @@ final class ConvertView: UIView {
         progressView.clipsToBounds = true
         progressView.layer.cornerRadius = 5
         
-        progressView.trackTintColor = .lightGray
-        progressView.progressTintColor = .mainColor
+        progressView.trackTintColor = .lightGray //채워지지 않은 공간 색 설정
+        progressView.progressTintColor = .mainColor //진행률 색 설정
         progressView.progress = 0
         
         progressStack.addArrangedSubview(progressView)
