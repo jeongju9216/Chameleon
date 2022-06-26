@@ -8,35 +8,39 @@
 import UIKit
 
 class SelectCell: UICollectionViewCell {
-    var imageView: UIImageView!
-    var image: UIImage?
     
-    var checkImageView: UIImageView!
-    var checkImage: UIImage?
-    var noneCheckImage: UIImage?
+    //MARK: - Views
+    private var imageView: UIImageView! //얼굴 imageView
+    private var image: UIImage? //얼굴 이미지
+    private var checkImageView: UIImageView! //체크표시 imageView
+    private var checkImage: UIImage? //선택 이미지
+    private var noneCheckImage: UIImage? //해제 이미지
     
-    override var isSelected: Bool {
-        didSet {
+    //MARK: - Properties
+    private let size = 28
+    override var isSelected: Bool { //선택되었는가
+        didSet { //isSelected가 바뀌면 setSelected() 실행
             setSelected(isSelected)
         }
     }
     
-    private let size = 28
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
         setupCell()
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
-        
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
         setupCell()
     }
     
     //MARK: - Methods
-    func setSelected(_ selected: Bool) {
+    func setupImage(_ image: UIImage?) {
+        imageView.image = image
+    }
+
+    //selected에 따라 cell style 적용
+    private func setSelected(_ selected: Bool) {
         if selected {
             setSelectedStyle()
         } else {
@@ -44,7 +48,8 @@ class SelectCell: UICollectionViewCell {
         }
     }
     
-    func setSelectedStyle() {
+    //선택되었을 때 cell style
+    private func setSelectedStyle() {
         checkImageView.image = checkImage
         
         checkImageView.tintColor = .mainColor
@@ -55,7 +60,8 @@ class SelectCell: UICollectionViewCell {
         contentView.layer.borderColor = UIColor.mainColor.cgColor
     }
     
-    func setDeselectedStyle() {
+    //선택 해제되었을 때 cell style
+    private func setDeselectedStyle() {
         checkImageView.image = noneCheckImage
         
         checkImageView.tintColor = .black
@@ -79,9 +85,10 @@ class SelectCell: UICollectionViewCell {
     }
 
     private func setupImages() {
+        //사이즈에 맞추기 위해 imageConfig 설정
         let imageConfig = UIImage.SymbolConfiguration(pointSize: CGFloat(size))
-        noneCheckImage = UIImage(systemName: "circle.fill", withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate)
-        checkImage = UIImage(systemName: "checkmark.circle.fill", withConfiguration: imageConfig)?.withRenderingMode(.alwaysTemplate)
+        noneCheckImage = UIImage(systemName: "circle.fill", withConfiguration: imageConfig)
+        checkImage = UIImage(systemName: "checkmark.circle.fill", withConfiguration: imageConfig)
     }
     
     private func setupCheckImageView() {
@@ -112,9 +119,5 @@ class SelectCell: UICollectionViewCell {
         contentView.addSubview(imageView)
         imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
         imageView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
-    }
-    
-    func setupImage(_ image: UIImage?) {
-        imageView.image = image
     }
 }

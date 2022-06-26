@@ -9,12 +9,13 @@ import UIKit
 
 final class SelectView: UIView {
     
-    //MARK: -
-    var faceCollectionView: UICollectionView!
-    var emptyGuideLabel: UILabel!
-    var convertButton: UIButton!
-    var isFacesEmpty: Bool = true
+    //MARK: - View
+    var faceCollectionView: UICollectionView! //얼굴 리스트 collectionView
+    var emptyGuideLabel: UILabel! //faceImages가 비어있을 때 안내 문구 label
+    var convertButton: UIButton! //변환하기 버튼
+    var isFacesEmpty: Bool = true //faceImages가 비어있는가
     
+    //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -35,9 +36,9 @@ final class SelectView: UIView {
         self.backgroundColor = UIColor.backgroundColor
         
         if isFacesEmpty {
-            setupEmptyGuideLabel()
+            setupEmptyGuideLabel() //faceImages가 empty라면 안내 문구 보여줌
         } else {
-            setupFaceCollectionView()
+            setupFaceCollectionView() //faceImages가 non-empty라면 collectionView 생성
         }
         
         setupConvertButton()
@@ -61,8 +62,8 @@ final class SelectView: UIView {
         
         faceCollectionView.backgroundColor = .backgroundColor
         faceCollectionView.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 80, right: 10)
-        faceCollectionView.showsVerticalScrollIndicator = false
-        faceCollectionView.allowsMultipleSelection = true
+        faceCollectionView.showsVerticalScrollIndicator = false //indicator 숨기기
+        faceCollectionView.allowsMultipleSelection = true //다중 선택 설정
         
         self.addSubview(faceCollectionView)
         faceCollectionView.widthAnchor.constraint(equalTo: self.widthAnchor).isActive = true
