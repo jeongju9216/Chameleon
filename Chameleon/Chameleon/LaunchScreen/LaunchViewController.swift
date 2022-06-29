@@ -18,7 +18,7 @@ class LaunchViewController: BaseViewController {
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         //버전을 서버에서 가져옴. 최신 버전, 강제 업데이트 버전
         HttpService.shared.getVersion(completionHandler: { [weak self] (result, response) in
             if result {

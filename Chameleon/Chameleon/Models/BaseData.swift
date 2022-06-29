@@ -12,7 +12,7 @@ final class BaseData {
     
     let appleID = "1625706929"
     let bundleID = "com.jeong9216.Chameleon"
-    var appStoreOpenUrlString: String {
+    var appStoreOpenUrlString: String { //앱 스토어 url
         "itms-apps://itunes.apple.com/app/apple-store/\(appleID)"
     }
     
