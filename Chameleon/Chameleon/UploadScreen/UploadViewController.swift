@@ -47,7 +47,7 @@ class UploadViewController: BaseViewController {
         print("selected: \(sender.selectedSegmentIndex)")
         
         UploadData.shared.convertType = sender.selectedSegmentIndex
-        uploadView.segmentedControlLabel.text = UploadData.shared.convertTypeString
+        uploadView.changeSegmentGuideText()
     }
     
     //완료 버튼 click

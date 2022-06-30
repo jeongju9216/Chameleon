@@ -17,6 +17,23 @@ final class UploadView: UIView {
     var segmentedControlLabel: UILabel! //segmentedControl 설명 label
     var uploadButton: UIButton! //완료 버튼
     
+    //MARK: - Properties
+    private var segmentGuideText: String {
+        var message = ""
+        switch UploadData.shared.convertType {
+        case ConvertType.face.rawValue:
+            message = "얼굴을 페이크 얼굴로 변환합니다."
+        case ConvertType.mosaic.rawValue:
+            message = "얼굴을 모자이크 합니다."
+        case ConvertType.all.rawValue:
+            message = "얼굴을 페이크 얼굴로 변환하고 모자이크 합니다."
+        default: break
+        }
+        
+        return message
+    }
+    
+    //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -35,6 +52,10 @@ final class UploadView: UIView {
         self.uploadLabel.isHidden = true
         
         self.uploadButton.isEnabled = true
+    }
+    
+    func changeSegmentGuideText() {
+        segmentedControlLabel.text = segmentGuideText
     }
     
     //MARK: - Setup
@@ -129,7 +150,7 @@ final class UploadView: UIView {
         segmentedControlLabel = UILabel()
         segmentedControlLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        segmentedControlLabel.text = UploadData.shared.convertTypeString
+        segmentedControlLabel.text = segmentGuideText
         segmentedControlLabel.textColor = .gray
         segmentedControlLabel.font = UIFont.systemFont(ofSize: 15)
         segmentedControlLabel.numberOfLines = 0
