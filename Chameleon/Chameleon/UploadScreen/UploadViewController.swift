@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import Photos
 import PhotosUI
 
 class UploadViewController: BaseViewController {
     
     //MARK: - Views
     private var uploadView: UploadView!
-    private var imagePicker: UIImagePickerController! //todo: PHPicker로 변경
+    private var phPicker: PHPickerViewController!
     
     //MARK: - Properties
     var mediaFile: MediaFile? //업로드할 파일
@@ -25,7 +26,7 @@ class UploadViewController: BaseViewController {
         UploadData.shared.clearData() //화면 처음 진입하면 공유 데이터 초기화
         setupNavigationBar(title: "\(UploadData.shared.uploadType)")
 
-        setupImagePicker()
+        setupPHPicker()
         
         uploadView.uploadButton.addTarget(self, action: #selector(clickedUpload(sender:)), for: .touchUpInside)
         uploadView.segmentedControl.addTarget(self, action: #selector(changedSegmentedControl(sender:)), for: .valueChanged)
@@ -118,7 +119,8 @@ class UploadViewController: BaseViewController {
         checkPermission() { isGranted in
             DispatchQueue.main.async {
                 if isGranted { //권한 OK
-                    self.present(self.imagePicker, animated: true)
+                    self.present(self.phPicker, animated: true)
+                    //self.present(self.imagePicker, animated: true)
                 } else { //권한 X
                     self.moveToSetting() //설정으로 이동하여 권한 설정하도록
                 }
@@ -166,89 +168,50 @@ class UploadViewController: BaseViewController {
 }
 
 //MARK: - UIImagePickerControllerDelegate
-extension UploadViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true) { [weak self] in
-            DispatchQueue.main.async {
-                if UploadData.shared.uploadType == .Photo {
-                    self?.setImageData(info: info)
-                } else {
-                    self?.setVideoData(info: info)
-                }
-            }
-        }
-    }
-    
-    private func setImageData(info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage,
-           let assetPath = info[.imageURL] as? URL {
-            self.mediaFile = MediaFile(url: assetPath)
-
-            print("orientation: \(image.imageOrientation.rawValue)")
-            let newImage = image.upOrientationImage()
-            let imageData = (self.mediaFile?.extension == "png") ? newImage?.pngData() : newImage?.jpegData(compressionQuality: 1.0)
-            if let imageData = imageData {
-                self.mediaFile?.data = imageData
-                self.uploadView.showThumbnail(image)
-            }
-        }
-    }
-    
-    private func setVideoData(info: [UIImagePickerController.InfoKey : Any]) {
-        let videoURL = info[.mediaURL] as? URL
+extension UploadViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
         
-        if let videoURL = videoURL, let videoData = try? Data(contentsOf: videoURL) {
-            self.mediaFile = MediaFile(url: videoURL, data: videoData)
+        let itemProvider = results[0].itemProvider
+        guard itemProvider.canLoadObject(ofClass: UIImage.self) else { return }
+        
+        itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { [weak self] (url, error) in
+            guard let self = self else { return }
             
-            self.getThumbnailFromUrl(videoURL.absoluteString) { [weak self] (image) in
-                if let image = image {
-                    self?.uploadView.showThumbnail(image)
+            print("url: \(String(describing: url))")
+            if let url = url {
+                self.mediaFile = MediaFile(url: url)
+                
+                itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (image, error) in
+                    guard let self = self else { return }
+                    
+                    if let image = image as? UIImage {
+                        let newImage = image.upOrientationImage()
+                        let imageData = (self.mediaFile?.extension == "png") ? newImage?.pngData() : newImage?.jpegData(compressionQuality: 1.0)
+
+                        if let imageData = imageData {
+                            self.mediaFile?.data = imageData
+                            self.uploadView.showThumbnail(image)
+                        }
+                    }
                 }
-            }
-        }
-    }
-    
-    private func getThumbnailFromUrl(_ url: String?, _ completion: @escaping ((_ image: UIImage?)->Void)) {
-        guard let url = URL(string: url ?? "") else { return }
-
-        DispatchQueue.global().async {
-            let asset = AVAsset(url: url)
-
-            let assetImgGenerate = AVAssetImageGenerator(asset: asset)
-            assetImgGenerate.appliesPreferredTrackTransform = true
-
-            let time = CMTimeMake(value: 2, timescale: 1)
-            do {
-                let img = try assetImgGenerate.copyCGImage(at: time, actualTime: nil)
-                let thumbnail = UIImage(cgImage: img)
-                completion(thumbnail)
-            } catch {
-                print("Error :: ", error.localizedDescription)
-                completion(nil)
             }
         }
     }
 }
 
-//MARK: - ImagePicker Permission
+//MARK: - PHPicker Permission
 extension UploadViewController {
-    //비디오 Thumbnail 추출이 안 되어 UIImagePickerController 사용
-    //원인 파악 후 PHPicker로 변경
-    private func setupImagePicker() {
-        imagePicker = UIImagePickerController()
+    private func setupPHPicker() {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = 1
+        configuration.filter = .images
         
-        imagePicker.sourceType = .photoLibrary //앨범 사용
-        imagePicker.allowsEditing = false //편집 미사용
-        if UploadData.shared.uploadType == .Photo {
-            imagePicker.mediaTypes = ["public.image"]
-        } else {
-            imagePicker.mediaTypes = ["public.movie"]
-        }
-        
-        imagePicker.delegate = self
+        phPicker = PHPickerViewController(configuration: configuration)
+        phPicker.delegate = self
     }
     
-    //앨범 권한 체크
+    //앨범 권한 체크 -> 앨범에 이미지 저장
     private func checkPermission(completionHandler: @escaping (Bool) -> Void) {
         let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         switch status {

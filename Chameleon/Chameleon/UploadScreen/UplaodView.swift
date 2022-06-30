@@ -46,12 +46,14 @@ final class UploadView: UIView {
     
     //MARK: - Methods
     func showThumbnail(_ image: UIImage) {
-        self.uploadImageView.image = image
-        
-        self.uploadIcon.isHidden = true
-        self.uploadLabel.isHidden = true
-        
-        self.uploadButton.isEnabled = true
+        DispatchQueue.main.async {
+            self.uploadImageView.image = image
+            
+            self.uploadIcon.isHidden = true
+            self.uploadLabel.isHidden = true
+            
+            self.uploadButton.isEnabled = true
+        }
     }
     
     func changeSegmentGuideText() {
