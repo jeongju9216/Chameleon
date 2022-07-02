@@ -200,7 +200,7 @@ extension UploadViewController: PHPickerViewControllerDelegate {
     }
 }
 
-//MARK: - PHPicker Permission
+//MARK: - Setup PHPicker
 extension UploadViewController {
     private func setupPHPicker() {
         var configuration = PHPickerConfiguration()

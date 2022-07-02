@@ -16,6 +16,7 @@
 		9B1A112527F8322600E2CE08 /* ConvertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A112427F8322600E2CE08 /* ConvertViewController.swift */; };
 		9B1A112727F837F700E2CE08 /* UploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A112627F837F700E2CE08 /* UploadData.swift */; };
 		9B1A112927F85D1300E2CE08 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B1A112827F85D1300E2CE08 /* ResultViewController.swift */; };
+		9B2D4DCF287078D700176C21 /* GuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2D4DCE287078D700176C21 /* GuideView.swift */; };
 		9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */; };
 		9B4B8FA627E0B2390066C7E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA527E0B2390066C7E3 /* SceneDelegate.swift */; };
 		9B4B8FA827E0B2390066C7E3 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4B8FA727E0B2390066C7E3 /* HomeViewController.swift */; };
@@ -60,6 +61,7 @@
 		9B1A112427F8322600E2CE08 /* ConvertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertViewController.swift; sourceTree = "<group>"; };
 		9B1A112627F837F700E2CE08 /* UploadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadData.swift; sourceTree = "<group>"; };
 		9B1A112827F85D1300E2CE08 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		9B2D4DCE287078D700176C21 /* GuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideView.swift; sourceTree = "<group>"; };
 		9B38B84D28362AD4003D7BBE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B4B8FA027E0B2390066C7E3 /* Chameleon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chameleon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B4B8FA327E0B2390066C7E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				9BC9C08C282CF9E10038396E /* GuideViewController.swift */,
+				9B2D4DCE287078D700176C21 /* GuideView.swift */,
 			);
 			path = GuideScreen;
 			sourceTree = "<group>";
@@ -397,6 +400,7 @@
 				9BEA5D7228337FB80050C7E0 /* MoreView.swift in Sources */,
 				9B197573282235F20051D3C6 /* MediaFile.swift in Sources */,
 				9B4B8FA427E0B2390066C7E3 /* AppDelegate.swift in Sources */,
+				9B2D4DCF287078D700176C21 /* GuideView.swift in Sources */,
 				9B0D411D27E856ED00E2FA10 /* CustomTabBarController.swift in Sources */,
 				9BF442D027F2E04700537C60 /* LaunchViewController.swift in Sources */,
 				9B1A112527F8322600E2CE08 /* ConvertViewController.swift in Sources */,
