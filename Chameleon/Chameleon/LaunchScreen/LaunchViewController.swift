@@ -13,7 +13,7 @@ class LaunchViewController: BaseViewController {
     var launchView: LaunchView!
 
     //MARK: - Properties
-    private var loadingTime: Double = 2 //런치 스크린 보여주는 시간
+    private var loadingTime: Double = 1 //런치 스크린 보여주는 시간
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -56,9 +56,6 @@ class LaunchViewController: BaseViewController {
     }
     
     private func presentNextVC() {
-        //디비 관리를 위해 접속하면 디비 이미지 폴더 삭제
-        HttpService.shared.deleteFiles(completionHandler: { _,_ in })
-        
         //loadingTime 뒤에 화면 이동
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.loadingTime) {
             let vc: UIViewController = CustomTabBarController()
