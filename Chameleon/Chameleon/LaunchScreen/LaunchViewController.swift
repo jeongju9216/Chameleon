@@ -13,21 +13,29 @@ class LaunchViewController: BaseViewController {
     var launchView: LaunchView!
 
     //MARK: - Properties
-    private var loadingTime: Double = 2 //런치 스크린 보여주는 시간
+    private var loadingTime: Double = 1 //런치 스크린 보여주는 시간
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //버전을 서버에서 가져옴. 최신 버전, 강제 업데이트 버전
-        HttpService.shared.getVersion(completionHandler: { [weak self] (result, response) in
+        //데이터베이스 추가
+        FirebaseService.shared.initDatabase()
+        
+        //파이어베이스에서 서버 작동 확인
+        FirebaseService.shared.checkServer(completionHandler: { [weak self] (result, message) in
+            guard let self = self else { return }
+
             if result {
-                self?.setupAppInfo(response: (response as! Response))
-                self?.presentNextVC() //버전 세팅 후 홈으로 이동
-            } else {
-                self?.showErrorAlert(erorr: "서버 통신에 실패했습니다.", action: { _ in
-                    self?.presentNextVC()
+                //파이어베이스에서 버전 정보 가져옴
+                FirebaseService.shared.fetchVersion(completionHandler: { [weak self] (result, versions) in
+                    guard let self = self else { return }
+                    
+                    self.setupAppInfo(lasted: versions[0], forced: versions[1])
+                    self.presentNextVC() //버전
                 })
+            } else {
+                self.showErrorAlert(erorr: message.replacingOccurrences(of: "/n", with: "\n"))
             }
         })
     }
@@ -40,18 +48,15 @@ class LaunchViewController: BaseViewController {
     }
     
     //MARK: - Methods
-    private func setupAppInfo(response: Response) {
+    private func setupAppInfo(lasted: String, forced: String) {
         BaseData.shared.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
-        BaseData.shared.lastetVersion = response.message ?? "0.0.1"
-        BaseData.shared.forcedUpdateVersion = response.data ?? "0.0.1"
+        BaseData.shared.lastetVersion = lasted
+        BaseData.shared.forcedUpdateVersion = forced
 
         print("currentVersion: \(BaseData.shared.currentVersion) / lastetVersion: \(BaseData.shared.lastetVersion) / forcedUpdateVersion: \(BaseData.shared.forcedUpdateVersion)")
     }
     
     private func presentNextVC() {
-        //디비 관리를 위해 접속하면 디비 이미지 폴더 삭제
-        HttpService.shared.deleteFiles(completionHandler: { _,_ in })
-        
         //loadingTime 뒤에 화면 이동
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.loadingTime) {
             let vc: UIViewController = CustomTabBarController()
