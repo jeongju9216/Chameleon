@@ -19,6 +19,7 @@ class LaunchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //데이터베이스 추가
         FirebaseService.shared.initDatabase()
         
         //파이어베이스에서 서버 작동 확인
