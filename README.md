@@ -9,6 +9,10 @@
 앱스토어에 "카멜레온 페이크"를 검색!  
 <br></br>
 
+## Youtube 🎦
+https://youtu.be/-r7_r2oLk0E  
+<br></br>
+
 ## 개발 일지 ✏️
 0. 출시 기념 앱 소개  
 https://jeong9216.tistory.com/420  
