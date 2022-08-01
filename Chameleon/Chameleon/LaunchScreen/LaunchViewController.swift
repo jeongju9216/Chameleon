@@ -23,21 +23,16 @@ class LaunchViewController: BaseViewController {
         FirebaseService.shared.initDatabase()
         
         //파이어베이스에서 서버 작동 확인
-        FirebaseService.shared.checkServer(completionHandler: { [weak self] (result, message) in
-            guard let self = self else { return }
-
-            if result {
-                //파이어베이스에서 버전 정보 가져옴
-                FirebaseService.shared.fetchVersion(completionHandler: { [weak self] (result, versions) in
-                    guard let self = self else { return }
-                    
-                    self.setupAppInfo(lasted: versions[0], forced: versions[1])
-                    self.presentNextVC() //버전
-                })
+        Task {
+            let (isLiveServer, message) = await FirebaseService.shared.checkServer()
+            let versions = await FirebaseService.shared.fetchVersion()
+            if isLiveServer && versions.count > 0 {
+                self.setupAppInfo(lasted: versions[0], forced: versions[1])
+                self.presentNextVC() //버전
             } else {
                 self.showErrorAlert(erorr: message.replacingOccurrences(of: "/n", with: "\n"))
             }
-        })
+        }
     }
     
     override func loadView() {

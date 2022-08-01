@@ -24,38 +24,38 @@ class FirebaseService {
         firebaseRef = Database.database().reference()
     }
     
-    func checkServer(completionHandler: @escaping ((Bool, String) -> Void)) {
-        firebaseRef.child("version/").getData(completion:  { error, snapshot in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return
-            }
-            
+    func checkServer() async -> (Bool, String) {
+        do {
+            let snapshot = try await firebaseRef.child("version/").getData()
             guard let snapData = snapshot.value as? [String: Any] else {
-                print("snapshot.value: \(String(describing: snapshot.value))")
-                return
+                return (false, "failed")
             }
-            print("[checkServer] snapData: \(snapData)")
             
             let result = snapData["result"] as? String ?? "failed"
             let message = snapData["message"] as? String ?? ""
             print("[checkServer] result: \(result) / message: \(message)")
             
-            completionHandler(result == "ok", message)
-        });
+            return (result.lowercased() == "ok", message)
+        } catch {
+            print("[checkServer] Error: \(error.localizedDescription)")
+            return (false, "failed")
+        }
     }
 
-    func fetchVersion(completionHandler: @escaping ((Bool, [String]) -> Void)) {
-        firebaseRef.child("version/data").getData(completion:  { error, snapshot in
+    func fetchVersion() async -> [String] {
+        do {
+            let snapshot = try await firebaseRef.child("version/data").getData()
             guard let snapData = snapshot.value as? [String: String] else {
-                print("snapshot.value: \(String(describing: snapshot.value))")
-                return
+                return []
             }
-            
+
             let versions: [String] = [snapData["lasted"] ?? "0.0.1", snapData["forced"] ?? "0.0.1"]
-            print("[fetchVersion] snapData: \(snapData)")
-            
-            completionHandler(true, versions)
-        });
+            print("[fetchVersion] versions: \(versions)")
+
+            return versions
+        } catch {
+            print("[fetchVersion] Error: \(error.localizedDescription)")
+            return []
+        }
     }
 }
