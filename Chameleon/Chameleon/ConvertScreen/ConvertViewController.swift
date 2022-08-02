@@ -54,7 +54,7 @@ class ConvertViewController: BaseViewController {
         if let resultURL = resultURL { //결과 url을 서버에서 받아왔을 때
             LoadingIndicator.showLoading() //result image load동안 loading
             
-            DispatchQueue.global().async { //결과 image load는 비동기로 실행
+            Task { //결과 image load는 비동기로 실행
                 guard let url = URL(string: resultURL),
                       let data = try? Data(contentsOf: url),
                       let resultImage = UIImage(data: data) else {
@@ -64,10 +64,6 @@ class ConvertViewController: BaseViewController {
                     return
                 }
                 
-                //결과 이미지 load에 성공한 경우
-                //디비 데이터 삭제하기
-                HttpService.shared.deleteFiles(completionHandler: { _, _ in })
-
                 //결과 VC로 이동
                 DispatchQueue.main.async {
                     LoadingIndicator.hideLoading()
