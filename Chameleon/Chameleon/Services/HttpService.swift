@@ -24,6 +24,8 @@ class HttpService {
     private init() { }
     
     var retryCount = 0
+    let maxRetryCount = 3, maxFaceRetryCount = 30
+    let errorResult = (false, "ERROR")
     
     private let okString = "ok"
     private let serverIP: String = "https://chameleon161718.xyz"
@@ -45,31 +47,21 @@ class HttpService {
     }
     
     //MARK: - GET
-    func getFaces(waitingTime: Int, completionHandler: @escaping (Bool, Any) -> Void) {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
-            guard let self = self else { return }
-            
-            self.requestGet(url: self.serverIP + "/faces", completionHandler: { [weak self] (result, response) in
-                guard let self = self else { return }
-                
-                print("[getFaces] result: \(result) / response: \(response)")
-
-                if result || self.retryCount == 15 {
-                    self.retryCount = 0
-                    completionHandler(result, response)
-                } else {
-                    self.retryCount += 1
-                    self.getFaces(waitingTime: 1, completionHandler: completionHandler)
-                }
-            })
+    func getFaces(waitingTime: Int) async -> (Bool, Any) {
+        for _ in 0..<self.maxFaceRetryCount {
+            try? await Task.sleep(nanoseconds: UInt64(waitingTime * 1_000_000_000))
+            let output = try? await requestGet(url: self.serverIP + "/faces")
+            if let output = output, output.result {
+                return output
+            }
         }
+        
+        return errorResult
     }
     
-    func getResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
-            print("[getResultFile] result: \(result) / response: \(response)")
-            completionHandler(result, response)
-        })
+    func getResultFile() async -> (Bool, Any) {
+        let output = try? await requestGet(url: self.serverIP + "/file/download")
+        return output ?? errorResult
     }
     
     //MARK: - Post
@@ -131,55 +123,31 @@ class HttpService {
 }
 
 extension HttpService {
-    private func requestGet(url: String, completionHandler: @escaping (Bool, Any) -> Void) {
+    private func requestGet(url: String) async throws -> (result: Bool, response: Any) {
         print("[GET] url: \(url)")
         guard let url = URL(string: url) else {
             print("Error: cannot create URL")
-            completionHandler(false, "Error: cannot create URL")
-            
-            return
+            return (false, "Error: cannot create URL")
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                print("Error: error calling GET -> \(error!)")
-                completionHandler(false, "Error: error calling GET -> \(error!)")
-                
-                return
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 200  else {
+            return (false, "Error: statusCode is not 200")
+        }
+        
+        if let output = try? JSONDecoder().decode(Response.self, from: data) {
+            return (output.result == self.okString, output)
+        } else {
+            guard let output = try? JSONDecoder().decode(FaceResponse.self, from: data) else {
+                return (false, "Error: JSON Data Parsing failed")
             }
             
-            guard let data = data else {
-                print("Error: Did not receive data")
-                completionHandler(false, "Error: Did not receive data")
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                print("Error: HTTP request failed")
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-                
-                return
-            }
-
-            if let output = try? JSONDecoder().decode(Response.self, from: data) {
-                completionHandler(output.result == self.okString, output)
-            } else {
-                print("Error: JSON Data Parsing failed")
-                
-                guard let output = try? JSONDecoder().decode(FaceResponse.self, from: data) else {
-                    print("Error: JSON Data Parsing failed")
-                    
-                    completionHandler(false, "Error: JSON Data Parsing failed")
-                    return
-                }
-                
-                completionHandler(output.result == self.okString, output)
-            }
-        }.resume()
+            return (output.result == self.okString, output)
+        }
     }
     
     private func requestPost(url: String, param: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
