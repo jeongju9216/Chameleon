@@ -93,8 +93,8 @@ class ConvertViewController: BaseViewController {
     //resultURL가 생성되었는지 확인 -> 서버에서 받아오면 변환 완료
     //5초 당 1회 실행
     private func downloadResult() {
-        HttpService.shared.getResultFile() { [weak self] (result, response) in
-            guard let self = self else { return }
+        Task {
+            let (result, response) = await HttpService.shared.getResultFile()
             guard result,
                   let response = response as? Response,
                   let resultURL = response.data else {
