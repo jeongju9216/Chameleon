@@ -74,38 +74,34 @@ class UploadViewController: BaseViewController {
             guard deleteOutput.result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
             
             //이미지 파일 업로드
-            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                guard let self = self else { return }
-                guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+            let uploadOutput = await HttpService.shared.uploadMedia(params: [:], media: mediaFile)
+            guard uploadOutput.result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+            
+            //업로드가 완료되면 classifier 실행
+            self.loadingVC.guideString = "얼굴 찾는 중"
+            
+            //1초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
+            let faceOutput = await HttpService.shared.getFaces(waitingTime: 1)
+            guard faceOutput.result, let faceResponse = faceOutput.response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
+                self.errorResult()
+                return
+            }
+            
+            let faceImages: [FaceImage] = faceResponse.data ?? []
+            print("faceImages count: \(faceImages.count)")
+            
+            //얼굴 이미지 url을 모두 load하여 UIImage로 변경하고 다음 화면으로 이동함
+            let faceImageList: [UIImage?] = faceImages.map { faceImage in
+                guard let url = URL(string: faceImage.url),
+                      let data = try? Data(contentsOf: url) else { return nil }
                 
-                //업로드가 완료되면 classifier 실행
-                self.loadingVC.guideString = "얼굴 찾는 중"
-                //3초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
-                Task {
-                    let (result, response) = await HttpService.shared.getFaces(waitingTime: 1)
-                    guard result, let faceResponse = response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
-                        self.errorResult()
-                        return
-                    }
-                    
-                    let faceImages: [FaceImage] = faceResponse.data ?? []
-                    print("faceImages count: \(faceImages.count)")
-                    
-                    //얼굴 이미지 url을 모두 load하여 UIImage로 변경하고 다음 화면으로 이동함
-                    let faceImageList: [UIImage?] = faceImages.map { faceImage in
-                        guard let url = URL(string: faceImage.url),
-                              let data = try? Data(contentsOf: url) else { return nil }
-                        
-                        return UIImage(data: data)
-                    }
-                    print("faceImageList count: \(faceImageList.count)")
-                    
-                    LoadingIndicator.hideLoading()
-                    self.loadingVC.dismiss(animated: true)
-                    
-                    self.moveToSelectVC(faceImages: faceImageList)
-                }
-            })
+                return UIImage(data: data)
+            }
+            print("faceImageList count: \(faceImageList.count)")
+            
+            LoadingIndicator.hideLoading()
+            self.loadingVC.dismiss(animated: true)
+            self.moveToSelectVC(faceImages: faceImageList)
         }
     }
     
