@@ -55,17 +55,17 @@ class SelectViewController: BaseViewController {
         print("sendFaces jsonData: \(jsonData)")
         
         LoadingIndicator.showLoading()
-        HttpService.shared.sendCheckedFaces(params: jsonData) { [weak self] (result, response) in
-            LoadingIndicator.hideLoading()
-            if result { //result가 true라면 변환 화면으로 이동
-                DispatchQueue.main.async {
-                    let convertVC = ConvertViewController()
-                    convertVC.modalPresentationStyle = .fullScreen
-                    self?.navigationController?.pushViewController(convertVC, animated: true)
-                }
+        Task {
+            let output = await HttpService.shared.sendCheckedFaces(params: jsonData)
+            if output.result {
+                let convertVC = ConvertViewController()
+                convertVC.modalPresentationStyle = .fullScreen
+                self.navigationController?.pushViewController(convertVC, animated: true)
             } else {
-                self?.showErrorAlert()
+                self.showErrorAlert()
             }
+            
+            LoadingIndicator.hideLoading()
         }
     }
     

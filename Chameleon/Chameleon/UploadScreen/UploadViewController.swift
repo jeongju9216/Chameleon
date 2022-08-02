@@ -69,49 +69,40 @@ class UploadViewController: BaseViewController {
         //터치 방지
         LoadingIndicator.showLoading()
         //디비에서 이미지 삭제를 한 후 업로드 진행
-        HttpService.shared.deleteFiles(completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-            guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+        Task {
+            let deleteOutput = await HttpService.shared.deleteFiles()
+            guard deleteOutput.result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
             
             //이미지 파일 업로드
-            HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
-                guard let self = self else { return }
-                guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+            let uploadOutput = await HttpService.shared.uploadMedia(params: [:], media: mediaFile)
+            guard uploadOutput.result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+            
+            //업로드가 완료되면 classifier 실행
+            self.loadingVC.guideString = "얼굴 찾는 중"
+            
+            //1초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
+            let faceOutput = await HttpService.shared.getFaces(waitingTime: 1)
+            guard faceOutput.result, let faceResponse = faceOutput.response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
+                self.errorResult()
+                return
+            }
+            
+            let faceImages: [FaceImage] = faceResponse.data ?? []
+            print("faceImages count: \(faceImages.count)")
+            
+            //얼굴 이미지 url을 모두 load하여 UIImage로 변경하고 다음 화면으로 이동함
+            let faceImageList: [UIImage?] = faceImages.map { faceImage in
+                guard let url = URL(string: faceImage.url),
+                      let data = try? Data(contentsOf: url) else { return nil }
                 
-                //업로드가 완료되면 classifier 실행
-                self.loadingVC.guideString = "얼굴 찾는 중"
-                //3초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
-                HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
-                    guard let self = self else { return }
-                    guard result,
-                            let faceResponse = response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
-                        self.errorResult()
-                        return
-                    }
-                    
-                    //서버에서 얻은 얼굴 데이터
-                    let faceImages: [FaceImage] = faceResponse.data ?? []
-                    print("faceImages count: \(faceImages.count)")
-                    
-                    //얼굴 이미지 url을 모두 load하여 UIImage로 변경하고 다음 화면으로 이동함
-                    let faceImageList: [UIImage?] = faceImages.map { faceImage in
-                        guard let url = URL(string: faceImage.url),
-                              let data = try? Data(contentsOf: url) else { return nil }
-                        
-                        return UIImage(data: data)
-                    }
-                    print("faceImageList count: \(faceImageList.count)")
-                    
-                    //얼굴 이미지를 로딩 완료했다면 Select VC로 이동
-                    DispatchQueue.main.async {
-                        LoadingIndicator.hideLoading()
-                        self.loadingVC.dismiss(animated: true)
-                        
-                        self.moveToSelectVC(faceImages: faceImageList)
-                    }
-                })
-            })
-        })
+                return UIImage(data: data)
+            }
+            print("faceImageList count: \(faceImageList.count)")
+            
+            LoadingIndicator.hideLoading()
+            self.loadingVC.dismiss(animated: true)
+            self.moveToSelectVC(faceImages: faceImageList)
+        }
     }
     
     //사진을 선택할 때 권한 체크
@@ -131,12 +122,14 @@ class UploadViewController: BaseViewController {
     //MARK: - Methods
     private func errorResult() {
         //업로드 후 에러가 발생하면 업로드한 파일 수정
-        HttpService.shared.deleteFiles(completionHandler: { _,_  in })
-        
-        DispatchQueue.main.async {
-            LoadingIndicator.hideLoading()
-            self.loadingVC.dismiss(animated: true) {
-                self.showErrorAlert()
+        Task {
+            await HttpService.shared.deleteFiles()
+            
+            DispatchQueue.main.async {
+                LoadingIndicator.hideLoading()
+                self.loadingVC.dismiss(animated: true) {
+                    self.showErrorAlert()
+                }
             }
         }
     }

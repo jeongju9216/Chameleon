@@ -24,38 +24,34 @@ class FirebaseService {
         firebaseRef = Database.database().reference()
     }
     
-    func checkServer(completionHandler: @escaping ((Bool, String) -> Void)) {
-        firebaseRef.child("version/").getData(completion:  { error, snapshot in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return
-            }
+    func checkServer() async -> (Bool, String) {
+        do {
+            let snapshot = try await firebaseRef.child("version/").getData()
+            let snapData = snapshot.value as? [String: Any]
             
-            guard let snapData = snapshot.value as? [String: Any] else {
-                print("snapshot.value: \(String(describing: snapshot.value))")
-                return
-            }
-            print("[checkServer] snapData: \(snapData)")
-            
-            let result = snapData["result"] as? String ?? "failed"
-            let message = snapData["message"] as? String ?? ""
+            let result = snapData?["result"] as? String ?? "failed"
+            let message = snapData?["message"] as? String ?? ""
             print("[checkServer] result: \(result) / message: \(message)")
             
-            completionHandler(result == "ok", message)
-        });
+            return (result.lowercased() == "ok", message)
+        } catch {
+            print("[checkServer] Error: \(error.localizedDescription)")
+            return (false, "failed")
+        }
     }
 
-    func fetchVersion(completionHandler: @escaping ((Bool, [String]) -> Void)) {
-        firebaseRef.child("version/data").getData(completion:  { error, snapshot in
-            guard let snapData = snapshot.value as? [String: String] else {
-                print("snapshot.value: \(String(describing: snapshot.value))")
-                return
-            }
-            
-            let versions: [String] = [snapData["lasted"] ?? "0.0.1", snapData["forced"] ?? "0.0.1"]
-            print("[fetchVersion] snapData: \(snapData)")
-            
-            completionHandler(true, versions)
-        });
+    func fetchVersion() async -> (String, String) {
+        do {
+            let snapshot = try await firebaseRef.child("version/data").getData()
+            let snapData = snapshot.value as? [String: String]
+
+            let versions: (String, String) = (snapData?["lasted"] ?? "0.0.0", snapData?["forced"] ?? "0.0.0")
+            print("[fetchVersion] versions: \(versions)")
+
+            return versions
+        } catch {
+            print("[fetchVersion] Error: \(error.localizedDescription)")
+            return ("0.0.0", "0.0.0")
+        }
     }
 }

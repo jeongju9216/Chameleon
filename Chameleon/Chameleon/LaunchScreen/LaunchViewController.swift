@@ -11,9 +11,6 @@ class LaunchViewController: BaseViewController {
     
     //MARK: - Views
     var launchView: LaunchView!
-
-    //MARK: - Properties
-    private var loadingTime: Double = 1 //런치 스크린 보여주는 시간
     
     //MARK: - Life Cycles
     override func viewDidLoad() {
@@ -23,21 +20,17 @@ class LaunchViewController: BaseViewController {
         FirebaseService.shared.initDatabase()
         
         //파이어베이스에서 서버 작동 확인
-        FirebaseService.shared.checkServer(completionHandler: { [weak self] (result, message) in
-            guard let self = self else { return }
-
-            if result {
-                //파이어베이스에서 버전 정보 가져옴
-                FirebaseService.shared.fetchVersion(completionHandler: { [weak self] (result, versions) in
-                    guard let self = self else { return }
-                    
-                    self.setupAppInfo(lasted: versions[0], forced: versions[1])
-                    self.presentNextVC() //버전
-                })
-            } else {
+        Task {
+            let (isLiveServer, message) = await FirebaseService.shared.checkServer()
+            guard isLiveServer else {
                 self.showErrorAlert(erorr: message.replacingOccurrences(of: "/n", with: "\n"))
+                return
             }
-        })
+            
+            let (lasted, forced) = await FirebaseService.shared.fetchVersion()
+            self.setupAppInfo(lasted: lasted, forced: forced)
+            self.presentNextVC() //버전
+        }
     }
     
     override func loadView() {
@@ -57,12 +50,8 @@ class LaunchViewController: BaseViewController {
     }
     
     private func presentNextVC() {
-        //loadingTime 뒤에 화면 이동
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.loadingTime) {
-            let vc: UIViewController = CustomTabBarController()
-            vc.modalPresentationStyle = .fullScreen
-            
-            self.present(vc, animated: false, completion: nil)
-        }
+        let vc: UIViewController = CustomTabBarController()
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false, completion: nil)
     }
 }

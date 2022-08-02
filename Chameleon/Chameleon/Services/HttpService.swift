@@ -23,7 +23,11 @@ class HttpService {
     static let shared: HttpService = HttpService()
     private init() { }
     
+    typealias Output = (result: Bool, response: Any)
+    
     var retryCount = 0
+    let maxRetryCount = 3, maxFaceRetryCount = 30
+    let errorOutput: Output = (false, "ERROR")
     
     private let okString = "ok"
     private let serverIP: String = "https://chameleon161718.xyz"
@@ -45,166 +49,102 @@ class HttpService {
     }
     
     //MARK: - GET
-    func getVersion(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/version", completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[getVersion] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.getVersion(completionHandler: completionHandler)
-            }
-        })
-    }
-    
-    func getFaces(waitingTime: Int, completionHandler: @escaping (Bool, Any) -> Void) {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
-                guard let self = self else { return }
-                
-                self.requestGet(url: self.serverIP + "/faces", completionHandler: { [weak self] (result, response) in
-                    guard let self = self else { return }
-                    
-                    print("[getFaces] result: \(result) / response: \(response)")
-
-                    if result || self.retryCount == 15 {
-                        self.retryCount = 0
-                        completionHandler(result, response)
-                    } else {
-                        self.retryCount += 1
-                        self.getFaces(waitingTime: 1, completionHandler: completionHandler)
-                    }
-                })
+    func getFaces(waitingTime: Int) async -> Output {
+        var output: Output = errorOutput
+        for _ in 0..<self.maxFaceRetryCount {
+            try? await Task.sleep(nanoseconds: UInt64(waitingTime * 1_000_000_000))
+            output = await requestGet(url: self.serverIP + "/faces")
+            if output.result {
+                return output
             }
         }
+        
+        return output
+    }
     
-    func getResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
-            print("[getResultFile] result: \(result) / response: \(response)")
-            completionHandler(result, response)
-        })
+    func getResultFile() async -> Output {
+        let output: Output = await requestGet(url: self.serverIP + "/file/download")
+        return output
     }
     
     //MARK: - Post
-    func sendCheckedFaces(params: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/faces", param: params, completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[sendCheckedFaces] result: \(result) / response: \(response)")
-            
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.sendCheckedFaces(params: params, completionHandler: completionHandler)
+    func sendCheckedFaces(params: [String: Any]) async -> Output {
+        var output: Output = errorOutput
+        for _ in 0..<maxRetryCount {
+            output =  await requestPost(url: serverIP + "/faces", param: params)
+            if output.result {
+                return output
             }
-        })
+        }
+        return output
     }
     
-    func deleteFiles(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/delete", param: ["message": "delete"], completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[deleteFiles] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.deleteFiles(completionHandler: completionHandler)
+    func deleteFiles() async -> Output {
+        var output: Output = errorOutput
+        for _ in 0..<maxRetryCount {
+            output =  await requestPost(url: serverIP + "/file/delete", param: ["message": "delete"])
+            if output.result {
+                return output
             }
-        })
+        }
+        return output
     }
     
-    func cancelFiles(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestPost(url: serverIP + "/file/cancel", param: ["message": "delete"], completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[cancelFiles] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.cancelFiles(completionHandler: completionHandler)
+    func cancelFiles() async -> Output {
+        var output: Output = errorOutput
+        for _ in 0..<maxRetryCount {
+            output =  await requestPost(url: serverIP + "/file/cancel", param: ["message": "delete"])
+            if output.result {
+                return output
             }
-        })
+        }
+        return output
     }
     
     //MARK: - Multipart
-    func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
-            print("[uploadMedia] result: \(result) / response: \(response)")
-            completionHandler(result, response)
-        }
+    func uploadMedia(params: [String: Any], media: MediaFile) async -> Output {
+        let ouput = await requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media)
+        return ouput
     }
 }
 
 extension HttpService {
-    private func requestGet(url: String, completionHandler: @escaping (Bool, Any) -> Void) {
+    private func requestGet(url: String) async -> Output {
         print("[GET] url: \(url)")
         guard let url = URL(string: url) else {
-            print("Error: cannot create URL")
-            completionHandler(false, "Error: cannot create URL")
-            
-            return
+            return (false, "Error: cannot create URL")
         }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else {
-                print("Error: error calling GET -> \(error!)")
-                completionHandler(false, "Error: error calling GET -> \(error!)")
-                
-                return
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard (response as? HTTPURLResponse)?.statusCode == 200  else {
+                return (false, "Error: statusCode is not 200")
             }
             
-            guard let data = data else {
-                print("Error: Did not receive data")
-                completionHandler(false, "Error: Did not receive data")
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                print("Error: HTTP request failed")
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-                
-                return
-            }
-
             if let output = try? JSONDecoder().decode(Response.self, from: data) {
-                completionHandler(output.result == self.okString, output)
+                return (output.result == self.okString, output)
             } else {
-                print("Error: JSON Data Parsing failed")
-                
-                guard let output = try? JSONDecoder().decode(FaceResponse.self, from: data) else {
-                    print("Error: JSON Data Parsing failed")
-                    
-                    completionHandler(false, "Error: JSON Data Parsing failed")
-                    return
-                }
-                
-                completionHandler(output.result == self.okString, output)
+                let output = try JSONDecoder().decode(FaceResponse.self, from: data)
+                return (output.result == self.okString, output)
             }
-        }.resume()
+        } catch {
+            return (false, "[requestGet] Error \(error.localizedDescription)")
+        }
     }
     
-    private func requestPost(url: String, param: [String: Any], completionHandler: @escaping (Bool, Any) -> Void) {
+    private func requestPost(url: String, param: [String: Any]) async -> Output {
         print("[POST] url: \(url) / param: \(param)")
-        let sendData = try! JSONSerialization.data(withJSONObject: param, options: [])
+        let sendData = try? JSONSerialization.data(withJSONObject: param, options: [])
+        guard let sendData = sendData else {
+            return (false, "Error: cannot create sendData")
+        }
         
         guard let url = URL(string: url) else {
-            print("Error: cannot create URL")
-            return
+            return (false, "Error: cannot create URL")
         }
         
         var request = URLRequest(url: url)
@@ -213,46 +153,23 @@ extension HttpService {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = sendData
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard error == nil else {
-                print("Error: error calling Post -> \(error!)")
-                
-                completionHandler(false, "Error: error calling GET -> \(error!)")
-                return
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            guard (response as? HTTPURLResponse)?.statusCode == 200  else {
+                return (false, "Error: statusCode is not 200")
             }
             
-            guard let data = data else {
-                print("Error: Did not receive data")
-                
-                completionHandler(false, "Error: Did not receive data")
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                print("Error: HTTP request failed")
-                
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-                return
-            }
-
-            guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
-                print("Error: JSON Data Parsing failed")
-                
-                completionHandler(false, "Error: JSON Data Parsing failed")
-                return
-            }
-            
-            completionHandler(output.result == self.okString, output)
-        }.resume()
+            let output = try JSONDecoder().decode(Response.self, from: data)
+            return (output.result == self.okString, output)
+        } catch {
+            return (false, "[requestPost] Error \(error.localizedDescription)")
+        }
     }
 
-    func requestMultipartForm(url: String, params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        print("[requestMultipartForm 1] url: \(url)")
+    func requestMultipartForm(url: String, params: [String: Any], media: MediaFile) async -> Output {
+        print("[requestMultipartForm] url: \(url)")
         guard let url = URL(string: url) else {
-            print("Error: cannot create URL")
-            completionHandler(false, "Error: cannot create URL")
-            
-            return
+            return (false, "Error: cannot create URL")
         }
         
         var request = URLRequest(url: url)
@@ -260,39 +177,19 @@ extension HttpService {
         request.addValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
-        let data = createUploadBody(params: params, media: media)
+        let reqeustData = createUploadBody(params: params, media: media)
         
-        print("request: \(request)")
-        URLSession.shared.uploadTask(with: request, from: data) { (data, response, error) in
-            guard error == nil else {
-                print("Error: error calling Post -> \(error!)")
-                completionHandler(false, "Error: error calling Post")
-
-                return
+        do {
+            let (data, response) = try await URLSession.shared.upload(for: request, from: reqeustData)
+            guard (response as? HTTPURLResponse)?.statusCode == 200  else {
+                return (false, "Error: statusCode is not 200")
             }
             
-            guard let data = data else {
-                print("Error: Did not receive data")
-                completionHandler(false, "Error: Did not receive data")
-
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-
-                return
-            }
-
-            guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
-                print("Error: JSON Data Parsing failed")
-                completionHandler(false, "Error: JSON Data Parsing failed")
-
-                return
-            }
-            
-            completionHandler(output.result == self.okString, output)
-        }.resume()
+            let output = try JSONDecoder().decode(Response.self, from: data)
+            return (output.result == self.okString, output)
+        } catch {
+            return (false, "[requestMultipartForm] Error \(error.localizedDescription)")
+        }
     }
 }
 
