@@ -81,15 +81,13 @@ class UploadViewController: BaseViewController {
                 //업로드가 완료되면 classifier 실행
                 self.loadingVC.guideString = "얼굴 찾는 중"
                 //3초에 한 번씩 호출하면서 classifier가 완료되었는지 확인함
-                HttpService.shared.getFaces(waitingTime: 3, completionHandler: { [weak self] (result, response) in
-                    guard let self = self else { return }
-                    guard result,
-                            let faceResponse = response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
+                Task {
+                    let (result, response) = await HttpService.shared.getFaces(waitingTime: 1)
+                    guard result, let faceResponse = response as? FaceResponse else { //result가 true일 때만 다음 로직 실행
                         self.errorResult()
                         return
                     }
                     
-                    //서버에서 얻은 얼굴 데이터
                     let faceImages: [FaceImage] = faceResponse.data ?? []
                     print("faceImages count: \(faceImages.count)")
                     
@@ -102,14 +100,11 @@ class UploadViewController: BaseViewController {
                     }
                     print("faceImageList count: \(faceImageList.count)")
                     
-                    //얼굴 이미지를 로딩 완료했다면 Select VC로 이동
-                    DispatchQueue.main.async {
-                        LoadingIndicator.hideLoading()
-                        self.loadingVC.dismiss(animated: true)
-                        
-                        self.moveToSelectVC(faceImages: faceImageList)
-                    }
-                })
+                    LoadingIndicator.hideLoading()
+                    self.loadingVC.dismiss(animated: true)
+                    
+                    self.moveToSelectVC(faceImages: faceImageList)
+                }
             })
         })
     }
