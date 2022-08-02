@@ -69,9 +69,9 @@ class UploadViewController: BaseViewController {
         //터치 방지
         LoadingIndicator.showLoading()
         //디비에서 이미지 삭제를 한 후 업로드 진행
-        HttpService.shared.deleteFiles(completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-            guard result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
+        Task {
+            let deleteOutput = await HttpService.shared.deleteFiles()
+            guard deleteOutput.result else { self.errorResult(); return } //result가 true일 때만 다음 로직 실행
             
             //이미지 파일 업로드
             HttpService.shared.uploadMedia(params: [:], media: mediaFile, completionHandler: { [weak self] (result, response) in
@@ -106,7 +106,7 @@ class UploadViewController: BaseViewController {
                     self.moveToSelectVC(faceImages: faceImageList)
                 }
             })
-        })
+        }
     }
     
     //사진을 선택할 때 권한 체크
@@ -126,12 +126,14 @@ class UploadViewController: BaseViewController {
     //MARK: - Methods
     private func errorResult() {
         //업로드 후 에러가 발생하면 업로드한 파일 수정
-        HttpService.shared.deleteFiles(completionHandler: { _,_  in })
-        
-        DispatchQueue.main.async {
-            LoadingIndicator.hideLoading()
-            self.loadingVC.dismiss(animated: true) {
-                self.showErrorAlert()
+        Task {
+            await HttpService.shared.deleteFiles()
+            
+            DispatchQueue.main.async {
+                LoadingIndicator.hideLoading()
+                self.loadingVC.dismiss(animated: true) {
+                    self.showErrorAlert()
+                }
             }
         }
     }
