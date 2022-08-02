@@ -27,12 +27,10 @@ class FirebaseService {
     func checkServer() async -> (Bool, String) {
         do {
             let snapshot = try await firebaseRef.child("version/").getData()
-            guard let snapData = snapshot.value as? [String: Any] else {
-                return (false, "failed")
-            }
+            let snapData = snapshot.value as? [String: Any]
             
-            let result = snapData["result"] as? String ?? "failed"
-            let message = snapData["message"] as? String ?? ""
+            let result = snapData?["result"] as? String ?? "failed"
+            let message = snapData?["message"] as? String ?? ""
             print("[checkServer] result: \(result) / message: \(message)")
             
             return (result.lowercased() == "ok", message)
@@ -45,11 +43,9 @@ class FirebaseService {
     func fetchVersion() async -> (String, String) {
         do {
             let snapshot = try await firebaseRef.child("version/data").getData()
-            guard let snapData = snapshot.value as? [String: String] else {
-                return ("0.0.0", "0.0.0")
-            }
+            let snapData = snapshot.value as? [String: String]
 
-            let versions: (String, String) = (snapData["lasted"] ?? "0.0.0", snapData["forced"] ?? "0.0.0")
+            let versions: (String, String) = (snapData?["lasted"] ?? "0.0.0", snapData?["forced"] ?? "0.0.0")
             print("[fetchVersion] versions: \(versions)")
 
             return versions
