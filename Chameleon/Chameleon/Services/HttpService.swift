@@ -102,11 +102,9 @@ class HttpService {
     }
     
     //MARK: - Multipart
-    func uploadMedia(params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media) { (result, response) in
-            print("[uploadMedia] result: \(result) / response: \(response)")
-            completionHandler(result, response)
-        }
+    func uploadMedia(params: [String: Any], media: MediaFile) async -> Output {
+        let ouput = await requestMultipartForm(url: serverIP + "/file/upload", params: params, media: media)
+        return ouput
     }
 }
 
@@ -168,13 +166,10 @@ extension HttpService {
         }
     }
 
-    func requestMultipartForm(url: String, params: [String: Any], media: MediaFile, completionHandler: @escaping (Bool, Any) -> Void) {
-        print("[requestMultipartForm 1] url: \(url)")
+    func requestMultipartForm(url: String, params: [String: Any], media: MediaFile) async -> Output {
+        print("[requestMultipartForm] url: \(url)")
         guard let url = URL(string: url) else {
-            print("Error: cannot create URL")
-            completionHandler(false, "Error: cannot create URL")
-            
-            return
+            return (false, "Error: cannot create URL")
         }
         
         var request = URLRequest(url: url)
@@ -182,39 +177,19 @@ extension HttpService {
         request.addValue(authorization, forHTTPHeaderField: authorizationHeaderKey)
         request.addValue("multipart/form-data; boundary=\(authorization)", forHTTPHeaderField: "Content-Type")
         
-        let data = createUploadBody(params: params, media: media)
+        let reqeustData = createUploadBody(params: params, media: media)
         
-        print("request: \(request)")
-        URLSession.shared.uploadTask(with: request, from: data) { (data, response, error) in
-            guard error == nil else {
-                print("Error: error calling Post -> \(error!)")
-                completionHandler(false, "Error: error calling Post")
-
-                return
+        do {
+            let (data, response) = try await URLSession.shared.upload(for: request, from: reqeustData)
+            guard (response as? HTTPURLResponse)?.statusCode == 200  else {
+                return (false, "Error: statusCode is not 200")
             }
             
-            guard let data = data else {
-                print("Error: Did not receive data")
-                completionHandler(false, "Error: Did not receive data")
-
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse, (200 ..< 300) ~= response.statusCode else {
-                completionHandler(false, "Error: HTTP request failed: \((response as! HTTPURLResponse).statusCode)")
-
-                return
-            }
-
-            guard let output = try? JSONDecoder().decode(Response.self, from: data) else {
-                print("Error: JSON Data Parsing failed")
-                completionHandler(false, "Error: JSON Data Parsing failed")
-
-                return
-            }
-            
-            completionHandler(output.result == self.okString, output)
-        }.resume()
+            let output = try JSONDecoder().decode(Response.self, from: data)
+            return (output.result == self.okString, output)
+        } catch {
+            return (false, "[requestMultipartForm] Error \(error.localizedDescription)")
+        }
     }
 }
 
