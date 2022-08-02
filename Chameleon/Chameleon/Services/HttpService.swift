@@ -45,41 +45,25 @@ class HttpService {
     }
     
     //MARK: - GET
-    func getVersion(completionHandler: @escaping (Bool, Any) -> Void) {
-        requestGet(url: serverIP + "/version", completionHandler: { [weak self] (result, response) in
-            guard let self = self else { return }
-
-            print("[getVersion] result: \(result) / response: \(response)")
-
-            if result || self.retryCount == 3 {
-                self.retryCount = 0
-                completionHandler(result, response)
-            } else {
-                self.retryCount += 1
-                self.getVersion(completionHandler: completionHandler)
-            }
-        })
-    }
-    
     func getFaces(waitingTime: Int, completionHandler: @escaping (Bool, Any) -> Void) {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(waitingTime)) { [weak self] in
+            guard let self = self else { return }
+            
+            self.requestGet(url: self.serverIP + "/faces", completionHandler: { [weak self] (result, response) in
                 guard let self = self else { return }
                 
-                self.requestGet(url: self.serverIP + "/faces", completionHandler: { [weak self] (result, response) in
-                    guard let self = self else { return }
-                    
-                    print("[getFaces] result: \(result) / response: \(response)")
+                print("[getFaces] result: \(result) / response: \(response)")
 
-                    if result || self.retryCount == 15 {
-                        self.retryCount = 0
-                        completionHandler(result, response)
-                    } else {
-                        self.retryCount += 1
-                        self.getFaces(waitingTime: 1, completionHandler: completionHandler)
-                    }
-                })
-            }
+                if result || self.retryCount == 15 {
+                    self.retryCount = 0
+                    completionHandler(result, response)
+                } else {
+                    self.retryCount += 1
+                    self.getFaces(waitingTime: 1, completionHandler: completionHandler)
+                }
+            })
         }
+    }
     
     func getResultFile(completionHandler: @escaping (Bool, Any) -> Void) {
         requestGet(url: serverIP + "/file/download", completionHandler: { (result, response) in
