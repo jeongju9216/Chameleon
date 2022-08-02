@@ -42,20 +42,20 @@ class FirebaseService {
         }
     }
 
-    func fetchVersion() async -> [String] {
+    func fetchVersion() async -> (String, String) {
         do {
             let snapshot = try await firebaseRef.child("version/data").getData()
             guard let snapData = snapshot.value as? [String: String] else {
-                return []
+                return ("0.0.0", "0.0.0")
             }
 
-            let versions: [String] = [snapData["lasted"] ?? "0.0.1", snapData["forced"] ?? "0.0.1"]
+            let versions: (String, String) = (snapData["lasted"] ?? "0.0.0", snapData["forced"] ?? "0.0.0")
             print("[fetchVersion] versions: \(versions)")
 
             return versions
         } catch {
             print("[fetchVersion] Error: \(error.localizedDescription)")
-            return []
+            return ("0.0.0", "0.0.0")
         }
     }
 }
