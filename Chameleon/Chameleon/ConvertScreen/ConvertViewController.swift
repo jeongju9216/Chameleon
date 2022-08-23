@@ -91,6 +91,7 @@ class ConvertViewController: BaseViewController {
     private func downloadResult() {
         Task {
             let (result, response) = await HttpService.shared.getResultFile()
+            print("result: \(result) / response: \(response)")
             guard result,
                   let response = response as? Response,
                   let resultURL = response.data else {
