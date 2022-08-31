@@ -8,9 +8,7 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-    
-    //todo: loadView 제네릭 이용 + 화면 스크린 사이즈 이용해서 코드 중복 줄이기
-    
+        
     func setupNavigationBar(title: String) { //네비게이션 UI 속성 적용
         navigationItem.title = title //제목 설정
         navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil) //back 버튼 글자 삭제
