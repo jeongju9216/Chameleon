@@ -23,13 +23,13 @@ https://jeong9216.tistory.com/424
 3. UICollectionView와 UICollectionViewCell  
 https://jeong9216.tistory.com/428
 
-4. API 통신과 URLSession, completionHandler
+4. API 통신과 URLSession, completionHandler  
 https://jeong9216.tistory.com/446
 
-5. 버전 체크하고 업데이트 Alert 띄우기
+5. 버전 체크하고 업데이트 Alert 띄우기  
 https://jeong9216.tistory.com/450
 
-6. async/await 적용하기
+6. async/await 적용하기  
 https://jeong9216.tistory.com/512
 <br></br>
 
