@@ -2,6 +2,10 @@
 세상에서 존재하지 않는 얼굴, "페이크 얼굴"을 이용해 초상권을 보호하세요.
 <br></br>
 
+## Notion
+https://jeong9216.notion.site/dca13bba40ac40cdb05d5417f34a1058
+<br></br>
+
 ## Youtube 🎦
 https://youtu.be/-r7_r2oLk0E  
 <br></br>
@@ -18,6 +22,15 @@ https://jeong9216.tistory.com/424
 
 3. UICollectionView와 UICollectionViewCell  
 https://jeong9216.tistory.com/428
+
+4. API 통신과 URLSession, completionHandler
+https://jeong9216.tistory.com/446
+
+5. 버전 체크하고 업데이트 Alert 띄우기
+https://jeong9216.tistory.com/450
+
+6. async/await 적용하기
+https://jeong9216.tistory.com/512
 <br></br>
 
 ## 스크린샷 📷
@@ -31,8 +44,4 @@ https://jeong9216.tistory.com/428
 ## 사용 기술 🚀
 - UIKit / Swift 5  
 - Code based UI  
-- URLSession  
-
-## 업데이트 예정
-- Localization
-- 영상 변환
+- URLSession
